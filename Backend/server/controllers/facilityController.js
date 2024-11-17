@@ -1,4 +1,4 @@
-const FacilitiesModel = require('../models/Facility');
+ const FacilitiesModel = require('../models/Facility');
 const ResponseAPI = require('../utils/response');
 
 const facilityController = {

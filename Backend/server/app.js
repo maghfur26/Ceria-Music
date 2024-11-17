@@ -5,6 +5,7 @@ const { port } = require('./config/env');
 const userRoute = require('./routes/userRoute');
 const facilityRoute = require('./routes/facilityRoute');
 const errorHandler = require('./middleware/errorHandler');
+const roomRoute = require('./routes/roomRoute');
 require('dotenv').config(); 
 
 const app = express();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', userRoute)
 app.use('/api', facilityRoute)
+app.use('/api', roomRoute)
 
 app.use(errorHandler)
 
