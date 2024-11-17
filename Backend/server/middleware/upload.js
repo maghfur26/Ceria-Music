@@ -36,7 +36,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 2 * 1024 * 1024 } 
+    limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
 module.exports = (featureFolder) => (req, res, next) => {
@@ -54,6 +54,9 @@ module.exports = (featureFolder) => (req, res, next) => {
                 message: err.message
             });
         }
+        req.file.path = req.file.path.replace(/\\/g, '/'); 
+        // console.log('File uploaded:', req.file); 
+        // console.log('File path:', req.file.path);
         next();
     });
 };

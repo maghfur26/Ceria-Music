@@ -1,6 +1,7 @@
-const userController = {}
+const userController = {};
 const User = require('../models/User');
 const fs = require('fs');
+const path = require('path'); 
 const ResponseAPI = require('../utils/response');
 const bcrypt = require('bcryptjs');
 
@@ -58,13 +59,18 @@ userController.updateProfile = async (req, res) => {
             const user = await User.findById(userId);
 
             if (user.photo) {
-                const oldPhotoPath = path.join(__dirname, '../', user.photo);
+                const oldPhotoPath = path.join(user.photo.replace(/\\/g, '/')); 
+                // console.log('Old photo path:', oldPhotoPath); 
+        
                 if (fs.existsSync(oldPhotoPath)) {
                     fs.unlinkSync(oldPhotoPath);
+                    // console.log('Old photo deleted'); 
+                } else {
+                    // console.log('Old photo does not exist');
                 }
             }
 
-            updateData.photo = req.file.path;
+            updateData.photo = req.file.path.replace(/\\/g, '/');
         }
 
         const user = await User.findByIdAndUpdate(
@@ -82,7 +88,6 @@ userController.updateProfile = async (req, res) => {
         ResponseAPI.serverError(res, error);
     }
 };
-
 
 userController.logout = async (req, res) => {
     try {
