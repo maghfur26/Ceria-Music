@@ -22,8 +22,8 @@ app.get('/', (req, res) => {
 });
 
 // Routing kumpulkan disini
-app.use('/api/user', userRoute)
-app.use('/api/facility', facilityRoute)
+app.use('/api', userRoute)
+app.use('/api', facilityRoute)
 
 // Jalankan server
 app.listen(port, () => {
