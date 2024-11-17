@@ -2,20 +2,17 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Fungsi untuk membuat folder jika belum ada
-const ensureDirectoryExistence = (filePath) => {
-    const dir = path.dirname(filePath);
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+const ensureDirectoryExistence = (folderPath) => {
+    if (!fs.existsSync(folderPath)) {
+        fs.mkdirSync(folderPath, { recursive: true }); 
     }
 };
 
-// Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Tentukan folder berdasarkan entitas
-        const folder = req.uploadFolder || 'uploads';
-        ensureDirectoryExistence(folder); // Pastikan folder ada
+        const featureFolder = req.featureFolder || 'general'; 
+        const folder = `uploads/${featureFolder}`.replace(/\\/g, '/'); 
+        ensureDirectoryExistence(folder); 
         cb(null, folder);
     },
     filename: (req, file, cb) => {
@@ -24,7 +21,6 @@ const storage = multer.diskStorage({
     }
 });
 
-// Filter untuk memastikan hanya file gambar yang diunggah
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png/;
     const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -40,7 +36,24 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 2 * 1024 * 1024 } // Maksimal 2MB
+    limits: { fileSize: 2 * 1024 * 1024 } 
 });
 
-module.exports = upload;
+module.exports = (featureFolder) => (req, res, next) => {
+    req.featureFolder = featureFolder; 
+    upload.single('photo')(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({
+                success: false,
+                message: `Error Multer: ${err.message}`
+            });
+        } else if (err) {
+            // Handle error lainnya
+            return res.status(400).json({
+                success: false,
+                message: err.message
+            });
+        }
+        next();
+    });
+};

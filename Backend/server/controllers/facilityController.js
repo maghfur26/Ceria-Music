@@ -3,12 +3,11 @@ const ResponseAPI = require('../utils/response');
 
 const facilityController = {
 
-    // Create a new facility
     async createFacility(req, res) {
         try {
             const facility = await FacilitiesModel.create({
                 ...req.body,
-                userId: req.user._id // Mengaitkan fasilitas dengan pengguna yang membuatnya
+                userId: req.user._id 
             });
 
             ResponseAPI.success(res, facility, 'Facility created successfully', 201);
@@ -17,22 +16,20 @@ const facilityController = {
         }
     },
 
-    // Get all facilities for a user
     async getUserFacilities(req, res) {
         try {
-            const facilities = await FacilitiesModel.find({ userId: req.user._id }); // Hanya fasilitas milik pengguna yang diautentikasi
+            const facilities = await FacilitiesModel.find({ userId: req.user._id });
             ResponseAPI.success(res, facilities);
         } catch (error) {
             ResponseAPI.serverError(res, error);
         }
     },
 
-    // Get a specific facility by ID
     async getFacility(req, res) {
         try {
             const facility = await FacilitiesModel.findOne({
                 _id: req.params.id,
-                userId: req.user._id // Memastikan hanya fasilitas milik pengguna yang ditemukan
+                userId: req.user._id 
             });
 
             if (!facility) {
@@ -45,19 +42,17 @@ const facilityController = {
         }
     },
 
-    // Update a facility
     async updateFacility(req, res) {
         try {
             const facility = await FacilitiesModel.findOne({
                 _id: req.params.id,
-                userId: req.user._id // Memastikan hanya fasilitas milik pengguna yang bisa diubah
+                userId: req.user._id 
             });
 
             if (!facility) {
                 return ResponseAPI.notFound(res, 'Facility not found');
             }
 
-            // Update fasilitas dengan data baru dari body request
             Object.assign(facility, req.body);
             await facility.save();
 
@@ -67,12 +62,11 @@ const facilityController = {
         }
     },
 
-    // Delete a facility
     async deleteFacility(req, res) {
         try {
             const facility = await FacilitiesModel.findOneAndDelete({
                 _id: req.params.id,
-                userId: req.user._id // Memastikan hanya fasilitas milik pengguna yang bisa dihapus
+                userId: req.user._id 
             });
 
             if (!facility) {

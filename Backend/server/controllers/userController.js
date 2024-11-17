@@ -4,7 +4,6 @@ const fs = require('fs');
 const ResponseAPI = require('../utils/response');
 const bcrypt = require('bcryptjs');
 
-// Controller untuk login
 userController.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -18,7 +17,6 @@ userController.login = async (req, res) => {
             return ResponseAPI.unauthorized(res, 'User tidak ditemukan');
         }
 
-        // Periksa apakah password cocok
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return ResponseAPI.unauthorized(res, 'Password salah');
@@ -26,11 +24,65 @@ userController.login = async (req, res) => {
 
         const token = user.generateAuthToken();
 
-        ResponseAPI.success(res, { token }, 'Login berhasil');
+        ResponseAPI.success(res, {
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                photo: user.photo
+            }
+        });
     } catch (error) {
         ResponseAPI.serverError(res, error);
     }
 };
+
+userController.updateProfile = async (req, res) => {
+    try {
+        const { username, email, password } = req.body; 
+        const userId = req.user.id;
+
+        const updateData = {};
+
+        if (username) updateData.username = username;
+
+        if (email) updateData.email = email;
+
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 12);
+            updateData.password = hashedPassword;
+        }
+
+        if (req.file) {
+            const user = await User.findById(userId);
+
+            if (user.photo) {
+                const oldPhotoPath = path.join(__dirname, '../', user.photo);
+                if (fs.existsSync(oldPhotoPath)) {
+                    fs.unlinkSync(oldPhotoPath);
+                }
+            }
+
+            updateData.photo = req.file.path;
+        }
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            updateData,
+            { new: true, runValidators: true }
+        ).select('-password'); 
+
+        if (!user) {
+            return ResponseAPI.error(res, 'User tidak ditemukan', 404);
+        }
+
+        ResponseAPI.success(res, user, 'Profil berhasil diperbarui');
+    } catch (error) {
+        ResponseAPI.serverError(res, error);
+    }
+};
+
 
 userController.logout = async (req, res) => {
     try {
@@ -39,6 +91,5 @@ userController.logout = async (req, res) => {
         ResponseAPI.serverError(res, error);
     }
 };
-
 
 module.exports = userController;

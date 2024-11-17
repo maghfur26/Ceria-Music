@@ -1,31 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/database'); // Path ke database.js
-const { port } = require('./config/env'); // Path ke env.js
+const connectDB = require('./config/database');
+const { port } = require('./config/env');
 const userRoute = require('./routes/userRoute');
 const facilityRoute = require('./routes/facilityRoute');
-require('dotenv').config(); // Memastikan dotenv dipanggil
+const errorHandler = require('./middleware/errorHandler');
+require('dotenv').config(); 
 
-// Inisialisasi aplikasi
 const app = express();
 
-// Middleware
 app.use(cors());
-app.use(express.json()); // Untuk mem-parsing request body dalam format JSON
+app.use(express.json()); 
 
-// Connect ke database
 connectDB();
 
-// Routing dasar (sementara)
 app.get('/', (req, res) => {
     res.send('Selamat datang di API Studio Musik Rental!');
 });
 
-// Routing kumpulkan disini
 app.use('/api', userRoute)
 app.use('/api', facilityRoute)
 
-// Jalankan server
+app.use(errorHandler)
+
 app.listen(port, () => {
     console.log(`Server berjalan di http://localhost:${port}`);
 });
