@@ -1,32 +1,40 @@
 const RoomsModel = require('../models/Room');
 const FacilitiesModel = require('../models/Facility');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+
+const deleteFile = (filePath) => {
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+    }
+};
 
 const roomController = {
 
+    // Fungsi untuk membuat room baru dengan upload photo
     async createRoom(req, res) {
-        const { schedule, facilities, name, price_perhour } = req.body;
-    
+        const { facilities, name, price_perhour } = req.body;
+        const photo = req.file ? req.file.path : ''; // ambil photo jika ada
+
         try {
-            // Validasi semua `facility_id`
             const facilityIds = facilities.map(f => f.facility_id);
             const foundFacilities = await FacilitiesModel.find({ _id: { $in: facilityIds } });
-    
+
             if (foundFacilities.length !== facilities.length) {
                 return res.status(404).json({ message: 'One or more facilities not found' });
             }
-    
-            // Buat Room baru
+
             const newRoom = await RoomsModel.create({
-                schedule,
                 facilities,
                 name,
                 price_perhour,
+                photo,
             });
-    
-            // Populate fasilitas
+
             const populatedRoom = await RoomsModel.findById(newRoom._id)
-                .populate('facilities.facility_id', 'name unit'); // Populate hanya `name` dan `unit`
-    
+                .populate('facilities.facility_id', 'name unit'); 
+
             return res.status(201).json({
                 message: 'Room created successfully',
                 data: populatedRoom,
@@ -36,9 +44,22 @@ const roomController = {
                 message: error.message,
             });
         }
-    },    
+    },
 
-    async getUserRooms(req, res) {
+    // Fungsi untuk mendapatkan semua room
+    async getAllRooms(req, res) {
+        try {
+            const rooms = await RoomsModel.find().populate('facilities.facility_id', 'name unit');
+            return res.status(200).json({ data: rooms });
+        } catch (error) {
+            return res.status(500).json({
+                message: error.message,
+            });
+        }
+    },
+
+    // Fungsi untuk mendapatkan rooms milik user tertentu
+    async getEachRooms(req, res) {
         try {
             const rooms = await RoomsModel.find({ userId: req.user._id });
             return res.status(200).json({ data: rooms });
@@ -49,23 +70,7 @@ const roomController = {
         }
     },
 
-    async getDetailRoom(req, res) {
-        try {
-            const room = await RoomsModel.findById(req.params.id)
-                .populate('facilities.facility_id', 'name unit'); 
-
-            if (!room) {
-                return res.status(404).json({ message: 'Room not found' });
-            }
-
-            return res.status(200).json({ data: room });
-        } catch (error) {
-            return res.status(500).json({
-                message: error.message,
-            });
-        }
-    },
-
+    // Fungsi untuk mengupdate room
     async updateRoom(req, res) {
         try {
             const room = await RoomsModel.findOne({
@@ -86,6 +91,14 @@ const roomController = {
                 }
             }
 
+            // Handle photo replacement if a new photo is uploaded
+            if (req.file) {
+                if (room.photo) {
+                    deleteFile(room.photo); // hapus foto lama
+                }
+                room.photo = req.file.path;
+            }
+
             Object.assign(room, req.body);
             await room.save();
 
@@ -100,6 +113,7 @@ const roomController = {
         }
     },
 
+    // Fungsi untuk menghapus room dan foto
     async deleteRoomById(req, res) {
         try {
             const room = await RoomsModel.findOneAndDelete({
@@ -111,6 +125,11 @@ const roomController = {
                 return res.status(404).json({ message: 'Room not found' });
             }
 
+            // Hapus foto dari direktori
+            if (room.photo) {
+                deleteFile(room.photo);
+            }
+
             return res.status(200).json({ message: 'Room deleted successfully' });
         } catch (error) {
             return res.status(500).json({
@@ -118,18 +137,6 @@ const roomController = {
             });
         }
     },
-
-    async getAllRooms(req, res) {
-        try {
-            const rooms = await RoomsModel.find().populate('facilities.facility_id', 'name unit');
-            return res.status(200).json({ data: rooms });
-        } catch (error) {
-            return res.status(500).json({
-                message: error.message,
-            });
-        }
-    },
-
 };
 
 module.exports = roomController;

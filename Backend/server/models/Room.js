@@ -16,9 +16,13 @@ const roomsSchema = new mongoose.Schema({
     },
     price_perhour: {
         type: Number,
-        default: '',
         required: true
     },
+    photo: {
+        type: String,
+        default: '',
+        required: true
+    }
 }, {
     timestamps: true
 });
