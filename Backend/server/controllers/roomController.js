@@ -11,11 +11,9 @@ const deleteFile = (filePath) => {
 };
 
 const roomController = {
-
-    // Fungsi untuk membuat room baru dengan upload photo
     async createRoom(req, res) {
         const { facilities, name, price_perhour } = req.body;
-        const photo = req.file ? req.file.path : ''; // ambil photo jika ada
+        const photo = req.file ? req.file.path : ''; 
 
         try {
             const facilityIds = facilities.map(f => f.facility_id);
@@ -46,7 +44,6 @@ const roomController = {
         }
     },
 
-    // Fungsi untuk mendapatkan semua room
     async getAllRooms(req, res) {
         try {
             const rooms = await RoomsModel.find().populate('facilities.facility_id', 'name unit');
@@ -58,7 +55,6 @@ const roomController = {
         }
     },
 
-    // Fungsi untuk mendapatkan rooms milik user tertentu
     async getEachRooms(req, res) {
         try {
             const rooms = await RoomsModel.find({ userId: req.user._id });
@@ -70,7 +66,6 @@ const roomController = {
         }
     },
 
-    // Fungsi untuk mengupdate room
     async updateRoom(req, res) {
         try {
             const room = await RoomsModel.findOne({
@@ -91,10 +86,9 @@ const roomController = {
                 }
             }
 
-            // Handle photo replacement if a new photo is uploaded
             if (req.file) {
                 if (room.photo) {
-                    deleteFile(room.photo); // hapus foto lama
+                    deleteFile(room.photo);
                 }
                 room.photo = req.file.path;
             }
@@ -113,7 +107,6 @@ const roomController = {
         }
     },
 
-    // Fungsi untuk menghapus room dan foto
     async deleteRoomById(req, res) {
         try {
             const room = await RoomsModel.findOneAndDelete({
@@ -125,7 +118,6 @@ const roomController = {
                 return res.status(404).json({ message: 'Room not found' });
             }
 
-            // Hapus foto dari direktori
             if (room.photo) {
                 deleteFile(room.photo);
             }
