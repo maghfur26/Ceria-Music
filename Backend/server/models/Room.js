@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
 
 const roomsSchema = new mongoose.Schema({
-    schedule: {
-       type: String,
-       required: true
-    },
-    facility : {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Facilities', 
-        required: true
-    },
+    facilities: [
+        {
+            facility_id: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'Facilities',
+                required: true
+            }
+        }
+    ],
     name: {
-        type: String, 
+        type: String,
         required: true
     },
-    price_perhour : {
+    price_perhour: {
         type: Number,
-        default: 1
-    }
+        default: '',
+        required: true
+    },
 }, {
     timestamps: true
 });
