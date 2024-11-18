@@ -4,24 +4,57 @@ const RoomsModel = require('../models/Room');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const bookingController = {
     async createBooking(req, res) {
         try {
             const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
 
+            const today = new Date().setHours(0, 0, 0, 0); 
+            const bookingDate = new Date(date).setHours(0, 0, 0, 0);
+            if (bookingDate < today) {
+                return res.status(400).json({ message: 'Booking date cannot be in the past.' });
+            }
+
+            const overlappingBooking = await BookingModel.findOne({
+                room_id,
+                date,
+                $or: [
+                    { startTime: { $lt: endTime }, endTime: { $gt: startTime } }
+                ]
+            });
+
+            if (overlappingBooking) {
+                return res.status(400).json({
+                    message: 'Room is already booked for the selected date and time range.'
+                });
+            }
+
+            const totalHours = (new Date(endTime) - new Date(startTime)) / 3600000;
             const room = await RoomsModel.findById(room_id);
             if (!room) return res.status(404).json({ message: 'Room not found' });
 
-            const totalHours = (new Date(endTime) - new Date(startTime)) / 3600000; 
             const totalAmount = totalHours * room.price_perhour;
 
-            const booking = await BookingModel.create({ room_id, name, phoneNumber, date, startTime, endTime });
+            const booking = await BookingModel.create({
+                room_id,
+                name,
+                phoneNumber,
+                date,
+                startTime,
+                endTime
+            });
+
+            const paymentCode = crypto.randomBytes(4).toString('hex');
+            const expiryTime = new Date(Date.now() + 5 * 60 * 1000); 
 
             const payment = await PaymentModel.create({
                 booking_id: booking._id,
                 total_amount: totalAmount,
-                payment_status: 'Pending'
+                payment_status: 'Pending',
+                payment_code: paymentCode,
+                payment_code_expiry: expiryTime
             });
 
             return res.status(201).json({
@@ -49,26 +82,20 @@ const bookingController = {
             }
     
             const room = booking.room_id;
-    
-            console.log('Current working directory:', process.cwd());
-    
-            const receiptsDir = path.posix.join(__dirname, '../receipts');
-            console.log('Receipts directory path:', receiptsDir);
+            const receiptsDir = path.join('receipts');
     
             if (!fs.existsSync(receiptsDir)) {
-                console.log('Receipts directory does not exist. Creating...');
-                fs.mkdirSync(receiptsDir);
+                fs.mkdirSync(receiptsDir, { recursive: true });
             }
     
-            const pdfPath = path.posix.join(receiptsDir, `receipt-${bookingId}.pdf`);
-            console.log('Generated PDF path:', pdfPath);
-    
+            const pdfPath = path.join(receiptsDir, `receipt-${bookingId}.pdf`);
             const doc = new PDFDocument();
-            doc.pipe(fs.createWriteStream(pdfPath));
+            const writeStream = fs.createWriteStream(pdfPath);
+    
+            doc.pipe(writeStream);
     
             doc.fontSize(18).text('Music Studio Rental Receipt', { align: 'center' });
             doc.moveDown();
-    
             doc.fontSize(14).text(`Receipt ID: ${payment._id}`);
             doc.text(`Booking ID: ${booking._id}`);
             doc.text(`Name: ${booking.name}`);
@@ -77,40 +104,41 @@ const bookingController = {
             doc.text(`Start Time: ${new Date(booking.startTime).toLocaleTimeString()}`);
             doc.text(`End Time: ${new Date(booking.endTime).toLocaleTimeString()}`);
             doc.moveDown();
-    
-            doc.fontSize(14).text(`Room Name: ${room.name}`);
+            doc.text(`Room Name: ${room.name}`);
             doc.text(`Price per Hour: ${room.price_perhour}`);
             doc.moveDown();
-    
-            doc.fontSize(14).text(`Total Amount: ${payment.total_amount}`);
+            doc.text(`Total Amount: ${payment.total_amount}`);
+            doc.text(`Payment Code: ${payment.payment_code}`);
             doc.text(`Payment Status: ${payment.payment_status}`);
             doc.text(`Payment Date: ${payment.payment_date || '-'}`);
             doc.moveDown();
-    
             doc.text('Thank you for booking with us!', { align: 'center' });
     
             doc.end();
     
-            fs.access(pdfPath, fs.constants.F_OK, (err) => {
-                if (err) {
-                    console.error('PDF file does not exist:', err);
-                    return res.status(500).json({ message: 'Error generating PDF file' });
-                }
+            writeStream.on('finish', () => {
+                console.log('PDF file successfully written:', pdfPath);
     
-                console.log('Sending PDF file:', pdfPath);
                 res.download(pdfPath, `receipt-${bookingId}.pdf`, (err) => {
                     if (err) {
                         console.error('Error sending file:', err.message);
-                    } else {
-                        console.log('File sent successfully');
+                        return res.status(500).json({ message: 'Error sending PDF file' });
                     }
-                    fs.unlinkSync(pdfPath); 
+    
+                    console.log('File sent successfully');
+                    fs.unlinkSync(pdfPath);
                 });
             });
+    
+            writeStream.on('error', (err) => {
+                console.error('Error writing PDF file:', err.message);
+                return res.status(500).json({ message: 'Error generating PDF file' });
+            });
         } catch (error) {
+            console.error('Error in generateReceipt:', error.message);
             return res.status(500).json({ message: error.message });
         }
-    },
+    },    
 
     async getBookingDetails(req, res) {
         try {
