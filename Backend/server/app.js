@@ -8,6 +8,8 @@ const errorHandler = require('./middleware/errorHandler');
 const roomRoute = require('./routes/roomRoute');
 const bookingRoute = require('./routes/bookingRoute');
 const paymentRoute = require('./routes/paymentRoute');
+const cron = require('node-cron');
+const bookingController = require('./controllers/bookingController');
 require('dotenv').config(); 
 
 const app = express();
@@ -28,6 +30,11 @@ app.use('/api', bookingRoute)
 app.use('/api', paymentRoute)
 
 app.use(errorHandler)
+
+cron.schedule('* * * * *', async () => { // Cron berjalan setiap menit
+    console.log('Memeriksa booking yang kedaluwarsa...');
+    await bookingController.cancelExpiredBookings();
+});
 
 app.listen(port, () => {
     console.log(`Server berjalan di http://localhost:${port}`);

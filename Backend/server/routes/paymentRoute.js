@@ -3,6 +3,6 @@ const authMiddleware = require("../middleware/auth");
 const express = require('express')
 const paymentRoute = express.Router();
 
-paymentRoute.put('/payment/:id', authMiddleware, paymentController.updatePaymentStatus);
+paymentRoute.put('/payment', authMiddleware, paymentController.processPayment);
 
 module.exports = paymentRoute

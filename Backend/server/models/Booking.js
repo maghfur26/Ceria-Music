@@ -5,10 +5,15 @@ const bookingSchema = new mongoose.Schema({
     name: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     date: { type: Date, required: true },
+    status: {
+        type: String,
+        enum: ['Active', 'Confirmed','Cancelled'],
+        default: 'Active',
+    },    
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+}, {
+    timestamps: true
 });
 
 const BookingModel = mongoose.model('Bookings', bookingSchema);

@@ -151,6 +151,27 @@ const bookingController = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
+    },
+
+    async cancelExpiredBookings() {
+        try {
+            const now = new Date();
+
+            const expiredPayments = await PaymentModel.find({
+                payment_status: 'Pending',
+                payment_code_expiry: { $lte: now }
+            });
+
+            for (const payment of expiredPayments) {
+                await BookingModel.findByIdAndDelete(payment.booking_id);
+
+                await PaymentModel.findByIdAndDelete(payment._id);
+
+                console.log(`Booking ${payment.booking_id} dan pembayaran ${payment._id} dibatalkan.`);
+            }
+        } catch (error) {
+            console.error('Error canceling expired bookings:', error.message);
+        }
     }
 };
 
