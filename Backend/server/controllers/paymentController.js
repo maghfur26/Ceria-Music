@@ -25,7 +25,8 @@ const paymentController = {
                 return res.status(400).json({ message: 'Invalid payment amount. Payment must be exact.' });
             }
 
-            payment.payment_status = 'Paid';
+            payment.payment_status = 'Paid'
+            payment.receipt_status = 'Paid'
             payment.payment_date = now;
             await payment.save();
 
