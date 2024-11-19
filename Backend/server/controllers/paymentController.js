@@ -1,43 +1,52 @@
 const PaymentModel = require('../models/Payment');
 const BookingModel = require('../models/Booking');
+const path = require('path');
+const fs = require('fs');
+const bookingController = require('./bookingController');
 
 const paymentController = {
-    async processPayment(req, res) {
+    processPayment: async (req, res) => {
         try {
             const { payment_code, amount } = req.body;
 
-            // Cari payment berdasarkan payment_code
             const payment = await PaymentModel.findOne({ payment_code });
             if (!payment) {
                 return res.status(404).json({ message: 'Payment code not found' });
             }
 
-            // Cek apakah payment_code sudah kadaluarsa
             const now = new Date();
             if (payment.payment_code_expiry <= now) {
-                // Jika kadaluarsa, batalkan booking dan pembayaran terkait
                 await BookingModel.findByIdAndDelete(payment.booking_id);
                 await PaymentModel.findByIdAndDelete(payment._id);
                 return res.status(400).json({ message: 'Payment code expired. Booking has been canceled.' });
             }
 
-            // Verifikasi jumlah pembayaran sesuai dengan total_amount
             if (amount !== payment.total_amount) {
                 return res.status(400).json({ message: 'Invalid payment amount. Payment must be exact.' });
             }
 
-            // Update status pembayaran menjadi 'Paid'
             payment.payment_status = 'Paid';
             payment.payment_date = now;
             await payment.save();
 
-            // Update status booking jika diperlukan (misalnya jika ada field status)
+            if (payment.payment_status === 'Paid') {
+                const receiptsDir = path.join('receipts');
+                const pendingReceiptPath = path.join(receiptsDir, `receipt-${payment._id}.pdf`);
+
+                if (fs.existsSync(pendingReceiptPath)) {
+                    fs.unlinkSync(pendingReceiptPath);
+                }
+            }
+
             const booking = await BookingModel.findById(payment.booking_id);
             if (booking) {
-                // Booking sudah dibayar, bisa update status booking jika ada field status
-                booking.status = 'Confirmed'; // Pastikan field status sesuai dengan model Booking
+                booking.status = 'Confirmed';
                 await booking.save();
             }
+
+            await bookingController.generateReceipt(booking._id, payment._id, 'Paid');
+
+            await paymentController.removePendingReceipts();
 
             return res.status(200).json({
                 message: 'Payment processed successfully',
@@ -46,7 +55,48 @@ const paymentController = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    }
+    },
+
+    removePendingReceipts: async () => {
+        try {
+            const receiptsDir = path.join('receipts');
+            const files = fs.readdirSync(receiptsDir);
+
+            for (const file of files) {
+                const filePath = path.join(receiptsDir, file);
+                const paymentId = file.split('-')[1].split('.')[0];
+                const payment = await PaymentModel.findById(paymentId);
+
+                if (payment && payment.payment_status !== 'Paid') {
+                    fs.unlinkSync(filePath);
+                    console.log(`Deleted receipt file: ${file}`);
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting pending receipts:', error.message);
+        }
+    },
+
+    downloadReceipt: async (req, res) => {
+        try {
+            const { paymentId } = req.params;
+    
+            const payment = await PaymentModel.findById(paymentId);
+            if (!payment || payment.payment_status !== 'Paid') {
+                return res.status(404).json({ message: 'Paid receipt not found' });
+            }
+    
+            const pdfPath = path.join('receipts', `receipt-${payment._id}.pdf`);
+            if (!fs.existsSync(pdfPath)) {
+                return res.status(404).json({ message: 'Receipt file not found' });
+            }
+    
+            res.download(pdfPath, `receipt-${payment._id}.pdf`);
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({ message: 'Error downloading receipt' });
+        }
+    }  
 };
 
 module.exports = paymentController;

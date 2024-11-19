@@ -6,7 +6,9 @@ const paymentSchema = new mongoose.Schema({
     payment_status: { type: String, enum: ['Paid', 'Pending', 'Failed'], default: 'Pending' },
     payment_date: { type: Date },
     payment_code: { type: String, required: true },
-    payment_code_expiry: { type: Date, required: true }
+    payment_code_expiry: { type: Date, required: true },
+    receipt_path: { type: String, default: null },
+    receipt_status: { type: String, enum: ['Paid', 'Pending'], default: 'Pending' }
 }, {
     timestamps: true
 });

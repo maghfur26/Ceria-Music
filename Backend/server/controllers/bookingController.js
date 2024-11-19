@@ -7,16 +7,16 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const bookingController = {
-    async createBooking(req, res) {
+    createBooking: async (req, res) => {
         try {
             const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
-
-            const today = new Date().setHours(0, 0, 0, 0); 
+    
+            const today = new Date().setHours(0, 0, 0, 0);
             const bookingDate = new Date(date).setHours(0, 0, 0, 0);
             if (bookingDate < today) {
                 return res.status(400).json({ message: 'Booking date cannot be in the past.' });
             }
-
+    
             const overlappingBooking = await BookingModel.findOne({
                 room_id,
                 date,
@@ -24,19 +24,19 @@ const bookingController = {
                     { startTime: { $lt: endTime }, endTime: { $gt: startTime } }
                 ]
             });
-
+    
             if (overlappingBooking) {
                 return res.status(400).json({
                     message: 'Room is already booked for the selected date and time range.'
                 });
             }
-
+    
             const totalHours = (new Date(endTime) - new Date(startTime)) / 3600000;
             const room = await RoomsModel.findById(room_id);
             if (!room) return res.status(404).json({ message: 'Room not found' });
-
+    
             const totalAmount = totalHours * room.price_perhour;
-
+    
             const booking = await BookingModel.create({
                 room_id,
                 name,
@@ -45,18 +45,26 @@ const bookingController = {
                 startTime,
                 endTime
             });
-
+    
             const paymentCode = crypto.randomBytes(4).toString('hex');
-            const expiryTime = new Date(Date.now() + 5 * 60 * 1000); 
-
+            const expiryTime = new Date(Date.now() + 5 * 60 * 1000);
+    
             const payment = await PaymentModel.create({
                 booking_id: booking._id,
                 total_amount: totalAmount,
                 payment_status: 'Pending',
                 payment_code: paymentCode,
-                payment_code_expiry: expiryTime
+                payment_code_expiry: expiryTime,
+                receipt_status: 'Pending',
+                receipt_path: null
             });
-
+    
+            const pdfPath = await bookingController.generateReceipt(booking._id);
+    
+            payment.receipt_path = pdfPath;
+            payment.receipt_status = 'Pending'; 
+            await payment.save();
+    
             return res.status(201).json({
                 message: 'Booking created successfully',
                 booking,
@@ -67,19 +75,13 @@ const bookingController = {
         }
     },
 
-    async generateReceipt(req, res) {
+    generateReceipt: async (bookingId) => {
         try {
-            const bookingId = req.params.id;
-    
             const booking = await BookingModel.findById(bookingId).populate('room_id');
-            if (!booking) {
-                return res.status(404).json({ message: 'Booking not found' });
-            }
+            if (!booking) throw new Error('Booking not found');
     
             const payment = await PaymentModel.findOne({ booking_id: bookingId });
-            if (!payment) {
-                return res.status(404).json({ message: 'Payment not found' });
-            }
+            if (!payment) throw new Error('Payment not found');
     
             const room = booking.room_id;
             const receiptsDir = path.join('receipts');
@@ -88,15 +90,17 @@ const bookingController = {
                 fs.mkdirSync(receiptsDir, { recursive: true });
             }
     
-            const pdfPath = path.join(receiptsDir, `receipt-${bookingId}.pdf`);
+            const pdfPath = path.join(receiptsDir, `receipt-${payment._id}.pdf`);
             const doc = new PDFDocument();
             const writeStream = fs.createWriteStream(pdfPath);
     
             doc.pipe(writeStream);
     
-            doc.fontSize(18).text('Music Studio Rental Receipt', { align: 'center' });
+            // Set font for the document (use Helvetica as an example)
+            doc.fontSize(18).font('Helvetica').text('Music Studio Rental Receipt', { align: 'center' });
             doc.moveDown();
-            doc.fontSize(14).text(`Receipt ID: ${payment._id}`);
+    
+            doc.fontSize(14).font('Helvetica').text(`Receipt ID: ${payment._id}`);
             doc.text(`Booking ID: ${booking._id}`);
             doc.text(`Name: ${booking.name}`);
             doc.text(`Phone Number: ${booking.phoneNumber}`);
@@ -116,29 +120,15 @@ const bookingController = {
     
             doc.end();
     
-            writeStream.on('finish', () => {
-                console.log('PDF file successfully written:', pdfPath);
-    
-                res.download(pdfPath, `receipt-${bookingId}.pdf`, (err) => {
-                    if (err) {
-                        console.error('Error sending file:', err.message);
-                        return res.status(500).json({ message: 'Error sending PDF file' });
-                    }
-    
-                    console.log('File sent successfully');
-                    fs.unlinkSync(pdfPath);
-                });
-            });
-    
-            writeStream.on('error', (err) => {
-                console.error('Error writing PDF file:', err.message);
-                return res.status(500).json({ message: 'Error generating PDF file' });
+            return new Promise((resolve, reject) => {
+                writeStream.on('finish', () => resolve(pdfPath)); 
+                writeStream.on('error', reject);
             });
         } catch (error) {
             console.error('Error in generateReceipt:', error.message);
-            return res.status(500).json({ message: error.message });
+            throw error;
         }
-    },    
+    },
 
     async getBookingDetails(req, res) {
         try {
