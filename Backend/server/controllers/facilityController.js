@@ -54,6 +54,7 @@ const facilityController = {
             }
 
             Object.assign(facility, req.body);
+            // console.log(req.body.facility)
             await facility.save();
 
             ResponseAPI.success(res, facility, 'Facility updated successfully');
