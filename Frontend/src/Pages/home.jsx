@@ -5,7 +5,7 @@ import Dream from "../Components/fragments/landing pages/Dream";
 import FindBestRealEstate from "../Components/fragments/landing pages/FindBestRealEstate";
 import Footer from "../Components/fragments/landing pages/Footer";
 import Hero from "../Components/fragments/landing pages/Hero";
-import Header from "../Components/fragments/landing pages/Header";
+import Header from "../Components/fragments/landing pages/Navbar";
 import Residences from "../Components/fragments/landing pages/Residences";
 import Search from "../Components/fragments/landing pages/Search";
 import Service from "../Components/fragments/landing pages/Service";
