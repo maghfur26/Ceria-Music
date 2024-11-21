@@ -2,7 +2,7 @@ import { useState } from "react";
 import {  IoReorderThreeSharp } from "react-icons/io5";
 
 
-const Header = () => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="container mx-auto  mt-10 lg:my-10  text-black px-2">
@@ -104,4 +104,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Navbar;
