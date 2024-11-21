@@ -11,12 +11,27 @@ const bookingController = {
         try {
             const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
     
-            const today = new Date().setHours(0, 0, 0, 0);
+            const today = new Date();
             const bookingDate = new Date(date).setHours(0, 0, 0, 0);
-            if (bookingDate < today) {
+            
+            // Validasi tanggal pemesanan
+            if (bookingDate < today.setHours(0, 0, 0, 0)) {
                 return res.status(400).json({ message: 'Booking date cannot be in the past.' });
             }
     
+            const startTimeDate = new Date(startTime);
+            const endTimeDate = new Date(endTime);
+    
+            // Validasi waktu mulai dan akhir
+            if (startTimeDate < today || endTimeDate < today) {
+                return res.status(400).json({ message: 'Booking time cannot be in the past.' });
+            }
+    
+            if (startTimeDate >= endTimeDate) {
+                return res.status(400).json({ message: 'Start time must be before end time.' });
+            }
+    
+            // Cek pemesanan yang tumpang tindih
             const overlappingBooking = await BookingModel.findOne({
                 room_id,
                 date,
@@ -31,7 +46,7 @@ const bookingController = {
                 });
             }
     
-            const totalHours = (new Date(endTime) - new Date(startTime)) / 3600000;
+            const totalHours = (endTimeDate - startTimeDate) / 3600000;
             const room = await RoomsModel.findById(room_id);
             if (!room) return res.status(404).json({ message: 'Room not found' });
     
@@ -73,7 +88,7 @@ const bookingController = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    },
+    },    
 
     generateReceipt: async (bookingId) => {
         try {
@@ -133,31 +148,55 @@ const bookingController = {
     async getBookingDetails(req, res) {
         try {
             const { id } = req.params;
+    
+            // Cek apakah pembayaran terkait sudah kedaluwarsa dan pesanan dibatalkan
+            const payment = await PaymentModel.findOne({ booking_id: id });
+            if (!payment) {
+                return res.status(404).json({
+                    message: `Booking ${id} has been canceled by the system due to expired payment.`
+                });
+            }
+    
             const booking = await BookingModel.findById(id).populate('room_id');
-            if (!booking) return res.status(404).json({ message: 'Booking not found' });
-
-            const payment = await PaymentModel.findOne({ booking_id: booking._id });
+            if (!booking) {
+                return res.status(404).json({
+                    message: `Your booking has been canceled by the system due to expired payment.`
+                });
+            }
+    
             return res.status(200).json({ booking, payment });
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    },
+    },    
 
     async cancelExpiredBookings() {
         try {
             const now = new Date();
-
+    
+            // Cari semua pembayaran yang kedaluwarsa
             const expiredPayments = await PaymentModel.find({
                 payment_status: 'Pending',
                 payment_code_expiry: { $lte: now }
             });
-
+    
             for (const payment of expiredPayments) {
+                // Hapus pesanan terkait
                 await BookingModel.findByIdAndDelete(payment.booking_id);
-
+    
+                // Hapus file receipt jika ada
+                if (payment.receipt_path) {
+                    const receiptPath = path.resolve(payment.receipt_path); // Resolusi path absolut
+                    if (fs.existsSync(receiptPath)) {
+                        fs.unlinkSync(receiptPath); // Hapus file secara sinkron
+                        console.log(`Receipt file ${receiptPath} has been deleted.`);
+                    }
+                }
+    
+                // Hapus pembayaran terkait
                 await PaymentModel.findByIdAndDelete(payment._id);
-
-                console.log(`Booking ${payment.booking_id} dan pembayaran ${payment._id} dibatalkan.`);
+    
+                console.log(`Booking ${payment.booking_id} and payment ${payment._id} have been canceled.`);
             }
         } catch (error) {
             console.error('Error canceling expired bookings:', error.message);
