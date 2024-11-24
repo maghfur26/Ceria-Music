@@ -54,7 +54,7 @@ module.exports = (featureFolder) => (req, res, next) => {
                 message: err.message
             });
         }
-        req.file.path = req.file.path.replace(/\\/g, '/'); 
+        // req.file.path = req.file.path.replace(/\\/g, '/'); 
         // console.log('File uploaded:', req.file); 
         // console.log('File path:', req.file.path);
         next();

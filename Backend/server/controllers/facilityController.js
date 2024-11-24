@@ -1,4 +1,4 @@
- const FacilitiesModel = require('../models/Facility');
+const FacilitiesModel = require('../models/Facility');
 const ResponseAPI = require('../utils/response');
 
 const facilityController = {
@@ -7,7 +7,7 @@ const facilityController = {
         try {
             const facility = await FacilitiesModel.create({
                 ...req.body,
-                userId: req.user._id 
+                userId: req.user._id
             });
 
             ResponseAPI.success(res, facility, 'Facility created successfully', 201);
@@ -29,7 +29,7 @@ const facilityController = {
         try {
             const facility = await FacilitiesModel.findOne({
                 _id: req.params.id,
-                userId: req.user._id 
+                userId: req.user._id
             });
 
             if (!facility) {
@@ -46,7 +46,7 @@ const facilityController = {
         try {
             const facility = await FacilitiesModel.findOne({
                 _id: req.params.id,
-                userId: req.user._id 
+                userId: req.user._id
             });
 
             if (!facility) {
@@ -67,7 +67,7 @@ const facilityController = {
         try {
             const facility = await FacilitiesModel.findOneAndDelete({
                 _id: req.params.id,
-                userId: req.user._id 
+                userId: req.user._id
             });
 
             if (!facility) {
