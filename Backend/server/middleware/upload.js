@@ -11,7 +11,7 @@ const ensureDirectoryExistence = (folderPath) => {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const featureFolder = req.featureFolder || 'general'; 
-        const folder = `uploads/${featureFolder}`.replace(/\\/g, '/'); 
+        const folder = path.join('uploads', featureFolder);
         ensureDirectoryExistence(folder); 
         cb(null, folder);
     },
@@ -54,7 +54,9 @@ module.exports = (featureFolder) => (req, res, next) => {
                 message: err.message
             });
         }
-        // req.file.path = req.file.path.replace(/\\/g, '/'); 
+        if (req.file) {
+            req.file.path = req.file.path.replace(/\\/g, '/'); 
+        }
         // console.log('File uploaded:', req.file); 
         // console.log('File path:', req.file.path);
         next();

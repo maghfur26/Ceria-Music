@@ -9,6 +9,7 @@ const router = require('./routes');
 require('dotenv').config(); 
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const path = require('path');
 
 const app = express();
 
@@ -21,9 +22,9 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Vocatask Task Management API',
+            title: 'Seamus Management API',
             version: '1.0.0',
-            description: 'API documentation for Task Management System'
+            description: 'API documentation for Music Studio Rent System'
         },
         servers: [
             {
@@ -73,6 +74,10 @@ const swaggerOptions = {
     },
     apis: ['./server/routes/*.js']  // Ensure this path includes your route files
 };
+
+// Menjadikan folder "uploads, dan receipts" sebagai folder statis
+app.use('/uploads', express.static(path.join('uploads')));
+app.use('/receipts', express.static(path.join('receipts')));
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

@@ -109,9 +109,10 @@ const bookingController = {
                 fs.mkdirSync(receiptsDir, { recursive: true });
             }
 
-            const pdfPath = path.join(receiptsDir, `receipt-${payment._id}.pdf`);
+            const pdfPath = `receipts/receipt-${payment._id}.pdf`;
+            const fullPath = path.join(pdfPath);
             const doc = new PDFDocument();
-            const writeStream = fs.createWriteStream(pdfPath);
+            const writeStream = fs.createWriteStream(fullPath);
 
             doc.pipe(writeStream);
 
@@ -177,25 +178,25 @@ const bookingController = {
     async cancelExpiredBookings() {
         try {
             const now = new Date();
-    
+
             // Cari semua pembayaran yang kedaluwarsa
             const expiredPayments = await PaymentModel.find({
                 payment_status: 'Pending',
                 payment_code_expiry: { $lte: now }
             });
-    
+
             for (const payment of expiredPayments) {
                 // Perbarui status pembayaran
                 payment.payment_status = 'Failed';
                 await payment.save();
-    
+
                 // Perbarui status pemesanan terkait
                 const booking = await BookingModel.findById(payment.booking_id);
                 if (booking) {
                     booking.status = 'Cancelled'; // Tambahkan field "status" di model Booking
                     await booking.save();
                 }
-    
+
                 // Hapus file PDF jika ada
                 if (payment.receipt_path) {
                     const pdfPath = path.join(payment.receipt_path);
@@ -209,13 +210,13 @@ const bookingController = {
                         });
                     }
                 }
-    
+
                 console.log(`Booking ${payment.booking_id} and payment ${payment._id} have been marked as expired.`);
             }
         } catch (error) {
             console.error('Error canceling expired bookings:', error.message);
         }
-    }    
+    }
 };
 
 module.exports = bookingController
