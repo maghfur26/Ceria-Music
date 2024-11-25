@@ -68,6 +68,58 @@ const swaggerOptions = {
                         }
                     },
                     required: ['name', 'unit']
+                },
+                Booking: {
+                    type: 'object',
+                    properties: {
+                        _id: {
+                            type: 'string',
+                            description: 'Unique identifier for the booking'
+                        },
+                        room_id: {
+                            type: 'string',
+                            description: 'ID of the room being booked'
+                        },
+                        name: {
+                            type: 'string',
+                            description: 'Name of the customer'
+                        },
+                        phoneNumber: {
+                            type: 'string',
+                            description: 'Customer phone number'
+                        },
+                        date: {
+                            type: 'string',
+                            format: 'date',
+                            description: 'Date of the booking'
+                        },
+                        startTime: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Start time of the booking'
+                        },
+                        endTime: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'End time of the booking'
+                        },
+                        status: {
+                            type: 'string',
+                            enum: ['Waiting', 'Confirmed', 'Cancelled'],
+                            description: 'Status of the booking'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Date and time when the booking was created'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Date and time when the booking was last updated'
+                        }
+                    },
+                    required: ['room_id', 'name', 'phoneNumber', 'date', 'startTime', 'endTime']
                 }
             }
         }

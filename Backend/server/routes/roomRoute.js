@@ -99,7 +99,7 @@ roomRoute.get('/room/:id', authMiddleware, roomController.getEachRooms)
  *                 items:
  *                   type: object
  *                   properties:
- *                     facility_id:
+ *                     facilities[0][facility_id]:
  *                       type: string
  *     responses:
  *       201:

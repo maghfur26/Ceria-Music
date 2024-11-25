@@ -53,7 +53,7 @@ userRoute.post('/user/login', userController.login);
 
 /**
  * @swagger
- * /api/update:
+ * /api/user/update:
  *   put:
  *     summary: Perbarui profil pengguna
  *     tags: [Users]
@@ -103,7 +103,7 @@ userRoute.put('/user/update', authMiddleware, upload('user'), userController.upd
 
 /**
  * @swagger
- * /api/logout:
+ * /api/user/logout:
  *   post:
  *     summary: Logout pengguna
  *     tags: [Users]
