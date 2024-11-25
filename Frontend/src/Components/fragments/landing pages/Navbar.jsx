@@ -1,31 +1,29 @@
 import { useState } from "react";
 import {  IoReorderThreeSharp } from "react-icons/io5";
+import Logo from '../../../assets/logo.png'
 
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <div className="container mx-auto  mt-10 lg:my-10  text-black px-2">
-      <div className=" px-2 pt-2   hidden lg:flex font-[Inter] lg:flex-row  lg:justify-between max-w-full">
-        <div className="p-2 flex flex-row  text-2xl  uppercase font-bold">
-          <img src="https://i.ibb.co/Z1rY1zd/Frame-102.png" alt="" /> Homeland
+    <div className="container mx-auto  mt-10 lg:my-7  text-black px-2">
+      <div className="  pt-2   hidden lg:flex font-[Inter] lg:flex-row  lg:justify-between max-w-full">
+        <div className="p- flex flex-row  text-2xl  uppercase font-bold">
+          <img src={Logo} alt="" width={250} height={0}/> 
         </div>
         <div>
           <div className="flex flex-row gap-2 text-xl font-[Inter]  ">
-            <a className="p-2 hover:text-sky-600" href="#home">
+            <a className="p-2 font-manrope hover:text-sky-600" href="#service">
               Home
             </a>
-            <a className="p-2 hover:text-sky-600" href="#service">
-              Listing
-            </a>
-            <a className="p-2 hover:text-sky-600" href="#residence">
-              Residence
+            <a className="p-2 font-manrope hover:text-sky-600" href="#residence">
+              Booking
             </a>
 
-            <a className="p-2 hover:text-sky-600" href="#team">
-              About us
+            <a className="p-2 font-manrope hover:text-sky-600" href="#team">
+              About 
             </a>
-            <a className="p-2 hover:text-sky-600" href="#team">
+            <a className="p-2 font-manrope hover:text-sky-600" href="#team">
               Contact
             </a>
 
@@ -34,14 +32,10 @@ const Navbar = () => {
           </div>
           
         </div>
-        <div className="">
-            <button className="bg-[#FF7043]  text-white py-3 px-5 rounded-lg font-bold hover:bg-blue-700 hover:text-white"> SignIn</button>
-            </div>
+        
       </div>
-      <div className="lg:hidden flex flex-row justify-between ">
-      <div className="p-2 flex flex-row  text-2xl  uppercase font-bold">
-          <img src="https://i.ibb.co/Z1rY1zd/Frame-102.png" alt="" /> Homeland
-        </div>
+      <div className="lg:hidden flex flex-row mb-6 justify-between ">
+      <img src={Logo} alt="logo" width={180} height={0} /> 
         <div>
           <button
             className="px-2 pt-2 -mr-1  transition duration-200 rounded focus:outline-none  focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
@@ -77,23 +71,17 @@ const Navbar = () => {
               Home
             </a>
             <a className="p-2 hover:text-sky-600" href="#service">
-              Listing
+              Booking
             </a>
             <a className="p-2 hover:text-sky-600" href="#residence">
-              Residence
-            </a>
-
-            <a className="p-2 hover:text-sky-600" href="#team">
-              About us
+              About
             </a>
             <a className="p-2 hover:text-sky-600" href="#team">
               Contact
             </a>
 
 
-                  <div className="">
-                  <button className="bg-[#FF7043]  text-white py-3 px-2 font-bold"> SignIn</button>
-                  </div>
+                  
                 </div>
               </div>
             </div>
