@@ -120,7 +120,63 @@ const swaggerOptions = {
                         }
                     },
                     required: ['room_id', 'name', 'phoneNumber', 'date', 'startTime', 'endTime']
-                }
+                },
+                Payment: {
+                    type: 'object',
+                    properties: {
+                        _id: {
+                            type: 'string',
+                            description: 'Unique identifier for the booking'
+                        },
+                        booking_id: {
+                            type: 'string',
+                            description: 'ID of the booking being payment'
+                        },
+                        total_amount: {
+                            type: 'number',
+                            description: 'Total amount'
+                        },
+                        payment_status: {
+                            type: 'string',
+                            enum: ['Pending', 'Paid', 'Failed'],
+                            description: 'Status of payment'
+                        },
+                        payment_date: {
+                            type: 'string',
+                            format: 'date',
+                            description: 'Date of the payment'
+                        },
+                        payment_code: {
+                            type: 'string',
+                            description: 'Code of the payment'
+                        },
+                        payment_code_expiry: {
+                            type: 'string',
+                            format: 'date',
+                            description: ''
+                        },
+                        receipt_path: {
+                            type: 'string',
+                            enum: ['Pending', 'Paid', 'Failed'],
+                            description: 'Path of receipt'
+                        },
+                        receipt_status: {
+                            type: 'string',
+                            description: 'Path of receipt'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Date and time when the booking was created'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Date and time when the booking was last updated'
+                        }
+                    },
+                    required: ['room_id', 'name', 'phoneNumber', 'date', 'startTime', 'endTime']
+                },
             }
         }
     },

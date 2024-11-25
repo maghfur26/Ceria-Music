@@ -8,6 +8,8 @@ const crypto = require('crypto');
 
 const bookingController = {
     createBooking: async (req, res) => {
+        const session = await mongoose.startSession();
+        session.startTransaction(); // Memulai transaksi
         try {
             const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
 
@@ -16,7 +18,7 @@ const bookingController = {
 
             // Validasi tanggal pemesanan
             if (bookingDate < today.setHours(0, 0, 0, 0)) {
-                return res.status(400).json({ message: 'Booking date cannot be in the past.' });
+                throw new Error('Booking date cannot be in the past.');
             }
 
             const startTimeDate = new Date(startTime);
@@ -24,11 +26,11 @@ const bookingController = {
 
             // Validasi waktu mulai dan akhir
             if (startTimeDate < today || endTimeDate < today) {
-                return res.status(400).json({ message: 'Booking time cannot be in the past.' });
+                throw new Error('Booking time cannot be in the past.');
             }
 
             if (startTimeDate >= endTimeDate) {
-                return res.status(400).json({ message: 'Start time must be before end time.' });
+                throw new Error('Start time must be before end time.');
             }
 
             // Cek pemesanan yang tumpang tindih
@@ -39,57 +41,62 @@ const bookingController = {
                 $or: [
                     { startTime: { $lt: endTime }, endTime: { $gt: startTime } } // Rentang waktu tumpang tindih
                 ]
-            });
+            }).session(session);
 
             if (overlappingBooking) {
-                return res.status(400).json({
-                    message: 'Room is already booked for the selected date and time range.'
-                });
+                throw new Error('Room is already booked for the selected date and time range.');
             }
 
-
+            // Hitung total biaya
             const totalHours = (endTimeDate - startTimeDate) / 3600000;
-            const room = await RoomsModel.findById(room_id);
-            if (!room) return res.status(404).json({ message: 'Room not found' });
+            const room = await RoomsModel.findById(room_id).session(session);
+            if (!room) throw new Error('Room not found');
 
             const totalAmount = totalHours * room.price_perhour;
 
-            const booking = await BookingModel.create({
+            // Buat booking
+            const booking = await BookingModel.create([{
                 room_id,
                 name,
                 phoneNumber,
                 date,
                 startTime,
                 endTime
-            });
+            }], { session });
 
-            const paymentCode = Array.from(crypto.randomBytes(8)) // 4 bytes untuk 8 karakter
-                .map((byte) => (byte % 36).toString(36).toUpperCase()) // Konversi ke base36
+            // Buat payment
+            const paymentCode = Array.from(crypto.randomBytes(8))
+                .map((byte) => (byte % 36).toString(36).toUpperCase())
                 .join('');
             const expiryTime = new Date(Date.now() + 5 * 60 * 1000);
 
-            const payment = await PaymentModel.create({
-                booking_id: booking._id,
+            const payment = await PaymentModel.create([{
+                booking_id: booking[0]._id,
                 total_amount: totalAmount,
                 payment_status: 'Pending',
                 payment_code: paymentCode,
                 payment_code_expiry: expiryTime,
                 receipt_status: 'Pending',
                 receipt_path: null
-            });
+            }], { session });
 
-            const pdfPath = await bookingController.generateReceipt(booking._id);
+            // Buat receipt PDF
+            const pdfPath = await bookingController.generateReceipt(booking[0]._id);
+            payment[0].receipt_path = pdfPath;
+            payment[0].receipt_status = 'Pending';
+            await payment[0].save({ session });
 
-            payment.receipt_path = pdfPath;
-            payment.receipt_status = 'Pending';
-            await payment.save();
+            await session.commitTransaction(); // Commit transaksi jika semua operasi berhasil
+            session.endSession();
 
             return res.status(201).json({
                 message: 'Booking created successfully',
-                booking,
-                payment
+                booking: booking[0],
+                payment: payment[0]
             });
         } catch (error) {
+            await session.abortTransaction(); // Rollback jika ada kesalahan
+            session.endSession();
             return res.status(500).json({ message: error.message });
         }
     },
