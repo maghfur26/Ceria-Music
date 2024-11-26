@@ -22,6 +22,14 @@ const roomsSchema = new mongoose.Schema({
         type: String,
         default: '',
         required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        default: 'Available'
     }
 }, {
     timestamps: true

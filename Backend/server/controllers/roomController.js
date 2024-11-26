@@ -12,7 +12,7 @@ const deleteFile = (filePath) => {
 
 const roomController = {
     async createRoom(req, res) {
-        const { facilities, name, price_perhour } = req.body;
+        const { facilities, name, price_perhour, category, status } = req.body;
         const photo = req.file ? req.file.path : ''; 
 
         try {
@@ -28,6 +28,8 @@ const roomController = {
                 name,
                 price_perhour,
                 photo,
+                category,
+                status
             });
 
             const populatedRoom = await RoomsModel.findById(newRoom._id)
