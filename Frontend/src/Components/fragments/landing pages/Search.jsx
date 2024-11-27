@@ -44,7 +44,7 @@ const Search = () => {
       >
         <ReactTyped
           strings={["Search Studio", "Look For Studio", "Find Studio"]}
-          typeSpeed={170}
+          typeSpeed={170}en
           backSpeed={100}
           backDelay={1500}
           loop
