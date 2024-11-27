@@ -13,17 +13,17 @@ const Navbar = () => {
         </div>
         <div>
           <div className="flex flex-row gap-2 text-xl font-[Inter]  ">
-            <a className="p-2 font-manrope hover:text-sky-600" href="#service">
+            <a className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md hover:text-white" href="#service">
               Home
             </a>
-            <a className="p-2 font-manrope hover:text-sky-600" href="#residence">
+            <a className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md hover:text-white" href="#residence">
               Booking
             </a>
 
-            <a className="p-2 font-manrope hover:text-sky-600" href="#team">
+            <a className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md hover:text-white" href="#team">
               About 
             </a>
-            <a className="p-2 font-manrope hover:text-sky-600" href="#team">
+            <a className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md hover:text-white" href="#team">
               Contact
             </a>
 

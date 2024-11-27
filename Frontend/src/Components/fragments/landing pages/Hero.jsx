@@ -2,53 +2,41 @@ import { IoStar } from "react-icons/io5";
 
 const Hero = () => {
   return (
-    <div
-      style={{
-        backgroundImage: `url(${"https://i.ibb.co/3c5Zj4f/imgonline-com-ua-twotoone-D8k-SN12-Fx-Bbog5-F.jpg"})`,
-        backgroundPosition: "center",
-        
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundColor: "lightcyan",
-        height: "80vh",
-      }}
-      className="container mx-auto text-black flex flex-col justify-center h-full text-center w-full items-center px-10 mb-12"
-    >
-      <div className="relative z-10">
-        <div className="text-center flex flex-col items-center justify-start">
-          <h1 className="text-4xl font-bold text-black">
-            Discover The Home of
-            <br /> Your Dream{" "}
-          </h1>
-          <p className="my-5 py-3 font-semibold">
-            The Real state is where you can find a dream home of <br /> your
-            choice without stress
-          </p>
-          <button className="bg-[#FF7043] my-5 text-white py-3 px-5 rounded-lg font-bold hover:bg-blue-700 hover:text-white">
-            Explore More{" "}
-          </button>
-          <div className="flex flex-row py-5 justify-evenly items-center gap-8">
-            <div className="px-4">
-              <img src="https://i.ibb.co/yF94yW2/Group.png" alt="" />
-              <p>Excellent 20,000+ reviews</p>
-              <div className="flex flex-row ">
-                <IoStar className="text-yellow-300" />
-                <IoStar className="text-yellow-300" />
-                <IoStar className="text-yellow-300" />
-                <IoStar className="text-yellow-300" />
-                <IoStar className="text-yellow-300" />
-              </div>
-            </div>
-            <div className="px-4">
-              <img src="https://i.ibb.co/dfLTKzT/Group-33096.png" alt="" />
-              <p>
-                People successfully <br /> got their dream home.
-              </p>
-            </div>
-          </div>
-        </div>
+    <section className="relative bg-gray-100">
+    {/* Background Image */}
+    <div className="relative">
+      <img
+        src="https://via.placeholder.com/1200x600"
+        alt="Music Studio"
+        className="w-full h-[300px] md:h-[400px] object-cover rounded-lg"
+      />
+      {/* Overlay Text */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <h1 className="text-white text-2xl md:text-4xl font-bold text-center">
+          Discover Your Dream Music Studio with us!
+        </h1>
       </div>
     </div>
+
+    {/* Text Section */}
+    <div className="mt-6 text-center">
+      <p className="text-gray-700 px-4 md:px-20">
+        Are you a musician, producer, or content creator looking for the
+        perfect space to bring your creative visions to life? Look no further.
+      </p>
+      <div className="mt-4">
+        <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition">
+          Explore More
+        </button>
+      </div>
+      {/* Extra Info */}
+      <div className="mt-6 flex justify-center gap-8 text-gray-600 text-sm">
+        <p>Excellent 10,000+ reviews</p>
+        <p>People Have Successfully Found Their Dream Studio</p>
+      </div>
+    </div>
+  </section>
+
   );
 };
 
