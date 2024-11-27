@@ -36,7 +36,7 @@ const upload = require('../middleware/upload');
  *       500:
  *         description: Internal server error
  */
-roomRoute.get('/room', authMiddleware, roomController.getAllRooms)
+roomRoute.get('/room', roomController.getAllRooms)
 
 /**
  * @swagger
