@@ -1,18 +1,18 @@
 import { useState } from "react";
 import {  IoReorderThreeSharp } from "react-icons/io5";
 import Logo from '../../../assets/logo.png'
-
+import AOS from "aos";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <div className="container mx-auto  mt-10 lg:my-7  text-black px-2">
-      <div className="  pt-2   hidden lg:flex font-[Inter] lg:flex-row  lg:justify-between max-w-full">
-        <div className="p- flex flex-row  text-2xl  uppercase font-bold">
+      <div className="  pt-2  hidden lg:flex font-[Inter] lg:flex-row  lg:justify-between max-w-full">
+        <div className="p- flex flex-row  text-2xl  uppercase font-bold" data-aos='fade-right'>
           <img src={Logo} alt="" width={250} height={0}/> 
         </div>
         <div>
-          <div className="flex flex-row gap-2 text-xl font-[Inter]  ">
+          <div className="flex flex-row gap-2 text-xl font-[Inter]  " data-aos='fade-left'>
             <a className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md hover:text-white" href="#service">
               Home
             </a>
@@ -35,11 +35,12 @@ const Navbar = () => {
         
       </div>
       <div className="lg:hidden flex flex-row mb-6 justify-between ">
-      <img src={Logo} alt="logo" width={180} height={0} /> 
+      <img src={Logo} alt="logo" width={180} height={0} data-aos='fade-right'/> 
         <div>
           <button
             className="px-2 pt-2 -mr-1  transition duration-200 rounded focus:outline-none  focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
             onClick={() => setIsMenuOpen(true)}
+            data-aos='fade-left'
           >
             <IoReorderThreeSharp className="text-3xl" />
           </button>
