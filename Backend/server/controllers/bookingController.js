@@ -223,6 +223,24 @@ const bookingController = {
         } catch (error) {
             console.error('Error canceling expired bookings:', error.message);
         }
+    },
+
+    async getAllBooking(req, res) {
+        try {
+            const bookings = await BookingModel.find()
+                .populate('room_id', 'name price_perhour') // Populate room_id
+                .populate('payment') // Populate payment (virtual field)
+                .sort({ date: -1 });
+
+            if (bookings.length === 0) {
+                return res.status(404).json({ message: 'No bookings found' });
+            }
+
+            return res.status(200).json({ bookings });
+        } catch (error) {
+            console.error('Error fetching all bookings:', error.message);
+            return res.status(500).json({ message: error.message });
+        }
     }
 };
 

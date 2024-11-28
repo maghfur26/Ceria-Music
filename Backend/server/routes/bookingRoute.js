@@ -121,5 +121,6 @@ const bookingRoute = express.Router();
 
 bookingRoute.post('/booking', bookingController.createBooking);
 bookingRoute.get('/booking/:id', bookingController.getBookingDetails);
+bookingRoute.get('/booking', bookingController.getAllBooking);
 
 module.exports = bookingRoute;
