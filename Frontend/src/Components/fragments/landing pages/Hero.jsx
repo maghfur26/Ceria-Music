@@ -22,12 +22,12 @@ const HeroSection = () => {
         </div>
 
         <div
-          className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 w-[80%] bg-white shadow-lg rounded-xl p-3 md:p-12 text-center"
+          className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 w-[80%] bg-white shadow-lg rounded-xl p-3 lg:p-10 md:p-8 text-center"
         >
-          <h1 className="text-xl md:text-[60px]  font-normal md:mb-8">
+          <h1 className="md:text-5xl text-xl lg:text-[60px]  font-normal md:mb-8 lg:mb-5">
             Discover Your dream
           </h1>
-          <span className="text-xl md:text-[60px] font-normal">
+          <span className="md:text-5xl text-xl lg:text-[60px] font-normal">
             Music Studio with us!
           </span>
         </div>
@@ -38,10 +38,10 @@ const HeroSection = () => {
         className="mt-16 text-center text-gray-600 text-sm space-y-2"
       >
         <div className="mb-10">
-          <p className="md:text-[23px] text-[15px] font-normal text-[#2E343F] mb-6 md:mb-6 md:leading-6">
-            Are you a musician, producer, or content creator looking for <br />{" "}
+          <p className="md:text-[23px] text-[15px] px-12 font-normal text-[#2E343F] mb-6 md:mb-6 md:leading-6">
+            Are you a musician, producer, or content creator looking for <br className="hidden lg:block"/>{" "}
             the perfect space to bring your creative visions to life? Look no{" "}
-            <br /> further.
+            <br className="hidden lg:block" /> further.
           </p>
           <button className="md:w-[170px] md:h-[45px] w-[120px] md:text-[20px] h-[40px] bg-blue-500 text-white font-semibold md:text-xl rounded-full hover:bg-blue-600 transition">
             Explore More
@@ -50,13 +50,13 @@ const HeroSection = () => {
 
         <div
           data-aos="fade-up"
-          className="flex flex-col md:flex-row md:gap-9 gap-4 items-center md:items-start text-gray-600"
+          className="md:flex flex-col px-7 md:flex-row md:gap-9 gap-4 items-center md:items-start text-gray-600"
         >
-          <div className="flex justify-between w-full md:w-auto">
-            <span className="text-[16px] text-[#2E343F] md:text-[20px] font-normal" data-aos='fade-right'>
+          <div className="flex justify-between w-full md:w-auto items-center md:mt-5">
+            <span className="text-[16px] text-[#2E343F] md:ml-16 md:text-[20px] md:block lg:block hidden font-normal" data-aos='fade-right'>
               Excellent 10,000+ reviews
             </span>
-            <p className="text-[16px] md:text-[20px] font-normal text-[#2E343F] md:ml-36 text-center" data-aos='fade-left'>
+            <p className="text-[16px] md:text-[20px] hidden lg:block font-normal md:block text-[#2E343F] md:ml-36 text-center" data-aos='fade-left'>
               People Have Successfully <br /> Found Their Dream Studio
             </p>
           </div>
