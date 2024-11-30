@@ -16,16 +16,5 @@ const bookingSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Definisikan virtual field untuk relasi ke Payment
-bookingSchema.virtual('payment', {
-    ref: 'Payments', // Nama model Payment
-    localField: '_id', // Field di Booking yang jadi referensi
-    foreignField: 'booking_id', // Field di Payment yang menunjuk ke Booking
-});
-
-// Aktifkan virtual field di output JSON
-bookingSchema.set('toJSON', { virtuals: true });
-bookingSchema.set('toObject', { virtuals: true });
-
 const BookingModel = mongoose.model('Bookings', bookingSchema);
 module.exports = BookingModel;

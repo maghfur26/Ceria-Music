@@ -32,7 +32,7 @@ const paymentController = {
 
             if (payment.payment_status === 'Paid') {
                 const receiptsDir = path.join('receipts');
-                const pendingReceiptPath = path.join(receiptsDir, `receipt-${payment._id}.pdf`);
+                const pendingReceiptPath = path.join(receiptsDir,"receipt-${payment._id}.pdf");
 
                 if (fs.existsSync(pendingReceiptPath)) {
                     fs.unlinkSync(pendingReceiptPath);
@@ -88,6 +88,7 @@ const paymentController = {
             }
     
             const pdfPath = path.join('receipts', `receipt-${payment._id}.pdf`);
+            console.log('PDF Path:', pdfPath);
             if (!fs.existsSync(pdfPath)) {
                 return res.status(404).json({ message: 'Receipt file not found' });
             }
