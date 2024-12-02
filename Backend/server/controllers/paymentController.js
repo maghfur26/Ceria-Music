@@ -14,6 +14,10 @@ const paymentController = {
                 return res.status(404).json({ message: 'Payment code not found' });
             }
 
+            if (payment.payment_status === 'Paid') {
+                return res.status(400).json({ message: 'Payment has already been processed.' });
+            }            
+
             const now = new Date();
             if (payment.payment_code_expiry <= now) {
                 await BookingModel.findByIdAndDelete(payment.booking_id);
@@ -98,7 +102,29 @@ const paymentController = {
             console.error(error.message);
             res.status(500).json({ message: 'Error downloading receipt' });
         }
-    }  
+    },  
+
+    getAllPayments: async(req, res) => {
+        try {
+            // Ambil semua data booking dari database
+            const payment = await PaymentModel.find();
+
+            // Jika tidak ada data booking
+            if (!payment || payment.length === 0) {
+                return res.status(404).json({ message: 'No payments found' });
+            }
+
+            // Kirim respon dengan data booking
+            return res.status(200).json({
+                message: 'payment retrieved successfully',
+                payment
+            });
+        } catch (error) {
+            // Tangani error dan kirim respon error
+            console.error(error.message);
+            return res.status(500).json({ message: 'Error retrieving payments' });
+        }
+    }
 };
 
 module.exports = paymentController;

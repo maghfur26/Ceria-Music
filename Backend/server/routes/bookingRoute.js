@@ -119,6 +119,7 @@ const bookingController = require('../controllers/bookingController');
 const bookingRoute = express.Router();
 
 bookingRoute.post('/booking', bookingController.createBooking);
+bookingRoute.get('/booking', bookingController.getAllBookings);
 bookingRoute.get('/booking/:id', bookingController.getBookingDetails);
 
 module.exports = bookingRoute;
