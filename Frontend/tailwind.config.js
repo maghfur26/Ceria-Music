@@ -9,6 +9,9 @@ export default {
       fontFamily: {
         manrope: ['Manrope', 'sans-serif'], 
       },
+      aspectRatio: {
+        '3/4': '3/4',
+      },
     },
   },
   plugins: [],

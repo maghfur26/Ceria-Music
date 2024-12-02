@@ -1,13 +1,14 @@
 import { CiCircleChevUp, CiTwitter } from "react-icons/ci";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import maghfur from "../../../assets/teams/maghfur.jpg";
 
 const Team = () => {
     const cards = [
       {
         id: 1,
-        img: "https://s3-alpha-sig.figma.com/img/d90d/aa9a/495f0295d092af5b214f4b8cdf301aab?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E2qy9FO5mHbdqkojcfejfHFV56P~zTHid3fRZ~tq6pPvtcsqKATwAOjpAx1hxY6KpBZZoNpYOTmXLI97KOukURIql8KH0Pt76-K52MSYEpCpPHUlQkKk-8FyLA~0V21IKxAXNB2uWPMgzXsDpTXsQIGzzggIyYhKsnjtPbsnQNE2xRse9Zy7aXc6PwZnV6q3D3OutQ5fQDvZnD--aUbgnX8OnDcNdSTGLg85-CWOsl4fRE~8CrIvExqpDCyNoRbDXlc3hGafq3DmBeh3DX3OcSuecZqDBxOvXgi-ojETtfPz7QiMaD5Nj4XaQgGboN7X9DFN53le2ktvHZwdJY8S6A__",
-       work:"Project Manager",
-        name: "Harly Rayan",
+        img: `${maghfur}`,
+       work:"Frontend Developer",
+        name: "Maghfur Hasani",
       },
       {
         id: 2,
@@ -32,11 +33,11 @@ const Team = () => {
             </h1>
            
           </div>
-          <div className=" grid grid-cols-1 md:grid-cols-3  gap-3 py-10 px-5">
+          <div className="flex flex-row flex-wrap justify-center gap-3 py-10 px-5 md:justify-between">
             {cards.map((card, i) => (
-              <div key={i} className="flex flex-col items-center  relative rounded-xl ">
-               <div className="relative">
-               <img src={card.img} alt="" className="w-80 h-64 bg-[#DEDEDE]" />
+              <div key={i} className="flex flex-col items-center  relative rounded-xl">
+               <div className="relative card">
+               <img src={card.img} alt="" className="w-80 h-64 bg-[#DEDEDE] aspect-4/3 object-cover object-center rounded-[10px] shadow-sm shadow-black" />
                 
                </div>
                 <p className="text-2xl  font-semibold text-black py-2">
