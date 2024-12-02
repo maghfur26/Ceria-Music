@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky py-4 top-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "bg-white/50 backdrop-blur-md shadow-md" 
           : "bg-transparent"
@@ -37,25 +37,25 @@ const Navbar = () => {
               data-aos="fade-left"
             >
               <a
-                className="p-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-md hover:text-white"
-                href="#home"
+                className="px-4 py-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-full hover:text-white"
+                href="/"
               >
                 Home
               </a>
               <a
-                className="p-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-md hover:text-white"
+                className="px-4 py-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-full hover:text-white"
                 href="#service"
               >
                 Booking
               </a>
               <a
-                className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md transition-all ease-in-out duration-500 hover:text-white"
-                href="#residence"
+                className="px-4 py-2 font-manrope hover:bg-blue-600 hover:rounded-full transition-all ease-in-out duration-500 hover:text-white"
+                href="#about"
               >
                 About
               </a>
               <a
-                className="p-2 font-manrope hover:bg-blue-600 hover:rounded-md transition-all ease-in-out duration-500 hover:text-white"
+                className="px-4 py-2 font-manrope hover:bg-blue-600 hover:rounded-full transition-all ease-in-out duration-500 hover:text-white"
                 href="#team"
               >
                 Contact
@@ -83,7 +83,7 @@ const Navbar = () => {
             </button>
             {isMenuOpen && (
               <div className="absolute top-0 left-0 w-full z-50">
-                <div className="p-5 bg-white/50 backdrop-blur-md shadow-md text-white dark:bg-slate-300 rounded-md ">
+                <div className="p-5 bg-white/50 backdrop-blur-md shadow-md text-white dark:bg-slate-100/75 rounded-md ">
                   <div className="flex items-center justify-between mb-4">
                     <button
                       aria-label="Close Menu"
@@ -104,16 +104,16 @@ const Navbar = () => {
                     onClick={() => setIsMenuOpen(false)}
                     className="flex flex-col items-center text-xl font-semibold gap-2"
                   >
-                    <a className="p-2 hover:text-gray-700 text-black" href="#home">
+                    <a className="p-2 hover:text-blue-700 text-black" href="#home">
                       Home
                     </a>
-                    <a className="p-2 hover:text-gray-700 text-black" href="#booking">
+                    <a className="p-2 hover:text-blue-700 text-black" href="#booking">
                       Booking
                     </a>
-                    <a className="p-2 hover:text-gray-700 text-black" href="#about">
+                    <a className="p-2 hover:text-blue-700 text-black" href="#about">
                       About
                     </a>
-                    <a className="p-2 hover:text-gray-700 text-black" href="#contact">
+                    <a className="p-2 hover:text-blue-700 text-black" href="#contact">
                       Contact
                     </a>
                   </div>
