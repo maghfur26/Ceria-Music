@@ -72,7 +72,7 @@ const HeroSection = () => {
         </div>
 
         <div className="text-left md:w-[60%] mb-6 md:mb-0">
-          <p className="md:text-[23px] text-[0px] px-12 font-normal text-[#000] mb-6 md:mb-6 md:leading-6">
+          <p className="md:text-[23px] text-[15px] px-12 font-normal text-[#000] mb-6 md:mb-6 md:leading-6">
             Music studio rental is a music studio rental service provider that serves daily rentals with different price ranges. Established since 2022, we always make improvements to customer service to be even better.
           </p>
         </div>
