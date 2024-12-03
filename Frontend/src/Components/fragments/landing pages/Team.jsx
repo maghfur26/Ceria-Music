@@ -2,6 +2,7 @@ import { CiCircleChevUp, CiTwitter } from "react-icons/ci";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import maghfur from "../../../assets/teams/maghfur.jpg";
 import alif_fadillah from "../../../assets/teams/alif_fadillah.jpg";
+import rendy from "../../../assets/teams/rendy.jpg"
 
 const Team = () => {
     const cards = [
@@ -19,9 +20,9 @@ const Team = () => {
       },
       {
         id: 3,
-        img: "https://s3-alpha-sig.figma.com/img/c240/3e84/21e65fee2c55fe220544c79bd37b4294?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=F15WnOjG7CC-qugmKw5rlbZD1xlwYgjIqAULuh1oyEuFvOcW-1YcJx7sZz88gGW0j~vxMkgyL7JxB9IOJ6o6MmL~hITC~EVCqB9RtTFJh0cYKoxuPxTiAF14iv0fjMf5yDAmlHEM8aN9wyZIB58dFj1fTjDJmRs430ksMzuEcv4bY3wqzpdM-cCa5JdwdXVM87gVqjuyYYcc9qDZ3my6jSZsHlezvIntb2vE3erAa8r5wsqyVmzD8-XWf7tiKdzXw40GltjU1tcz7IoCXX-UUxYlAB3NxcIfF0FvrRPPFJNElcFUvgmszXR8fp6ld5EdodxI6XxYprWGa2v4Oct8Sw__",
-       work:"Marketing Head",
-        name: "Kathryn Murphy",
+        img:`${rendy}`,
+       work:"Frontend Developer",
+        name: "Alif Rendy Pahlevi",
       },
       
     ];

@@ -68,6 +68,9 @@ const DetailRoom = () => {
               room.facilities.map((facility) => (
                 <li key={facility._id} className="list-none text-lg mt-2">
                   {facility.facility_id?.name || "Unknown Facility"}{" "}
+                  <span className="text-sm text-gray-500">
+                    (Unit: {facility.facility_id?.unit || 0})
+                  </span>
                 </li>
               ))
             ) : (
