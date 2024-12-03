@@ -71,7 +71,7 @@ roomRoute.get('/room/search', authMiddleware, roomController.searchByName);
  *       500:
  *         description: Internal server error
  */
-roomRoute.get('/room/:id', authMiddleware, roomController.getEachRooms)
+roomRoute.get('/room/:id', roomController.getEachRooms)
 
 /**
  * @swagger

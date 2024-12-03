@@ -4,18 +4,20 @@ import AOS from "aos";
 import { useEffect, useState } from "react";
 import { ReactTyped } from "react-typed";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [listStudio, setListStudio] = useState([]);
-  const [category, setCategory] = useState("");  
-  const [filteredStudios, setFilteredStudios] = useState([]); 
+  const [category, setCategory] = useState("");
+  const [filteredStudios, setFilteredStudios] = useState([]);
+  const navigate = useNavigate();
 
   const getRooms = async () => {
     try {
       const res = await axios.get("http://localhost:8080/api/room");
       if (res.status === 200) {
         setListStudio(res.data.data);
-        setFilteredStudios(res.data.data); 
+        setFilteredStudios(res.data.data);
       } else {
         throw new Error(res.data.message);
       }
@@ -47,11 +49,11 @@ const Search = () => {
 
   useEffect(() => {
     AOS.init();
-    getRooms(); 
+    getRooms();
   }, []);
 
   return (
-    <div className="flex flex-col font-manrope bg-slate-100 py-10 mb-20">
+    <div className="flex flex-col font-manrope bg-slate-100 py-10 mb-20" id="booking">
       <h1
         className="pb-4 text-[30px] font-thin ml-7 mb-4 first-letter:text-5xl first-letter:font-bold  lg:ml-10"
         data-aos="fade-right"
@@ -132,6 +134,8 @@ const Search = () => {
               status="Available"
               price={formattedPrice}
               key={studio._id}
+              id={studio._id}
+              onClick={() => navigate(`/room/${studio._id}`)}
             />
           );
         })}

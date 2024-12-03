@@ -7,6 +7,7 @@ const CardStudio = ({ ...props }) => {
   useEffect(() => {
     AOS.init();
   });
+
   return (
     <div
       data-aos="fade-up"
@@ -17,7 +18,7 @@ const CardStudio = ({ ...props }) => {
       <header className="font-manrope text-2xl mb-4">
         <h1>{props.title}</h1>
       </header>
-      <main>
+      <main onClick={props.onClick}>
         <img
           src={props.img}
           alt="Studio"

@@ -60,7 +60,7 @@ const roomController = {
 
     async getEachRooms(req, res) {
         try {
-            const rooms = await RoomsModel.find({ userId: req.user._id });
+            const rooms = await RoomsModel.findById({ _id: req.params.id }).populate('facilities.facility_id', 'name unit');
             return res.status(200).json({ data: rooms });
         } catch (error) {
             return res.status(500).json({
