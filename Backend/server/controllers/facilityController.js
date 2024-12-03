@@ -63,6 +63,23 @@ const facilityController = {
         }
     },
 
+    async searchByName(req, res) {
+        try {
+            const facilities = await FacilitiesModel.find({
+                name: { $regex: req.query.name, $options: 'i' },
+                userId: req.user._id
+            });
+
+            if (facilities.length === 0) {
+                return ResponseAPI.notFound(res, 'Facility not found');
+            }
+
+            ResponseAPI.success(res, facilities);
+        } catch (error) {
+            ResponseAPI.serverError(res, error);
+        }
+    },
+
     async deleteFacility(req, res) {
         try {
             const facility = await FacilitiesModel.findOneAndDelete({

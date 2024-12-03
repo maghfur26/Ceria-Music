@@ -7,7 +7,8 @@
 
 
 const paymentController = require("../controllers/paymentController");
-const express = require('express')
+const express = require('express');
+const authMiddleware = require("../middleware/auth");
 const paymentRoute = express.Router();
 
 /**
@@ -74,7 +75,7 @@ const paymentRoute = express.Router();
  */
 
 paymentRoute.put('/payment', paymentController.processPayment);
-paymentRoute.get('/payment', paymentController.getAllPayments);
+paymentRoute.get('/payment', authMiddleware, paymentController.getAllPayments);
 paymentRoute.get('/payment/receipt/:paymentId', paymentController.downloadReceipt);
 
 module.exports = paymentRoute

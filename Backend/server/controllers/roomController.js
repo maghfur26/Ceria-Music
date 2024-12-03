@@ -3,6 +3,7 @@ const FacilitiesModel = require('../models/Facility');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const ResponseAPI = require('../utils/response');
 
 const deleteFile = (filePath) => {
     if (fs.existsSync(filePath)) {
@@ -106,6 +107,23 @@ const roomController = {
             return res.status(500).json({
                 message: error.message,
             });
+        }
+    },
+
+    async searchByName(req, res) {
+        try {
+            const room = await RoomsModel.find({
+                name: { $regex: req.query.name, $options: 'i' },
+                userId: req.user._id
+            });
+
+            if (room.length === 0) {
+                return ResponseAPI.notFound(res, 'Room not found');
+            }
+
+            ResponseAPI.success(res, room);
+        } catch (error) {
+            ResponseAPI.serverError(res, error);
         }
     },
 

@@ -33,6 +33,7 @@ const facilityController = require('../controllers/facilityController');
  *         description: Terjadi kesalahan server
  */
 facilityRoute.get('/facilities', authMiddleware, facilityController.getUserFacilities);
+facilityRoute.get('/facility/search', authMiddleware, facilityController.searchByName); 
 
 /**
  * @swagger

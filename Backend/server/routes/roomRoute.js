@@ -37,6 +37,7 @@ const upload = require('../middleware/upload');
  *         description: Internal server error
  */
 roomRoute.get('/room', roomController.getAllRooms)
+roomRoute.get('/room/search', authMiddleware, roomController.searchByName);
 
 /**
  * @swagger
