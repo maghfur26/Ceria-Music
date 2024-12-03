@@ -63,7 +63,7 @@ const DetailRoom = () => {
         </div>
         <div className="flex flex-col px-2 mt-4">
           <h1 className="text-lg font-semibold">Facilities :</h1>
-          <ul className="list-disc flex gap-5">
+          <ul className="list-disc flex gap-5 flex-wrap">
             {room.facilities?.length > 0 ? (
               room.facilities.map((facility) => (
                 <li key={facility._id} className="list-none text-lg mt-2">
