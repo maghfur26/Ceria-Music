@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import Logo from "../../../assets/logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,16 +18,30 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleNavClick = (hash) => {
+    if (location.pathname !== "/") {
+      navigate(`/#${hash}`);
+    } else if (hash === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      const targetElement = document.getElementById(hash);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+  
+
   return (
     <div
       className={`sticky py-4 top-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/50 backdrop-blur-md shadow-md" 
+          ? "bg-white/50 backdrop-blur-md shadow-md"
           : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-2">
-          <div className="pt-2 hidden lg:flex font-[Inter] lg:flex-row lg:justify-between max-w-full">
+        <div className="pt-2 hidden lg:flex font-[Inter] lg:flex-row lg:justify-between max-w-full">
           <div
             className="flex flex-row text-2xl uppercase font-bold"
             data-aos="fade-right"
@@ -36,30 +53,30 @@ const Navbar = () => {
               className="flex flex-row gap-2 text-xl mt-2 font-[Inter]"
               data-aos="fade-left"
             >
-              <a
+              <button
                 className="px-4 py-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-full hover:text-white"
-                href="/"
+                onClick={() => handleNavClick("home")}
               >
                 Home
-              </a>
-              <a
+              </button>
+              <button
                 className="px-4 py-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-full hover:text-white"
-                href="#booking"
+                onClick={() => handleNavClick("booking")}
               >
                 Booking
-              </a>
-              <a
+              </button>
+              <button
                 className="px-4 py-2 font-manrope hover:bg-blue-600 hover:rounded-full transition-all ease-in-out duration-500 hover:text-white"
-                href="#about"
+                onClick={() => handleNavClick("about")}
               >
                 About
-              </a>
-              <a
+              </button>
+              <button
                 className="px-4 py-2 font-manrope hover:bg-blue-600 hover:rounded-full transition-all ease-in-out duration-500 hover:text-white"
-                href="#team"
+                onClick={() => handleNavClick("contact")}
               >
                 Contact
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -104,18 +121,30 @@ const Navbar = () => {
                     onClick={() => setIsMenuOpen(false)}
                     className="flex flex-col items-center text-xl font-semibold gap-2"
                   >
-                    <a className="p-2 hover:text-blue-700 text-black" href="#home">
+                    <button
+                      className="p-2 hover:text-blue-700 text-black"
+                      onClick={() => handleNavClick("home")}
+                    >
                       Home
-                    </a>
-                    <a className="p-2 hover:text-blue-700 text-black" href="#booking">
+                    </button>
+                    <button
+                      className="p-2 hover:text-blue-700 text-black"
+                      onClick={() => handleNavClick("booking")}
+                    >
                       Booking
-                    </a>
-                    <a className="p-2 hover:text-blue-700 text-black" href="#about">
+                    </button>
+                    <button
+                      className="p-2 hover:text-blue-700 text-black"
+                      onClick={() => handleNavClick("about")}
+                    >
                       About
-                    </a>
-                    <a className="p-2 hover:text-blue-700 text-black" href="#contact">
+                    </button>
+                    <button
+                      className="p-2 hover:text-blue-700 text-black"
+                      onClick={() => handleNavClick("contact")}
+                    >
                       Contact
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
