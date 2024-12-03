@@ -1,6 +1,7 @@
 import { CiCircleChevUp, CiTwitter } from "react-icons/ci";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import maghfur from "../../../assets/teams/maghfur.jpg";
+import alif_fadillah from "../../../assets/teams/alif_fadillah.jpg";
 
 const Team = () => {
     const cards = [
@@ -12,9 +13,9 @@ const Team = () => {
       },
       {
         id: 2,
-        img: "https://s3-alpha-sig.figma.com/img/2deb/15cb/f9a9efd26172c9ef8555c98f75956a6c?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eQrJIsb7x8sAe7SVp2u9TyY76-R-Fpe72NgTFyoekyhzPOsGIeOdMBRLbGVNJaI8DsOtOzSgW85B-vuY83KGuoqWJMviRn5rQgUB-yeCLNU04yAJevqtLO2pasDmjy2Mj1thx3AcVx0rgcNO7cYcOambydyXhgGgVJWBJ0gK0M9pA8VrulDkn0p~MEYPx6boQBxmwUlnA2wR89XHOI~WKusmDnnXlSzPWZizsp7bwhQ53Nd~9ONszbd70MzSX7TQzZQg~fYxkBaBbEDvfr5DCuN7jc7y-bDZUiwa9xWJJqn32FDZD5-uho6bkF2UMQsHrFIFVICdpXc89ly3ze5WaA__",
-       work:"Head of Services",
-        name: "Harly Rayan",
+        img: `${alif_fadillah}`,
+       work:"Backend Developer",
+        name: "Alif Fadillah Ummar",
       },
       {
         id: 3,
