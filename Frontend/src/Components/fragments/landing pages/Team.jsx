@@ -3,6 +3,7 @@ import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import maghfur from "../../../assets/teams/maghfur.jpg";
 import alif_fadillah from "../../../assets/teams/alif_fadillah.jpg";
 import rendy from "../../../assets/teams/rendy.jpg"
+import bella from "../../../assets/teams/bella.jpg"
 
 const Team = () => {
     const cards = [
@@ -24,6 +25,12 @@ const Team = () => {
        work:"Frontend Developer",
         name: "Alif Rendy Pahlevi",
       },
+      {
+        id:4,
+        img:`${bella}`,
+        work:"UI/UX",
+        name:"Salsabila",
+      }
       
     ];
     return (
