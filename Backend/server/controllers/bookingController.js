@@ -7,6 +7,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');
+const ResponseAPI = require('../utils/response');
 
 const bookingController = {
     // createBooking: async (req, res) => {
@@ -364,6 +365,23 @@ const bookingController = {
             }
         } catch (error) {
             console.error('Error canceling expired bookings:', error.message);
+        }
+    },
+
+    async searchByName(req, res) {
+        try {
+            const booking = await BookingModel.find({
+                name: { $regex: req.query.name, $options: 'i' },
+                userId: req.user._id
+            });
+
+            if (booking.length === 0) {
+                return ResponseAPI.notFound(res, 'booking not found');
+            }
+
+            ResponseAPI.success(res, booking);
+        } catch (error) {
+            ResponseAPI.serverError(res, error);
         }
     }
 };
