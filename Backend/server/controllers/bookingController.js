@@ -10,93 +10,6 @@ const moment = require('moment-timezone');
 const ResponseAPI = require('../utils/response');
 
 const bookingController = {
-    // createBooking: async (req, res) => {
-    //     try {
-    //         const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
-
-    //         const today = new Date();
-    //         const bookingDate = new Date(date).setHours(0, 0, 0, 0);
-
-    //         // Validasi tanggal pemesanan
-    //         if (bookingDate < today.setHours(0, 0, 0, 0)) {
-    //             return res.status(400).json({ message: 'Booking date cannot be in the past.' });
-    //         }
-
-    //         const startTimeDate = new Date(startTime);
-    //         const endTimeDate = new Date(endTime);
-
-    //         // Validasi waktu mulai dan akhir
-    //         if (startTimeDate < today || endTimeDate < today) {
-    //             return res.status(400).json({ message: 'Booking time cannot be in the past.' });
-    //         }
-
-    //         if (startTimeDate >= endTimeDate) {
-    //             return res.status(400).json({ message: 'Start time must be before end time.' });
-    //         }
-
-    //         // Cek pemesanan yang tumpang tindih
-    //         const overlappingBooking = await BookingModel.findOne({
-    //             room_id,
-    //             date,
-    //             status: { $in: ['Pending', 'Confirmed'] }, // Hanya cek status aktif
-    //             $or: [
-    //                 { startTime: { $lt: endTime }, endTime: { $gt: startTime } } // Rentang waktu tumpang tindih
-    //             ]
-    //         });
-
-    //         if (overlappingBooking) {
-    //             return res.status(400).json({
-    //                 message: 'Room is already booked for the selected date and time range.'
-    //             });
-    //         }
-
-
-    //         const totalHours = (endTimeDate - startTimeDate) / 3600000;
-    //         const room = await RoomsModel.findById(room_id);
-    //         if (!room) return res.status(404).json({ message: 'Room not found' });
-
-    //         const totalAmount = totalHours * room.price_perhour;
-
-    //         const booking = await BookingModel.create({
-    //             room_id,
-    //             name,
-    //             phoneNumber,
-    //             date,
-    //             startTime,
-    //             endTime
-    //         });
-
-    //         const paymentCode = Array.from(crypto.randomBytes(8)) // 4 bytes untuk 8 karakter
-    //             .map((byte) => (byte % 36).toString(36).toUpperCase()) // Konversi ke base36
-    //             .join('');
-    //         const expiryTime = new Date(Date.now() + 5 * 60 * 1000);
-
-    //         const payment = await PaymentModel.create({
-    //             booking_id: booking._id,
-    //             total_amount: totalAmount,
-    //             payment_status: 'Pending',
-    //             payment_code: paymentCode,
-    //             payment_code_expiry: expiryTime,
-    //             receipt_status: 'Pending',
-    //             receipt_path: null
-    //         });
-
-    //         const pdfPath = await bookingController.generateReceipt(booking._id);
-
-    //         payment.receipt_path = pdfPath;
-    //         payment.receipt_status = 'Pending';
-    //         await payment.save();
-
-    //         return res.status(201).json({
-    //             message: 'Booking created successfully',
-    //             booking,
-    //             payment
-    //         });
-    //     } catch (error) {
-    //         return res.status(500).json({ message: error.message });
-    //     }
-    // },
-
     createBooking: async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
@@ -109,9 +22,9 @@ const bookingController = {
                 return res.status(400).json({ message: 'All fields are required' });
             }
 
-            // Pastikan waktu diubah menjadi objek Date
-            const start = new Date(startTime);
-            const end = new Date(endTime);
+            // Gabungkan tanggal dengan waktu untuk membuat objek Date
+            const start = new Date(`${date}T${startTime}:00`);
+            const end = new Date(`${date}T${endTime}:00`);
 
             // Validasi waktu tidak di masa lalu
             const today = new Date();
@@ -124,6 +37,12 @@ const bookingController = {
             // Validasi endTime lebih besar dari startTime
             if (start >= end) {
                 return res.status(400).json({ message: 'End time must be after start time' });
+            }
+
+            // Validasi durasi harus kelipatan 1 jam
+            const diffInMinutes = (end - start) / (1000 * 60); // Selisih waktu dalam menit
+            if (diffInMinutes % 60 !== 0) {
+                return res.status(400).json({ message: 'Duration must be in full hours (e.g., 1 hour, 2 hours).' });
             }
 
             // Validasi overlapping booking
@@ -382,6 +301,23 @@ const bookingController = {
             ResponseAPI.success(res, booking);
         } catch (error) {
             ResponseAPI.serverError(res, error);
+        }
+    },
+
+    async deleteBooking(req, res) {
+        const { id } = req.params;
+
+        try {
+            // Cari booking berdasarkan ID dan hapus
+            const booking = await BookingModel.findByIdAndDelete(id);
+
+            if (!booking) {
+                return res.status(404).json({ message: 'Booking not found' });
+            }
+
+            res.status(200).json({ message: 'Booking deleted successfully', booking });
+        } catch (error) {
+            res.status(500).json({ message: 'Error deleting booking', error });
         }
     }
 };
