@@ -1,11 +1,11 @@
-import DetailRoom from "../Components/fragments/landing pages/Detail-Room";
+import FormBooking from "../Components/fragments/landing pages/FormBooking";
 import Navbar from "../Components/fragments/landing pages/Navbar";
 
 const Booking = () => {
   return (
     <>
       <Navbar />
-      <DetailRoom />
+      <FormBooking />
     </>
   );
 };

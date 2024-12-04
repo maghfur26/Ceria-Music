@@ -7,7 +7,7 @@ import Hero from "../Components/fragments/landing pages/Hero";
 import Navbar from "../Components/fragments/landing pages/Navbar";
 import Search from "../Components/fragments/landing pages/Search";
 import Team from "../Components/fragments/landing pages/Team";
-import Contact from "../Components/fragments/landing pages/contact";
+import Contact from "../Components/fragments/landing pages/Contact";
 
 const Home = () => {
   const location = useLocation();

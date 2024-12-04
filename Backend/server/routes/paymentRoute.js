@@ -75,7 +75,7 @@ const paymentRoute = express.Router();
  */
 
 paymentRoute.put('/payment', paymentController.processPayment);
-paymentRoute.get('/payment', authMiddleware, paymentController.getAllPayments);
+paymentRoute.get('/payment', paymentController.getAllPayments);
 paymentRoute.get('/payment/receipt/:paymentId', paymentController.downloadReceipt);
 
 module.exports = paymentRoute

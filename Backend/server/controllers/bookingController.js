@@ -319,7 +319,16 @@ const bookingController = {
         } catch (error) {
             res.status(500).json({ message: 'Error deleting booking', error });
         }
-    }
+    },
+
+    async deleteAllBookings(req, res) {
+        try {
+            await BookingModel.deleteMany({})         
+            res.status(200).json({ message: 'All bookings deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting all bookings:', error.message);
+        }
+    }   
 };
 
 module.exports = bookingController

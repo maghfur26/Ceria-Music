@@ -27,9 +27,12 @@ const Navbar = () => {
       const targetElement = document.getElementById(hash);
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.warn(`Element with id "${hash}" not found.`);
       }
     }
   };
+  
   
 
   return (
@@ -44,14 +47,14 @@ const Navbar = () => {
         <div className="pt-2 hidden lg:flex font-[Inter] lg:flex-row lg:justify-between max-w-full">
           <div
             className="flex flex-row text-2xl uppercase font-bold"
-            data-aos="fade-right"
+            // data-aos="fade-right"
           >
             <img src={Logo} alt="Logo" width={250} height={0} />
           </div>
           <div>
             <div
               className="flex flex-row gap-2 text-xl mt-2 font-[Inter]"
-              data-aos="fade-left"
+              // data-aos="fade-left"
             >
               <button
                 className="px-4 py-2 font-manrope hover:bg-blue-600 transition-all ease-in-out duration-500 hover:rounded-full hover:text-white"
@@ -88,13 +91,13 @@ const Navbar = () => {
             alt="Logo"
             width={180}
             height={0}
-            data-aos="fade-right"
+            // data-aos="fade-right"
           />
           <div>
             <button
               className="px-2 pt-2 transition duration-200 rounded focus:outline-none hover:bg-deep-purple-50 focus:bg-deep-purple-50"
               onClick={() => setIsMenuOpen(true)}
-              data-aos="fade-left"
+              // data-aos="fade-left"
             >
               <IoReorderThreeSharp className="text-3xl" />
             </button>

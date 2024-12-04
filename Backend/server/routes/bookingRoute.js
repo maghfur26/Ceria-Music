@@ -124,5 +124,6 @@ bookingRoute.get('/booking', bookingController.getAllBookings);
 bookingRoute.get('/booking/search', authMiddleware, bookingController.searchByName);
 bookingRoute.get('/booking/:id', bookingController.getBookingDetails);
 bookingRoute.delete('/booking/:id', authMiddleware, bookingController.deleteBooking);
+bookingRoute.delete('/booking', authMiddleware, bookingController.deleteAllBookings);
 
 module.exports = bookingRoute;

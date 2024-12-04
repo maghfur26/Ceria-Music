@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { useNavigate } from "react-router-dom";
 
 const DetailRoom = () => {
   const [room, setRoom] = useState({});
   const { id } = useParams();
   const time = ["08:00", "10:00", "13:00", "15:00", "17:00", "19:00"];
+  const navigate = useNavigate();
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("id-ID", {
@@ -25,6 +27,10 @@ const DetailRoom = () => {
     } catch (error) {
       console.log("error get room by id", error.response || error.message);
     }
+  };
+
+  const handleBooking = () => { 
+    navigate(`/booking/${id}`);
   };
 
   useEffect(() => {
@@ -88,7 +94,10 @@ const DetailRoom = () => {
             ))}
           </ul>
         </div>
-        <button className="mt-4 rounded-full border border-[#afd8de] bg-[#DBFAFF] lg:w-[400px] hover:bg-[#cae9ee] transition ease-linear duration-300">
+        <button
+          onClick={handleBooking}
+          className="mt-4 rounded-full border border-[#afd8de] bg-[#DBFAFF] lg:w-[400px] hover:bg-[#cae9ee] transition ease-linear duration-300"
+        >
           Booking
         </button>
       </div>
