@@ -92,6 +92,44 @@ const Payments = ({ paramBooking }) => {
     }
   };
 
+  const handlePayNow = async () => {
+    try {
+      const paymentResponse = await axios.put('http://localhost:8080/api/payment', {
+        payment_code: payment.payment_code,
+        amount: payment.total_amount
+      });
+     
+      if (paymentResponse.status === 200) {
+        const receiptResponse = await axios({
+          url: `http://localhost:8080/api/payment/receipt/${paymentResponse.data.payment._id}`,
+          method: 'GET',
+          responseType: 'blob' 
+        });
+  
+        const url = window.URL.createObjectURL(new Blob([receiptResponse.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `receipt-${paymentResponse.data.payment._id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        
+        link.remove();
+        window.URL.revokeObjectURL(url);
+  
+        await swal.fire({
+          icon: 'success',
+          title: 'Pembayaran Berhasil!',
+          text: 'Terima kasih atas pembayaran Anda.',
+          confirmButtonText: 'OK'
+        });
+       
+        navigate("/");
+      }
+    } catch (error) {
+      console.error('Payment processing error:', error);
+    }
+  }
+
   useEffect(() => {
     getPayment().then(() => {
       checkPaymentExpiry();
@@ -165,12 +203,8 @@ const Payments = ({ paramBooking }) => {
 
           <button
             className="w-full bg-blue-100 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-200 transition"
-            onClick={() =>
-              navigate("/confirmation", {
-                state: { name, studioType, totalPrice },
-              })
-            }
-          >
+            onClick={handlePayNow}
+          > 
             Pay Now
           </button>
         </div>
