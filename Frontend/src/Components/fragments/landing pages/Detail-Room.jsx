@@ -29,7 +29,7 @@ const DetailRoom = () => {
     }
   };
 
-  const handleBooking = () => { 
+  const handleBooking = () => {
     navigate(`/booking/${id}`);
   };
 
@@ -62,7 +62,7 @@ const DetailRoom = () => {
       >
         <h1 className="text-3xl">{room.name}</h1>
         <div className="flex gap-4 items-center">
-          <p className="text-md bg-[#DBFAFF] px-2 rounded-full border border-[#c8e7ec]">
+          <p className="text-md py-2 bg-blue-500 text-white px-3 rounded-full border border-blue-300">
             {room.status}
           </p>
           <span>{formatPrice(room.price_perhour)} / hour</span>
@@ -96,7 +96,7 @@ const DetailRoom = () => {
         </div>
         <button
           onClick={handleBooking}
-          className="mt-4 rounded-full border border-[#afd8de] bg-[#DBFAFF] lg:w-[400px] hover:bg-[#cae9ee] transition ease-linear duration-300"
+          className="mt-4 py-2 rounded-full border border-[#afd8de] bg-blue-500 text-white lg:w-[400px] hover:bg-blue-600 transition ease-linear duration-300"
         >
           Booking
         </button>
