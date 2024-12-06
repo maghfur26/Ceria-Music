@@ -101,6 +101,9 @@ userRoute.post('/user/login', userController.login);
  */
 userRoute.put('/user/update', authMiddleware, upload('user'), userController.updateProfile);
 
+userRoute.post('/forgot-password', userController.forgotPassword);
+userRoute.post('/reset-password/:token', userController.resetPassword);
+
 /**
  * @swagger
  * /api/user/logout:

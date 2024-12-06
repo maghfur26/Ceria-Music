@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import "sweetalert2/dist/sweetalert2.min.css";
 import swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -13,6 +14,7 @@ const Payments = ({ paramBooking }) => {
   const [payment, setPayment] = useState({});
   const [booking, setBooking] = useState({});
   const [idRoom, setIdRoom] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // State untuk loading
   const { id } = useParams();
 
   const {
@@ -56,11 +58,9 @@ const Payments = ({ paramBooking }) => {
   };
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
+    return `Rp. ${new Intl.NumberFormat("id-ID", {
       minimumFractionDigits: 0,
-    }).format(price);
+    }).format(price)}`;
   };
 
   const formatTime = (isoString) => {
@@ -85,6 +85,7 @@ const Payments = ({ paramBooking }) => {
           title: "Payment Expired",
           text: "The payment period has expired. Please make a new booking.",
           confirmButtonText: "OK",
+          confirmButtonColor: "#3b82f6",
         })
         .then(() => {
           navigate(`/booking/${idRoom}`);
@@ -93,42 +94,54 @@ const Payments = ({ paramBooking }) => {
   };
 
   const handlePayNow = async () => {
+    setIsLoading(true); // Aktifkan loading
     try {
-      const paymentResponse = await axios.put('http://localhost:8080/api/payment', {
-        payment_code: payment.payment_code,
-        amount: payment.total_amount
-      });
-     
+      const paymentResponse = await axios.put(
+        "http://localhost:8080/api/payment",
+        {
+          payment_code: payment.payment_code,
+          amount: payment.total_amount,
+        }
+      );
+
       if (paymentResponse.status === 200) {
         const receiptResponse = await axios({
           url: `http://localhost:8080/api/payment/receipt/${paymentResponse.data.payment._id}`,
-          method: 'GET',
-          responseType: 'blob' 
+          method: "GET",
+          responseType: "blob",
         });
-  
-        const url = window.URL.createObjectURL(new Blob([receiptResponse.data]));
-        const link = document.createElement('a');
+
+        const url = window.URL.createObjectURL(
+          new Blob([receiptResponse.data])
+        );
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', `receipt-${paymentResponse.data.payment._id}.pdf`);
+        link.setAttribute(
+          "download",
+          `receipt-${paymentResponse.data.payment._id}.pdf`
+        );
         document.body.appendChild(link);
         link.click();
-        
+
         link.remove();
         window.URL.revokeObjectURL(url);
-  
+
         await swal.fire({
-          icon: 'success',
-          title: 'Pembayaran Berhasil!',
-          text: 'Terima kasih atas pembayaran Anda.',
-          confirmButtonText: 'OK'
+          icon: "success",
+          title: "Pembayaran Success!",
+          text: "Thank you!",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3b82f6",
         });
-       
+
         navigate("/");
       }
     } catch (error) {
-      console.error('Payment processing error:', error);
+      console.error("Payment processing error:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getPayment().then(() => {
@@ -152,9 +165,14 @@ const Payments = ({ paramBooking }) => {
           <p className="text-gray-800 text-md mb-2 uppercase">{name}</p>
           <div className="flex justify-between items-center text-gray-700 text-sm mb-4">
             <span>{room.name}</span>
-            <span className="font-semibold px-2 border border-gray-500 rounded-full">
-              {formatTime(booking.startTime)}
-            </span>
+            <div className="flex space-x-1 text-sm">
+              <span className="font-semibold px-2 border border-gray-500 rounded-full">
+                Start: {formatTime(booking.startTime)}
+              </span>
+              <span className="font-semibold px-2 border border-gray-500 rounded-full">
+                End: {formatTime(booking.endTime)}
+              </span>
+            </div>
           </div>
           <div className="flex flex-col">
             <hr className="border-gray-300 mb-4" />
@@ -163,7 +181,7 @@ const Payments = ({ paramBooking }) => {
             <div className="flex justify-between text-sm">
               <span>Subtotal</span>
               <span className="font-semibold">
-                Rp.{formatPrice(payment.total_amount)}
+                {formatPrice(payment.total_amount)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -173,7 +191,7 @@ const Payments = ({ paramBooking }) => {
             <div className="flex justify-between text-sm">
               <span className="font-semibold">Total Price</span>
               <span className="font-semibold">
-                Rp.{formatPrice(payment.total_amount)}
+                {formatPrice(payment.total_amount)}
               </span>
             </div>
 
@@ -193,7 +211,7 @@ const Payments = ({ paramBooking }) => {
             Bri M-Banking
           </p>
           <div className="text-sm flex items-center justify-between">
-            <p>Payment ID: </p>
+            <p>Payment Code: </p>
             <span>{payment.payment_code}</span>
           </div>
           <div className="mt-2 mb-4 text-sm flex justify-between items-center">
@@ -202,10 +220,15 @@ const Payments = ({ paramBooking }) => {
           </div>
 
           <button
-            className="w-full bg-blue-100 text-blue-600 font-semibold py-2 rounded-md hover:bg-blue-200 transition"
+            className={`w-full py-2 rounded-md font-semibold transition ${
+              isLoading
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+            }`}
             onClick={handlePayNow}
-          > 
-            Pay Now
+            disabled={isLoading} // Disabled saat loading
+          >
+            {isLoading ? "Processing..." : "Pay Now"} {/* Efek teks loading */}
           </button>
         </div>
       </div>

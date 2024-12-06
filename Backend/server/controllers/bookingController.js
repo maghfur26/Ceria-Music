@@ -13,90 +13,92 @@ const bookingController = {
     createBooking: async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
-
+    
         try {
             const { room_id, name, phoneNumber, date, startTime, endTime } = req.body;
-
+    
             // Validasi input
             if (!room_id || !name || !phoneNumber || !date || !startTime || !endTime) {
                 return res.status(400).json({ message: 'All fields are required' });
             }
-
-            // Gabungkan tanggal dengan waktu untuk membuat objek Date
-            const start = new Date(`${date}T${startTime}:00`);
-            const end = new Date(`${date}T${endTime}:00`);
-
+    
+            // Gabungkan tanggal dengan waktu, konversi ke Asia/Jakarta
+            const startLocal = moment.tz(`${date}T${startTime}:00`, 'Asia/Jakarta').toDate();
+            const endLocal = moment.tz(`${date}T${endTime}:00`, 'Asia/Jakarta').toDate();
+    
+            // Konversi ke UTC untuk disimpan di database
+            const startUTC = moment(startLocal).utc().toDate();
+            const endUTC = moment(endLocal).utc().toDate();
+    
             // Validasi waktu tidak di masa lalu
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Mengatur waktu ke tengah malam
-
-            if (start < today) {
+            const todayUTC = moment.tz('Asia/Jakarta').startOf('day').utc().toDate();
+            if (startUTC < todayUTC) {
                 return res.status(400).json({ message: 'Booking cannot be made for a past date' });
             }
-
+    
             // Validasi endTime lebih besar dari startTime
-            if (start >= end) {
+            if (startUTC >= endUTC) {
                 return res.status(400).json({ message: 'End time must be after start time' });
             }
-
+    
             // Validasi durasi harus kelipatan 1 jam
-            const diffInMinutes = (end - start) / (1000 * 60); // Selisih waktu dalam menit
+            const diffInMinutes = (endUTC - startUTC) / (1000 * 60); // Selisih waktu dalam menit
             if (diffInMinutes % 60 !== 0) {
                 return res.status(400).json({ message: 'Duration must be in full hours (e.g., 1 hour, 2 hours).' });
             }
-
+    
             // Validasi overlapping booking
             const overlappingBookings = await BookingModel.find({
                 room_id,
                 status: { $ne: 'Cancelled' },
                 $or: [
-                    { startTime: { $lt: end }, endTime: { $gt: start } },
+                    { startTime: { $lt: endUTC }, endTime: { $gt: startUTC } },
                 ],
             });
-
+    
             if (overlappingBookings.length > 0) {
                 return res.status(400).json({ message: 'This room is already booked for the selected time range' });
             }
-
+    
             // Buat booking baru
             const newBooking = new BookingModel({
                 room_id,
                 name,
                 phoneNumber,
                 date,
-                startTime: start,
-                endTime: end,
+                startTime: startUTC,
+                endTime: endUTC,
                 status: 'Waiting',
             });
-
+    
             const savedBooking = await newBooking.save({ session });
             console.log('Booking saved successfully:', savedBooking);
-
+    
             // Generate kode pembayaran unik
             const paymentCode = Array.from(crypto.randomBytes(8))
                 .map((byte) => (byte % 36).toString(36).toUpperCase())
                 .join('');
             const expiryTime = new Date(Date.now() + 5 * 60 * 1000);
-
+    
             // Hitung durasi dalam jam
-            const totalHours = (end - start) / 3600000;
-
+            const totalHours = (endUTC - startUTC) / 3600000;
+    
             // Ambil data room
             const room = await RoomsModel.findById(room_id);
             if (!room) {
                 return res.status(404).json({ message: 'Room not found' });
             }
-
+    
             if (typeof room.price_perhour !== 'number' || isNaN(room.price_perhour)) {
                 return res.status(500).json({ message: 'Invalid room price' });
             }
-
+    
             // Hitung total harga
             const totalAmount = totalHours * room.price_perhour;
             if (isNaN(totalAmount) || totalAmount <= 0) {
                 return res.status(400).json({ message: 'Invalid total amount' });
             }
-
+    
             // Buat payment baru
             const newPayment = new PaymentModel({
                 booking_id: savedBooking._id,
@@ -108,27 +110,27 @@ const bookingController = {
                 receipt_path: null,
                 receipt_status: 'Pending',
             });
-
+    
             const savedPayment = await newPayment.save({ session });
             console.log('Payment saved successfully:', savedPayment);
-
+    
             // Commit transaksi setelah semua operasi berhasil
             await session.commitTransaction();
-
+    
             // Generate receipt
             const pdfPath = await bookingController.generateReceipt(savedBooking._id);
-
+    
             savedPayment.receipt_path = pdfPath;
             savedPayment.receipt_status = 'Pending';
             await savedPayment.save();
-
+    
             // Kirim respon sukses dengan detail booking dan payment
             return res.status(200).json({
                 message: 'Booking created successfully',
                 newBooking: {
                     ...savedBooking._doc,
-                    startTime: moment(savedBooking.startTime).tz('Asia/Jakarta').format(),
-                    endTime: moment(savedBooking.endTime).tz('Asia/Jakarta').format(),
+                    startTime: moment(savedBooking.startTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
+                    endTime: moment(savedBooking.endTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 },
                 newPayment: savedPayment,
             });
