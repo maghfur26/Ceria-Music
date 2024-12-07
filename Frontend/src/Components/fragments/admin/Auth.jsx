@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../../../assets/bg.jpg';
-import {loginUser} from './services/api.js'
-import Swal from 'sweetalert2'
+import { loginUser } from './services/api.js';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
@@ -9,7 +9,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -17,20 +17,22 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const result = await loginUser(email, password);
-      console.log('Login successful:', result); 
+      const { token, user } = await loginUser(email, password);
+      console.log('Login successful:', { token, user });
+
       Swal.fire({
         icon: 'success',
         title: 'Login Berhasil',
-        text: 'Selamat datang admin terbaik!!',
+        text: `Selamat datang, ${user.username}!`,
         confirmButtonText: 'Lanjutkan',
         customClass: {
-          confirmButton: 'bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded', 
+          confirmButton: 'bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded',
         },
       }).then(() => {
         navigate('/admin');
       });
-      localStorage.setItem('token', result.token);
+
+      sessionStorage.setItem('token', token);
     } catch (err) {
       console.error('Login error:', err);
       setError(err.message || 'Login failed');
@@ -38,7 +40,6 @@ const Auth = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -71,7 +72,7 @@ const Auth = () => {
             <input
               type="email"
               id="email"
-              name='email'
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -89,7 +90,7 @@ const Auth = () => {
             <input
               type="password"
               id="password"
-              name='password'
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -103,9 +104,13 @@ const Auth = () => {
             </a>
           </div>
           <div className="flex items-center justify-center">
-          <button type="submit" disabled={loading} className=' bg-blue-500 hover:bg-blue-600 text-white py-2 px-14 sm:px-14 text-[18px] sm:text-[20px] md:text-[23px] rounded-3xl transition'>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-14 sm:px-14 text-[18px] sm:text-[20px] md:text-[23px] rounded-3xl transition"
+            >
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
           </div>
         </form>
       </div>

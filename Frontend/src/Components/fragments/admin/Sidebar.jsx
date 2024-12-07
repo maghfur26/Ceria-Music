@@ -22,18 +22,6 @@ const Sidebar = () => {
     setActiveIcon(icon); // Set the active icon
   };
 
-  useEffect(() =>  {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login')
-    }
-  }, [navigate])
-
-  const handleLogout = () => {
-      localStorage.removeItem('token');
-      navigate('/login')
-  }
-
   const menuItems = [
     { id: "message", label: "Message", icon: <AiOutlineMail /> },
     { id: "schedule", label: "Schedule", icon: <MdSchedule /> },

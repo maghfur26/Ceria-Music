@@ -5,7 +5,17 @@ const API_URL = 'http://localhost:8080/api/user/login';
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(API_URL, { email, password });
-    return response.data; 
+
+    const token = response.data?.data?.token;
+
+    if (!token) {
+      throw new Error('Invalid response: Token not found');
+    }
+
+    return {
+      token,
+      user: response.data.data.user, 
+    };
   } catch (error) {
     throw error.response?.data || { message: 'An error occurred' };
   }

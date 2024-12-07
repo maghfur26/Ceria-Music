@@ -31,9 +31,16 @@ const bookingController = {
             const endUTC = moment(endLocal).utc().toDate();
 
             // Validasi waktu tidak di masa lalu
-            const todayUTC = moment.tz('Asia/Jakarta').startOf('day').utc().toDate();
-            if (startUTC < todayUTC) {
-                return res.status(400).json({ message: 'Booking cannot be made for a past date' });
+            const nowUTC = moment.utc(); // Waktu sekarang dalam UTC
+            const todayStartLimit = moment().tz('Asia/Jakarta').add(3, 'hours').utc().toDate(); // Batas 3 jam dari sekarang
+
+            // Jika booking dilakukan hari ini, validasi jarak waktu minimal 3 jam dari sekarang
+            if (date === moment().format('YYYY-MM-DD')) {
+                if (startUTC < todayStartLimit) {
+                    return res.status(400).json({
+                        message: 'Booking must be at least 3 hours from now if booked today.'
+                    });
+                }
             }
 
             // Validasi endTime lebih besar dari startTime
@@ -135,14 +142,14 @@ const bookingController = {
                 newPayment: savedPayment,
             });
         } catch (error) {
-            // Rollback transaksi jika terjadi error
             await session.abortTransaction();
             console.error(error.message);
             return res.status(500).json({ message: 'Error creating booking' });
         } finally {
-            session.endSession(); // Tutup session setelah selesai
+            session.endSession();
         }
     },
+
 
     generateReceipt: async (bookingId) => {
         try {
