@@ -4,6 +4,7 @@ import Admin from "../Pages/admin";
 import PaymentPages from "../Pages/paymentPages";
 import DetailRoomPages from "../Pages/detailRoom";
 import Booking from "../Pages/booking";
+import Login from '../Pages/login';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/payment/:id",
     element: <PaymentPages/>
+  },
+  {
+    path: '/login',
+    element: <Login/>
   }
 ]);
 
