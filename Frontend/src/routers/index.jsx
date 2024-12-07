@@ -6,6 +6,7 @@ import DetailRoomPages from "../Pages/detailRoom";
 import Booking from "../Pages/booking";
 import Login from '../Pages/login';
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login/>
-  }
+  },
 ]);
 
 export default router;
