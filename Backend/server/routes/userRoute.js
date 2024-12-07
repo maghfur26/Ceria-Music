@@ -100,7 +100,6 @@ userRoute.post('/user/login', userController.login);
  *         description: Terjadi kesalahan server
  */
 userRoute.put('/user/update', authMiddleware, upload('user'), userController.updateProfile);
-
 userRoute.post('/forgot-password', userController.forgotPassword);
 userRoute.post('/reset-password/:token', userController.resetPassword);
 userRoute.post('/reset-password', userController.resetPassword);

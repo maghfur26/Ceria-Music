@@ -1,9 +1,11 @@
-import Auth from "../Components/fragments/admin/Auth"
+import Login from "../Components/fragments/admin/Login";
 
-const Login = () => {
-    return (
-        <Auth/>
-    )
-}
+const LoginPage = () => {
+  return (
+    <>
+      <Login />
+    </>
+  );
+};
 
-export default Login
+export default LoginPage;

@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { IoIosSearch } from "react-icons/io";
-import { MdOutlineAnalytics, MdOutlinePrivacyTip, MdSchedule } from "react-icons/md";
+import {
+  MdOutlineAnalytics,
+  MdOutlinePrivacyTip,
+  MdSchedule,
+} from "react-icons/md";
 import { PiShoppingBagLight } from "react-icons/pi";
 import { AiOutlineMail } from "react-icons/ai";
-import { FaPlus } from "react-icons/fa6";
+// import { FaPlus } from "react-icons/fa6";
 import { IoNewspaperOutline, IoFolderOpenOutline } from "react-icons/io5";
 import { FiFlag } from "react-icons/fi";
 import { RiTeamLine } from "react-icons/ri";
@@ -14,14 +18,26 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isCollapse, setIsCollapse] = useState(true);
-  const [activeIcon, setActiveIcon] = useState(null); // Track active icon
-  const navigate = useNavigate()
+  const [activeIcon, setActiveIcon] = useState(null);
+  const navigate = useNavigate();
 
-  // Function to handle icon clicks
   const handleIconClick = (icon) => {
-    setActiveIcon(icon); // Set the active icon
+    setActiveIcon(icon);
   };
 
+  const handleLogout = async () => {
+    try {
+      const token = await sessionStorage.getItem("token");
+      if (token) {
+        sessionStorage.removeItem("token");
+        navigate("/login")
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
   const menuItems = [
     { id: "message", label: "Message", icon: <AiOutlineMail /> },
     { id: "schedule", label: "Schedule", icon: <MdSchedule /> },
@@ -69,7 +85,9 @@ const Sidebar = () => {
               className={`${
                 isCollapse ? "justify-between" : "justify-center"
               } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group ${
-                activeIcon === item.id ? "bg-white shadow-black drop-shadow-xl" : "hover:bg-gray-50"
+                activeIcon === item.id
+                  ? "bg-white shadow-black drop-shadow-xl"
+                  : "hover:bg-gray-50"
               }`}
               onClick={() => handleIconClick(item.id)}
             >
@@ -91,7 +109,12 @@ const Sidebar = () => {
               </div>
             </div>
           ))}
-          <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md mt-20">Logout</button>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 text-white rounded-md mt-20 hidden md:block"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </aside>

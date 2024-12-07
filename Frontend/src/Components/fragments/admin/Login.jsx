@@ -1,44 +1,68 @@
-import React, { useState } from 'react';
-import Logo from '../../../assets/bg.jpg';
-import { loginUser } from './services/api.js';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import Logo from "../../../assets/bg.jpg";
+import { loginUser } from "./services/api.js";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Auth = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    setError('');
+    setErrorEmail("");
+    setErrorPassword("");
     setLoading(true);
 
     try {
       const { token, user } = await loginUser(email, password);
-      console.log('Login successful:', { token, user });
 
       Swal.fire({
-        icon: 'success',
-        title: 'Login Berhasil',
+        icon: "success",
+        title: "Login Berhasil",
         text: `Selamat datang, ${user.username}!`,
-        confirmButtonText: 'Lanjutkan',
+        confirmButtonText: "Lanjutkan",
         customClass: {
-          confirmButton: 'bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded',
+          confirmButton:
+            "bg-emerald-500 text-white hover:bg-emerald-600 px-4 py-2 rounded",
         },
       }).then(() => {
-        navigate('/admin');
+        navigate("/admin");
       });
 
-      sessionStorage.setItem('token', token);
+      sessionStorage.setItem("token", token);
     } catch (err) {
-      console.error('Login error:', err);
-      setError(err.message || 'Login failed');
+      console.error("Login error:", err);
+
+      const errorMessage =
+        err?.message || err?.response?.data?.message || "Login failed";
+
+      if (errorMessage === "User tidak ditemukan") {
+        setErrorEmail("User tidak ditemukan");
+      } else if (errorMessage === "Password salah") {
+        setErrorPassword("Password salah");
+      } else {
+        setErrorEmail("");
+        setErrorPassword("");
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setErrorEmail("");
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setErrorPassword("");
   };
 
   return (
@@ -74,11 +98,14 @@ const Auth = () => {
               id="email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               required
               className="w-full bg-white text-black placeholder:text-gray-400 p-3 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter your email"
             />
+            {errorEmail && (
+              <p className="text-red-500 text-sm mt-2">{errorEmail}</p>
+            )}
           </div>
           <div className="mb-4">
             <label
@@ -92,16 +119,22 @@ const Auth = () => {
               id="password"
               name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               required
               className="w-full bg-white text-black placeholder:text-gray-400 p-3 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter your password"
             />
+            {errorPassword && (
+              <p className="text-red-500 text-sm mt-2">{errorPassword}</p>
+            )}
           </div>
           <div className="mb-4 text-left">
-            <a href="#" className="text-[15px] sm:text-[17px] text-blue-500 hover:underline">
+            <Link
+              to="/forget-password"
+              className="text-[15px] sm:text-[17px] text-blue-500 hover:underline"
+            >
               Lupa Password?
-            </a>
+            </Link>
           </div>
           <div className="flex items-center justify-center">
             <button
@@ -109,7 +142,7 @@ const Auth = () => {
               disabled={loading}
               className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-14 sm:px-14 text-[18px] sm:text-[20px] md:text-[23px] rounded-3xl transition"
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? "Logging in..." : "Login"}
             </button>
           </div>
         </form>
@@ -118,4 +151,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Login;

@@ -10,9 +10,9 @@ const Navbar = () => {
   return (
     <nav className="py-4 px-4 flex items-center justify-between w-full relative">
       <img
-        src="https://i.ibb.co/0BZfPq6/darklogo.png"
+        src="/src/assets/logo.png"
         alt="logo"
-        className="w-[60px] "
+        className="w-[100px] object-contain"
       />
       <ul className="items-center gap-[20px] text-[1rem] text-[#424242] lg:flex hidden">
         <li className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer hover:text-[#3B9DF8] capitalize">

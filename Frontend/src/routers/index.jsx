@@ -4,8 +4,9 @@ import Admin from "../Pages/admin";
 import PaymentPages from "../Pages/paymentPages";
 import DetailRoomPages from "../Pages/detailRoom";
 import Booking from "../Pages/booking";
-import Login from '../Pages/login';
-
+import LoginPage from "../Pages/login";
+import ForgetPasswordPage from "../Pages/forgetPassword";
+import ResetPasswordPage from "../Pages/resetPassword";
 
 const router = createBrowserRouter([
   {
@@ -14,23 +15,31 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin/>
+    element: <Admin />,
   },
   {
     path: "/room/:id",
-    element: <DetailRoomPages/>
+    element: <DetailRoomPages />,
   },
   {
     path: "/booking/:id",
-    element: <Booking/>
+    element: <Booking />,
   },
   {
     path: "/payment/:id",
-    element: <PaymentPages/>
+    element: <PaymentPages />,
   },
   {
-    path: '/login',
-    element: <Login/>
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/forget-password",
+    element: <ForgetPasswordPage />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: <ResetPasswordPage />,
   },
 ]);
 
