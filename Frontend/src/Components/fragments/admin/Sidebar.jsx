@@ -14,6 +14,7 @@ import { FiFlag } from "react-icons/fi";
 import { RiTeamLine } from "react-icons/ri";
 import { LuHelpCircle } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   const [isCollapse, setIsCollapse] = useState(true);
@@ -26,17 +27,38 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      const token = await sessionStorage.getItem("token");
-      if (token) {
-        sessionStorage.removeItem("token");
-        navigate("/login")
-      } else {
-        navigate("/login");
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of the system!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, log me out!",
+        cancelButtonText: "Cancel",
+      });
+
+      if (result.isConfirmed) {
+        const token = await sessionStorage.getItem("token");
+        if (token) {
+          sessionStorage.removeItem("token");
+          navigate("/login");
+        } else {
+          navigate("/login");
+        }
+
+        Swal.fire(
+          "Logged Out!",
+          "You have been successfully logged out.",
+          "success",
+        );
       }
     } catch (error) {
       console.error("Logout error:", error);
+      Swal.fire("Error!", "Something went wrong during logout.", "error");
     }
   };
+
   const menuItems = [
     { id: "message", label: "Message", icon: <AiOutlineMail /> },
     { id: "schedule", label: "Schedule", icon: <MdSchedule /> },
