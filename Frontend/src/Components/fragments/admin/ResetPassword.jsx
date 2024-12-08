@@ -40,6 +40,7 @@ const ResetPassword = () => {
           title: "Password berhasil diatur ulang",
           text: "Silakan login dengan password baru Anda.",
           confirmButtonText: "Login",
+          confirmButtonColor: "#3b82f6",
         }).then(() => {
           navigate("/login");
         });
