@@ -21,7 +21,7 @@ const DetailRoom = () => {
 
   const getRoom = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/room/${id}`);
+      const res = await axios.get(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
       const data = res.data.data;
       setRoom(data);
     } catch (error) {
@@ -48,7 +48,7 @@ const DetailRoom = () => {
         className="md:mr-4 md:w-[45%] h-[350px] rounded-xl overflow-hidden"
       >
         <img
-          src={`http://localhost:8080/${room.photo}`}
+          src={`https://ceria-music-production-4534.up.railway.app/${room.photo}`}
           className="w-full h-full object-cover"
           alt={room.name || "Room Image"}
         />

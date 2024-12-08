@@ -16,12 +16,10 @@ const ForgetPassword = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/forgot-password",
+        "https://ceria-music-production-4534.up.railway.app/api/forgot-password",
         { email }
       );
-
-      console.log(res.data);
-
+      
       if (res.status !== 200) {
         throw new Error(res.data.message);
       }

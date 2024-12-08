@@ -9,7 +9,6 @@ import {
 } from "react-icons/md";
 import { PiShoppingBagLight } from "react-icons/pi";
 import { AiOutlineMail } from "react-icons/ai";
-// import { FaPlus } from "react-icons/fa6";
 import { IoNewspaperOutline, IoFolderOpenOutline } from "react-icons/io5";
 import { FiFlag } from "react-icons/fi";
 import { RiTeamLine } from "react-icons/ri";
