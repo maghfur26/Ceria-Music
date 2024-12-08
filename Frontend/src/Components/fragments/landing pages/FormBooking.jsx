@@ -21,7 +21,7 @@ const FormBooking = () => {
 
   const getRoom = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/room/${id}`);
+      const res = await axios.get(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
       const data = res.data.data;
       setRoom(data);
     } catch (error) {
@@ -54,7 +54,7 @@ const FormBooking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Aktifkan loading
+    setLoading(true); 
 
     try {
       const startTime = new Date(`${formData.date}T${formData.startTime}`);
@@ -82,7 +82,7 @@ const FormBooking = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/api/booking",
+        "https://ceria-music-production-4534.up.railway.app/api/booking",
         requestData
       );
 
@@ -110,7 +110,7 @@ const FormBooking = () => {
         confirmButtonColor: "#3b82f6",
       });
     } finally {
-      setLoading(false); // Nonaktifkan loading
+      setLoading(false); 
     }
   };
 
@@ -126,7 +126,7 @@ const FormBooking = () => {
       <div
         className="min-h-screen flex items-center justify-center p-6"
         style={{
-          backgroundImage: `url(http://localhost:8080/${room.photo})`,
+          backgroundImage: `url(https://ceria-music-production-4534.up.railway.app/${room.photo})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

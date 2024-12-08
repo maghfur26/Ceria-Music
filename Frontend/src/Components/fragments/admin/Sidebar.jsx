@@ -1,29 +1,22 @@
 import { useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { IoIosSearch } from "react-icons/io";
-import {
-  MdOutlineAnalytics,
-  MdOutlinePrivacyTip,
-  MdSchedule,
-} from "react-icons/md";
-import { PiShoppingBagLight } from "react-icons/pi";
-import { AiOutlineMail } from "react-icons/ai";
-// import { FaPlus } from "react-icons/fa6";
-import { IoNewspaperOutline, IoFolderOpenOutline } from "react-icons/io5";
-import { FiFlag } from "react-icons/fi";
-import { RiTeamLine } from "react-icons/ri";
-import { LuHelpCircle } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import WeekendIcon from "@mui/icons-material/Weekend";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import PaymentIcon from "@mui/icons-material/Payment";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 const Sidebar = () => {
-  const [isCollapse, setIsCollapse] = useState(true);
+  const [isCollapse, setIsCollapse] = useState(false);
   const [activeIcon, setActiveIcon] = useState(null);
   const navigate = useNavigate();
 
-  const handleIconClick = (icon) => {
-    setActiveIcon(icon);
+  const handleIconClick = (target) => {
+    setActiveIcon(target); // Mengatur ikon aktif berdasarkan target URL
+    navigate(target); // Navigasi ke URL yang ditentukan
   };
 
   const handleLogout = async () => {
@@ -43,15 +36,12 @@ const Sidebar = () => {
         const token = await sessionStorage.getItem("token");
         if (token) {
           sessionStorage.removeItem("token");
-          navigate("/login");
-        } else {
-          navigate("/login");
         }
-
+        navigate("/login");
         Swal.fire(
           "Logged Out!",
           "You have been successfully logged out.",
-          "success",
+          "success"
         );
       }
     } catch (error) {
@@ -61,84 +51,73 @@ const Sidebar = () => {
   };
 
   const menuItems = [
-    { id: "message", label: "Message", icon: <AiOutlineMail /> },
-    { id: "schedule", label: "Schedule", icon: <MdSchedule /> },
-    { id: "analytics", label: "Analytics", icon: <MdOutlineAnalytics /> },
-    { id: "news", label: "News", icon: <IoNewspaperOutline /> },
-    { id: "recruitment", label: "Recruitment", icon: <PiShoppingBagLight /> },
-    { id: "projects", label: "Projects", icon: <IoFolderOpenOutline /> },
-    { id: "activity", label: "Activity", icon: <FiFlag /> },
-    { id: "shared", label: "Shared", icon: <RiTeamLine /> },
-    { id: "privacy", label: "Privacy", icon: <MdOutlinePrivacyTip /> },
-    { id: "help", label: "Help!", icon: <LuHelpCircle /> },
+    { id: "room", label: "Room", icon: <WeekendIcon />, target: "/admin/room" },
+    { id: "booking", label: "Booking", icon: <MenuBookIcon />, target: "/admin/booking" },
+    { id: "fasility", label: "Fasility", icon: <AssignmentIcon />, target: "/admin/fasility" },
+    { id: "payment", label: "Payment", icon: <PaymentIcon />, target: "/admin/payment" },
+    { id: "profile", label: "Profile", icon: <AccountBoxIcon />, target: "/admin/profile" },
   ];
 
   return (
     <aside
-      className={`${
-        isCollapse ? "py-[20px] px-[30px]" : "py-[15px] px-[10px]"
-      } bg-[#F5F6F7] boxShadow rounded-md transition-all duration-300 ease overflow-y-auto max-h-[100vh]`}
+      className={`h-screen ${
+        isCollapse ? "w-16 p-2" : "w-64 p-4"
+      } bg-gradient-to-r from-blue-500 to-blue-700 text-white transition-all duration-300 shadow-lg flex flex-col justify-between`}
     >
-      {isCollapse ? (
-        <div className="flex items-center">
-          <ChevronLeftIcon onClick={() => setIsCollapse(!isCollapse)} />
-          <p className="text-sm font-sans font-bold">MENU</p>
-        </div>
-      ) : (
-        <div className="flex items-center">
-          <p className="text-sm font-sans font-bold">MENU</p>
-          <ChevronRightIcon onClick={() => setIsCollapse(!isCollapse)} />
-        </div>
-      )}
-
-      <div className="mt-6">
-        <p
-          className={`${
-            isCollapse ? "text-[1rem]" : "text-[0.9rem] text-center"
-          } text-gray-500 font-[400]`}
+      <div>
+        {/* Header */}
+        <div
+          className="flex items-center justify-between cursor-pointer mb-6"
+          onClick={() => setIsCollapse(!isCollapse)}
         >
-          General
-        </p>
+          <span className={`text-lg font-bold ${isCollapse && "hidden"}`}>
+            Menu
+          </span>
+          {isCollapse ? (
+            <ChevronRightIcon className="text-white" />
+          ) : (
+            <ChevronLeftIcon className="text-white" />
+          )}
+        </div>
 
-        <div className="mt-3 flex flex-col gap-[5px]">
+        {/* Menu Items */}
+        <div className="flex flex-col gap-4">
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className={`${
-                isCollapse ? "justify-between" : "justify-center"
-              } flex items-center w-full p-[5px] rounded-md cursor-pointer transition-all duration-200 relative group ${
-                activeIcon === item.id
-                  ? "bg-white shadow-black drop-shadow-xl"
-                  : "hover:bg-gray-50"
+              className={`flex items-center ${
+                isCollapse ? "justify-center" : "gap-3"
+              } p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                activeIcon === item.target
+                  ? "bg-white text-blue-600 shadow-md"
+                  : "hover:bg-blue-600 hover:shadow-lg"
               }`}
-              onClick={() => handleIconClick(item.id)}
+              onClick={() => handleIconClick(item.target)}
             >
-              <div className="flex items-center gap-[8px]">
-                <div
-                  className={`text-[1.3rem] ${
-                    activeIcon === item.id ? "text-blue-600" : "text-gray-800"
-                  }`}
-                >
-                  {item.icon}
-                </div>
-                <p
-                  className={`${
-                    isCollapse ? "inline" : "hidden"
-                  } text-[1.1rem] font-[400] text-gray-800`}
-                >
-                  {item.label}
-                </p>
+              <div
+                className={`text-2xl transition-transform duration-300 ${
+                  activeIcon === item.target ? "rotate-12" : ""
+                }`}
+              >
+                {item.icon}
               </div>
+              {!isCollapse && (
+                <span className="text-lg font-medium">{item.label}</span>
+              )}
             </div>
           ))}
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 text-white rounded-md mt-20 hidden md:block"
-          >
-            Logout
-          </button>
         </div>
       </div>
+
+      {/* Logout */}
+      <button
+        onClick={handleLogout}
+        className={`p-3 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-300 ${
+          isCollapse ? "hidden" : "block"
+        }`}
+      >
+        Logout
+      </button>
     </aside>
   );
 };

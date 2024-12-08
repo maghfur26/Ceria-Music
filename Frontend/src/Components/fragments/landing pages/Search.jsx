@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ReactTyped } from "react-typed";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import bgLanding from "../../../assets/bg.jpg";
 
 const Search = () => {
   const [listStudio, setListStudio] = useState([]);
@@ -14,7 +15,7 @@ const Search = () => {
 
   const getRooms = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/room");
+      const res = await axios.get("https://ceria-music-production-4534.up.railway.app/api/room");
       if (res.status === 200) {
         setListStudio(res.data.data);
         setFilteredStudios(res.data.data);
@@ -71,7 +72,7 @@ const Search = () => {
       <div
         className="flex h-[342px] w-[95dvw] rounded-3xl mx-auto justify-center items-center flex-col shadow-black drop-shadow-lg"
         style={{
-          backgroundImage: `url(${"src/assets/bg.jpg"})`,
+          backgroundImage: `url(${bgLanding})`,
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -129,7 +130,7 @@ const Search = () => {
           return (
             <CardStudio
               className="my-4 lg:my-14"
-              img={`http://localhost:8080/${studio.photo}`}
+              img={`https://ceria-music-production-4534.up.railway.app/${studio.photo}`}
               title={studio.name}
               status="Available"
               price={formattedPrice}
