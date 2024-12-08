@@ -8,33 +8,13 @@ const Navbar = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <nav className="py-4 px-4 flex items-center justify-between w-full relative">
+    <nav className=" py-4 px-4 flex items-center justify-between w-full relative">
       <img
         src="/src/assets/logo.png"
         alt="logo"
         className="w-[100px] object-contain"
       />
-      <ul className="items-center gap-[20px] text-[1rem] text-[#424242] lg:flex hidden">
-        <li className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer hover:text-[#3B9DF8] capitalize">
-          home
-        </li>
-        <li className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer hover:text-[#3B9DF8] capitalize">
-          about us
-        </li>
-        <li className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer hover:text-[#3B9DF8] capitalize">
-          services
-        </li>
-      </ul>
-
       <div className="flex items-center gap-[10px]">
-        <div className="relative lg:flex hidden">
-          <input
-            className="py-1.5 pr-4 border border-text pl-10 rounded-full outline-none focus:border-[#3B9DF8]"
-            placeholder="Search..."
-          />
-          <IoIosSearch className="absolute top-[9px] left-3 text-[#424242] text-[1.3rem]" />
-        </div>
-
         <FaDiscord className="text-[1.6rem] text-[#424242]c cursor-pointer hover:text-[#3B9DF8] transition-all duration-500 " />
         <TbBrandGithubFilled className="text-[1.6rem] text-[#424242]c cursor-pointer hover:text-[#3B9DF8] transition-all duration-500" />
 

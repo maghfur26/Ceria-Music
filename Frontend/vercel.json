@@ -1,7 +1,8 @@
 {
     "rewrites": [
-      { "source": "/admin", "destination": "/" },
       { "source": "/login", "destination": "/" },
+      { "source": "/admin", "destination": "/" },
+      { "source": "/admin/room", "destination": "/" },
       { "source": "/room/:id", "destination": "/" },
       { "source": "/booking/:id", "destination": "/" },
       { "source": "/payment/:id", "destination": "/" },

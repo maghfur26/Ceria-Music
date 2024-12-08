@@ -7,6 +7,7 @@ import Booking from "../Pages/booking";
 import LoginPage from "../Pages/login";
 import ForgetPasswordPage from "../Pages/forgetPassword";
 import ResetPasswordPage from "../Pages/resetPassword";
+import RoomPages from "../Pages/admin/room";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/reset-password/:token",
     element: <ResetPasswordPage />,
+  },
+  {
+    path: "/admin/room/",
+    element: <RoomPages />,
   },
 ]);
 
