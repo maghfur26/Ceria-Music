@@ -242,6 +242,23 @@ userController.updateProfile = async (req, res) => {
     }
 };
 
+userController.getUser = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+        
+        const user = await User.findById(userId).select('-password'); 
+
+        if (!user) {
+            return ResponseAPI.error(res, 'User tidak ditemukan', 404);
+        }
+
+        ResponseAPI.success(res, user, 'Profil pengguna berhasil diambil');
+    } catch (error) {
+        console.error(error);
+        ResponseAPI.serverError(res, error);
+    }
+};
+
 userController.logout = async (req, res) => {
     try {
         ResponseAPI.success(res, null, 'Logout berhasil');

@@ -103,6 +103,7 @@ userRoute.put('/user/update', authMiddleware, upload('user'), userController.upd
 userRoute.post('/forgot-password', userController.forgotPassword);
 userRoute.post('/reset-password/:token', userController.resetPassword);
 userRoute.post('/reset-password', userController.resetPassword);
+userRoute.get('/user', authMiddleware, userController.getUser);
 
 /**
  * @swagger
