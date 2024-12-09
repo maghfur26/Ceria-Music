@@ -16,16 +16,28 @@ const facilityController = {
         }
     },
 
-    async getUserFacilities(req, res) {
+    async getFacilities(req, res) {
         try {
+            // Ambil fasilitas berdasarkan userId
             const facilities = await FacilitiesModel.find({ userId: req.user._id });
-            ResponseAPI.success(res, facilities);
+    
+            // Periksa apakah data fasilitas ditemukan
+            if (!facilities || facilities.length === 0) {
+                return ResponseAPI.success(res, [], 'No facilities found for this user');
+            }
+    
+            // Kirim respons sukses
+            return ResponseAPI.success(res, facilities, 'Facilities retrieved successfully');
         } catch (error) {
-            ResponseAPI.serverError(res, error);
+            // Log error ke konsol untuk debugging
+            console.error('Error fetching facilities:', error);
+    
+            // Kirim respons error
+            return ResponseAPI.serverError(res, error);
         }
-    },
+    },    
 
-    async getFacility(req, res) {
+    async getEachFacility(req, res) {
         try {
             const facility = await FacilitiesModel.findOne({
                 _id: req.params.id,

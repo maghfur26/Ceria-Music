@@ -241,30 +241,25 @@ const bookingController = {
         try {
             // Ambil semua data booking dari database
             const bookings = await BookingModel.find();
-
-            // Jika tidak ada data booking
-            if (!bookings || bookings.length === 0) {
-                return res.status(404).json({ message: 'No bookings found' });
-            }
-
+    
             // Konversi waktu ke Asia/Jakarta untuk setiap booking
             const formattedBookings = bookings.map((booking) => ({
                 ...booking._doc, // Spread data asli
                 startTime: moment(booking.startTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 endTime: moment(booking.endTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
             }));
-
-            // Kirim respon dengan data booking
+    
+            // Kirim respon dengan data booking, meskipun kosong
             return res.status(200).json({
                 message: 'Bookings retrieved successfully',
-                bookings: formattedBookings,
+                bookings: formattedBookings || [], // Kembalikan array kosong jika tidak ada data
             });
         } catch (error) {
             // Tangani error dan kirim respon error
             console.error(error.message);
             return res.status(500).json({ message: 'Error retrieving bookings' });
         }
-    },
+    },    
 
     async cancelExpiredBookings() {
         try {

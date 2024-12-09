@@ -140,18 +140,13 @@ const paymentController = {
 
     getAllPayments: async (req, res) => {
         try {
-            // Ambil semua data booking dari database
+            // Ambil semua data pembayaran dari database
             const payment = await PaymentModel.find();
 
-            // Jika tidak ada data booking
-            if (!payment || payment.length === 0) {
-                return res.status(404).json({ message: 'No payments found' });
-            }
-
-            // Kirim respon dengan data booking
+            // Kirim respon dengan data pembayaran, meskipun kosong
             return res.status(200).json({
-                message: 'payment retrieved successfully',
-                payment
+                message: 'Payments retrieved successfully',
+                payment: payment || [], // Kembalikan array kosong jika tidak ada data
             });
         } catch (error) {
             // Tangani error dan kirim respon error

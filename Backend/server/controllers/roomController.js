@@ -49,14 +49,25 @@ const roomController = {
 
     async getAllRooms(req, res) {
         try {
+            // Ambil semua data ruangan dan populate fasilitasnya
             const rooms = await RoomsModel.find().populate('facilities.facility_id', 'name unit');
-            return res.status(200).json({ data: rooms });
+    
+            // Kembalikan respons sukses
+            return res.status(200).json({
+                message: 'Rooms retrieved successfully',
+                data: rooms || [], // Kembalikan array kosong jika tidak ada data
+            });
         } catch (error) {
+            // Log error ke konsol untuk debugging
+            console.error('Error fetching rooms:', error);
+    
+            // Kembalikan respons error
             return res.status(500).json({
-                message: error.message,
+                message: 'Error retrieving rooms',
+                error: error.message,
             });
         }
-    },
+    },    
 
     async getEachRooms(req, res) {
         try {

@@ -32,7 +32,7 @@ const facilityController = require('../controllers/facilityController');
  *       500:
  *         description: Terjadi kesalahan server
  */
-facilityRoute.get('/facilities', authMiddleware, facilityController.getUserFacilities);
+facilityRoute.get('/facilities', authMiddleware, facilityController.getFacilities);
 facilityRoute.get('/facility/search', authMiddleware, facilityController.searchByName); 
 
 /**
@@ -64,7 +64,7 @@ facilityRoute.get('/facility/search', authMiddleware, facilityController.searchB
  *       500:
  *         description: Terjadi kesalahan server
  */
-facilityRoute.get('/facility/:id', authMiddleware, facilityController.getFacility);
+facilityRoute.get('/facility/:id', authMiddleware, facilityController.getEachFacility);
 
 /**
  * @swagger
