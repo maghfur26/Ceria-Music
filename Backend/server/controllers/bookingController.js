@@ -172,13 +172,12 @@ const bookingController = {
 
             doc.pipe(writeStream);
 
-            // Set font for the document (use Helvetica as an example)
             doc.fontSize(18).font('Helvetica').text('Music Studio Rental Receipt', { align: 'center' });
             doc.moveDown();
 
-            // Konversi waktu ke Asia/Jakarta
-            const startTimeLocal = moment(booking.startTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
-            const endTimeLocal = moment(booking.endTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
+            // Konversi waktu ke Asia/Jakarta dan hanya tampilkan jam:menit
+            const startTimeLocal = moment(booking.startTime).tz('Asia/Jakarta').format('HH:mm');
+            const endTimeLocal = moment(booking.endTime).tz('Asia/Jakarta').format('HH:mm');
             const paymentDateLocal = payment.payment_date
                 ? moment(payment.payment_date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss')
                 : '-';
