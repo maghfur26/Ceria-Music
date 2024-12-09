@@ -176,13 +176,20 @@ const bookingController = {
             doc.fontSize(18).font('Helvetica').text('Music Studio Rental Receipt', { align: 'center' });
             doc.moveDown();
 
+            // Konversi waktu ke Asia/Jakarta
+            const startTimeLocal = moment(booking.startTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
+            const endTimeLocal = moment(booking.endTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
+            const paymentDateLocal = payment.payment_date
+                ? moment(payment.payment_date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss')
+                : '-';
+
             doc.fontSize(14).font('Helvetica').text(`Receipt ID: ${payment._id}`);
             doc.text(`Booking ID: ${booking._id}`);
             doc.text(`Name: ${booking.name}`);
             doc.text(`Phone Number: ${booking.phoneNumber}`);
-            doc.text(`Date: ${new Date(booking.date).toLocaleDateString()}`);
-            doc.text(`Start Time: ${new Date(booking.startTime).toLocaleTimeString()}`);
-            doc.text(`End Time: ${new Date(booking.endTime).toLocaleTimeString()}`);
+            doc.text(`Date: ${moment(booking.date).format('YYYY-MM-DD')}`);
+            doc.text(`Start Time: ${startTimeLocal}`);
+            doc.text(`End Time: ${endTimeLocal}`);
             doc.moveDown();
             doc.text(`Room Name: ${room.name}`);
             doc.text(`Price per Hour: ${room.price_perhour}`);
@@ -190,7 +197,7 @@ const bookingController = {
             doc.text(`Total Amount: ${payment.total_amount}`);
             doc.text(`Payment Code: ${payment.payment_code}`);
             doc.text(`Payment Status: ${payment.payment_status}`);
-            doc.text(`Payment Date: ${payment.payment_date || '-'}`);
+            doc.text(`Payment Date: ${paymentDateLocal}`);
             doc.moveDown();
             doc.text('Thank you for booking with us!', { align: 'center' });
 
