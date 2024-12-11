@@ -8,6 +8,12 @@ const AdminProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    username: "",
+    email: "",
+  });
+  const [photo, setPhoto] = useState(null); // Tambahkan state untuk foto
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -66,6 +72,51 @@ const AdminProfile = () => {
     }
   };
 
+  const handleEdit = () => {
+    setEditData({
+      username: user.username,
+      email: user.email,
+      photo: user.photo,
+    });
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const formData = new FormData();
+      formData.append("username", editData.username);
+      formData.append("email", editData.email);
+      if (photo) {
+        formData.append("photo", photo);
+      }
+
+      const response = await axios.put(
+        "https://ceria-music-production-4534.up.railway.app/api/user/update",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setUser(response.data.data);
+      setIsEditing(false);
+      swal.fire("Success", "Profile updated successfully!", "success");
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      swal.fire("Error", "Failed to update profile.", "error");
+    }
+  };
+
+  console.log("User  photo URL:", user?.photo);
+
   return (
     <>
       <div className="flex justify-center items-center md:items-start md:py-20 bg-gray-100 px-4">
@@ -95,39 +146,115 @@ const AdminProfile = () => {
                   className="w-full border px-4 py-2 rounded-lg"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  readOnly
-                  value={user?.username || ""}
-                  className="w-full border px-4 py-2 rounded-lg"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="text"
-                  readOnly
-                  value={user?.email || ""}
-                  className="w-full border px-4 py-2 rounded-lg"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
-              <button className="w-full sm:w-auto bg-gray-500 text-white px-6 py-2 rounded-lg">
-                Edit
-              </button>
-              <button
-                onClick={handleLogout}
-                className="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-lg"
-              >
-                Logout
-              </button>
+              {isEditing ? (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      NAME
+                    </label>
+                    <input
+                      type="text"
+                      value={editData.username}
+                      onChange={(e) =>
+                        setEditData({ ...editData, username: e.target.value })
+                      }
+                      className="w-full border px-4 py-2 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      EMAIL
+                    </label>
+                    <input
+                      type="text"
+                      value={editData.email}
+                      onChange={(e) =>
+                        setEditData({ ...editData, email: e.target.value })
+                      }
+                      className="w-full border px-4 py-2 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Profile Photo
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setPhoto(e.target.files[0])}
+                      className="w-full border px-4 py-2 rounded-lg"
+                    />
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+                    <button
+                      onClick={handleSave}
+                      className="w-full sm:w-auto bg-gray-500 text-white px-6 py-2 rounded-lg"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-lg"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      NAME
+                    </label>
+                    <input
+                      type="text"
+                      readOnly
+                      value={user.username}
+                      className="w-full border px-4 py-2 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      EMAIL
+                    </label>
+                    <input
+                      type="text"
+                      readOnly
+                      value={user.email}
+                      className="w-full border px-4 py-2 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Current Profile Photo
+                    </label>
+                    {user?.photo ? (
+                      <img
+                        src={`https://ceria-music-production-4534.up.railway.app/${user?.photo}`} 
+                        alt="Profile"
+                        className="w-50 h-20 rounded-3xl mt-2 object-cover"
+                      />
+                    ) : (
+                      <p>No photo uploaded</p>
+                      
+                    )}
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+                    <button
+                      onClick={handleEdit}
+                      className="w-full sm:w-auto bg-gray-500 text-white px-6 py-2 rounded-lg"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-lg"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
