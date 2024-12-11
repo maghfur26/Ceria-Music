@@ -9,6 +9,7 @@ import ResetPasswordPage from "../Pages/resetPassword";
 import AdminProfilePage from "../Pages/admin/pofile";
 import RoomPages from "../Pages/admin/room";
 import Dashboard from "../Pages/admin/dasbord";
+import AddRoom from "../Pages/admin/addroom";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     path: "/admin/room",
     element: <RoomPages />,
   },
+  {
+    path: "/admin/add-room",
+    element: <AddRoom />,
+  }
 ]);
 
 export default router;
