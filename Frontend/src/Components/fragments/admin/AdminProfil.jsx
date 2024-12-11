@@ -1,8 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../../assets/logo.png";
 import Bg from "../../../assets/bgLandingPages.jpg";
+import axios from "axios";
+import "sweetalert2/dist/sweetalert2.min.css";
+import swal from 'sweetalert2';
+
 
 const AdminProfile = () => {
+  const [user, setUser] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); 
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        const response = await axios.get("https://ceria-music-production-4534.up.railway.app/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+        setUser(response.data.data);
+      } catch (err) {
+        setError(err.response?.data?.message || "Terjadi kesalahan");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  const handleLogout = async () => {
+    try {
+      const result = await swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of the system!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, log me out!",
+        cancelButtonText: "Cancel",
+      });
+
+      if (result.isConfirmed) {
+        const token = await sessionStorage.getItem("token");
+        if (token) {
+          sessionStorage.removeItem("token");
+        }
+        navigate("/login");
+        swal.fire(
+          "Logged Out!",
+          "You have been successfully logged out.",
+          "success"
+        );
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      swal.fire("Error!", "Something went wrong during logout.", "error");
+    }
+  };
+  
+
   return (
     <>
       <div className="md:min-h-[1000px] lg:min-h-[600px] min-h-52">
@@ -34,46 +98,40 @@ const AdminProfile = () => {
                     <input
                       type="text"
                       readOnly
-                      className="border rounded-3xl border-slate-900 md:w-[650px] md:h-[48px] lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
+                      value={user._id}
+                      className="border lg:px-4 px-4 rounded-3xl border-slate-900 md:w-[650px] md:h-[48px] md:text-2xl lg:text-base lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="" className="font-medium lg:text-lg md:text-[40px]">
-                      ID ADMIN
+                      NAME
                     </label>
                     <input
                       type="text"
                       readOnly
-                      className="border rounded-3xl border-slate-900 md:w-[650px] md:h-[48px] lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
+                      value={user.username}
+                      className="border rounded-3xl lg:px-4 px-4 border-slate-900 md:w-[650px] md:text-2xl lg:text-base md:h-[48px] lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="" className="font-medium lg:text-lg md:text-[40px]">
-                      ID ADMIN
+                      EMAIL
                     </label>
                     <input
                       type="text"
                       readOnly
-                      className="border rounded-3xl border-slate-900 md:w-[650px] md:h-[48px] lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
+                      value={user.email}
+                      className="border rounded-3xl lg:px-4 px-4 border-slate-900 md:w-[650px] md:h-[48px] md:text-2xl lg:text-base lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <label htmlFor="" className="font-medium lg:text-lg md:text-[40px]">
-                      ID ADMIN
-                    </label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="border rounded-3xl border-slate-900 md:w-[650px] md:h-[48px] lg:w-[400px] lg:h-[38px] w-[200px] h-[30px]"
-                    />
-                  </div>
+                 
                 </div>
-                <div className="absolute md:top-[590px] lg:top-[380px] top-[280px] left-7 iphonexr18:left-[53px] iphone12:left-[45px] iphone14plus:left-[66px] md:left-[110px] lg:left-[210px] lg:mt-1 flex md:w-auto px-4 md:px-0">
+                <div className="absolute md:top-[590px] lg:top-[380px] ipadProPortrait:top-[530px] ipadairportrait:top-[530px] top-[250px] left-7 iphonexr18:left-[53px] iphone12:left-[45px] iphone14plus:left-[66px] md:left-[110px] lg:left-[210px] lg:mt-1 flex md:w-auto px-4 md:px-0">
                   <div className="flex flex-col md:flex-row items-center gap-4">
                     <button className="md:py-5 py-2 md:px-28 lg:px-10 lg:py-2 px-[70px] md:text-3xl lg:text-base border border-slate-900 md:rounded-full lg:rounded-3xl rounded-3xl w-full md:w-auto">
                       Edit
                     </button>
-                    <button className="md:py-5 py-2 px-[70px] md:px-28 lg:px-10 lg:py-2 md:text-3xl lg:text-base border border-slate-900 bg-blue-500 text-white md:rounded-full rounded-3xl lg:rounded-3xl w-full md:w-auto">
+                    <button onClick={handleLogout} className="md:py-5 py-2 px-[70px] md:px-28 lg:px-10 lg:py-2 md:text-3xl lg:text-base border border-slate-900 bg-blue-500 text-white md:rounded-full rounded-3xl lg:rounded-3xl w-full md:w-auto">
                       Logout
                     </button>
                   </div>

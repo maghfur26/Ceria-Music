@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     element: <ResetPasswordPage />,
   },
   {
-    path: "/admin-profil",
+    path: "/admin/profile",
     element: <AdminProfilePage />,
   },
   {

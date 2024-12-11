@@ -20,7 +20,8 @@ export default {
         zflip3portrait: '360px',
         ipadairportrait: '820px',
         ipadProPortrait: '834px',
-        ipadMiniPortrait: '744px'
+        ipadMiniPortrait: '744px',
+        iphone11pro: '896px'
       }
     },
   },
