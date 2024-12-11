@@ -51,6 +51,7 @@ const Sidebar = () => {
   };
 
   const menuItems = [
+    { id: "dashboard", label: "Dashboard", icon: <WeekendIcon />, target: "/admin" },
     { id: "room", label: "Room", icon: <WeekendIcon />, target: "/admin/room" },
     { id: "booking", label: "Booking", icon: <MenuBookIcon />, target: "/admin/booking" },
     { id: "fasility", label: "Fasility", icon: <AssignmentIcon />, target: "/admin/fasility" },

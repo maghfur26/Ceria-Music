@@ -10,11 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.1.7",
-    "@mui/material": "^6.1.7",
-    "@mui/styled-engine-sc": "^6.1.7",
+    "@mui/material": "^6.1.10",
+    "@mui/styled-engine-sc": "^6.1.10",
+    "@mui/x-charts": "^7.23.1",
     "aos": "^2.3.4",
     "axios": "^1.7.7",
     "moment-timezone": "^0.5.46",
@@ -26,7 +27,7 @@
     "react-typed": "^2.0.12",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.13",
-    "sweetalert2": "^11.14.5",
+    "sweetalert2": "^11.6.13",
     "sweetalert2-react-content": "^5.0.7",
     "swiper": "^11.0.7"
   },

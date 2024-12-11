@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RoomPages from "./admin/room";
 
-const Admin = ({children}) => {
+const Admin = ({children, title}) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
   const navigate = useNavigate();
 

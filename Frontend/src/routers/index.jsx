@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../Pages/home";
-import Admin from "../Pages/admin";
 import PaymentPages from "../Pages/paymentPages";
 import DetailRoomPages from "../Pages/detailRoom";
 import Booking from "../Pages/booking";
@@ -9,6 +8,7 @@ import ForgetPasswordPage from "../Pages/forgetPassword";
 import ResetPasswordPage from "../Pages/resetPassword";
 import AdminProfilePage from "../Pages/adminProfil";
 import RoomPages from "../Pages/admin/room";
+import Dashboard from "../Pages/admin/dasbord";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin />,
+    element: < Dashboard/>,
   },
   {
     path: "/room/:id",

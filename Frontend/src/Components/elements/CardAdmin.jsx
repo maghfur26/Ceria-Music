@@ -5,7 +5,7 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { useEffect } from "react";
 import axios from "axios";
 
-const CardAdmin = ({...props}) => {
+const CardAdmin = ({ ...props }) => {
   const [data, setData] = useState([]);
 
   const getData = async () => {
@@ -29,7 +29,7 @@ const CardAdmin = ({...props}) => {
     <div className="bg-white rounded-lg shadow-md p-4 md:mt-10">
       <div className="flex justify-between items-center mb-4">
         <button
-        //   onClick={handleAddRoom}
+          //   onClick={handleAddRoom}
           className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
         >
           Add Rooms
@@ -58,13 +58,16 @@ const CardAdmin = ({...props}) => {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="title">
+        <h1 className="text-2xl font-semibold mx-2 py-4">{props.title}</h1>
+      </div>
+      <div className="grid px-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((datas) => (
           <div key={datas._id} className="bg-gray-100 rounded-lg p-4 shadow">
             <h2 className="text-lg font-semibold mb-4">{datas.name}</h2>
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2 justify-start">
               <button
-                onClick={() => console.log("Delete", (datas._id))}
+                onClick={() => console.log("Delete", datas._id)}
                 className="flex items-center gap-2 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"
               >
                 <DeleteIcon /> <span>Delete</span>

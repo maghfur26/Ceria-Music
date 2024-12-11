@@ -1,7 +1,11 @@
-import AdminProfile from "../Components/fragments/admin/AdminProfil"
+import AdminProfile from "../Components/fragments/admin/AdminProfil";
 
 const AdminProfilePage = () => {
-    return <AdminProfile/>
-}
+  return (
+    <>
+      <AdminProfile />
+    </>
+  );
+};
 
-export default AdminProfilePage
+export default AdminProfilePage;
