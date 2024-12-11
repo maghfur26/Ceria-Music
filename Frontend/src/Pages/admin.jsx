@@ -2,7 +2,6 @@ import Navbar from "../Components/fragments/admin/Navbar";
 import Sidebar from "../Components/fragments/admin/Sidebar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RoomPages from "./admin/room";
 
 const Admin = ({children, title}) => {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
@@ -22,7 +21,7 @@ const Admin = ({children, title}) => {
   }
 
   return (
-    <div className="flex gap-4 bg-white h-screen w-full">
+    <div className="flex bg-white h-screen">
       <div className="hidden lg:block">
         <Sidebar />
       </div>

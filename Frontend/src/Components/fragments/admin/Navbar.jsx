@@ -26,16 +26,21 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target) &&
+        event.target.id !== "account-icon"
+      ) {
         setShowProfile(false);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
 
   const listMenu = [
     {
@@ -62,13 +67,20 @@ const Navbar = () => {
       icon: "ri-file-list-3-line",
       link: "/admin/payment",
     },
+    {
+      id: 5,
+      title: "Profile",
+      icon: "ri-file-list-3-line",
+      link: "/admin/profile",
+    }
   ];
 
   return (
-    <nav className="py-4 px-4 flex items-center justify-between w-full relative">
+    <nav className="py-4 px-4 flex items-center justify-between w-full relative z-20">
       <img src={logo} alt="logo" className="w-[100px] object-contain" />
       <div className="flex items-center gap-[10px]">
         <AccountCircleIcon
+          id="account-icon"
           className="text-[1.6rem] text-[#424242] cursor-pointer hover:text-[#3B9DF8] transition-all duration-500"
           onClick={handleAccountClick}
         />
@@ -103,7 +115,7 @@ const Navbar = () => {
         className={`${
           mobileSidebarOpen
             ? "translate-x-0 opacity-100 z-20"
-            : "translate-x-[200px] opacity-0 z-[-1]"
+            : "opacity-0 z-[-1]"
         } lg:hidden bg-[#3B9DF8] p-4 text-center absolute top-[60px] right-0 w-full sm:w-[300px] rounded-md transition-all duration-300`}
       >
         <div className="w-full relative mb-5">
@@ -115,7 +127,10 @@ const Navbar = () => {
         </div>
         <ul className="items-center gap-[20px] text-[1rem] text-white flex flex-col">
           {listMenu.map((item) => (
-            <li key={item.id} className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer capitalize">
+            <li
+              key={item.id}
+              className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer capitalize"
+            >
               <a href={item.link} className="flex items-center gap-2">
                 <span className="text-[1.2rem]">
                   <item.icon />
