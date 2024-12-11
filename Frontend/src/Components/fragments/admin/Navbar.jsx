@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { CiMenuFries } from "react-icons/ci";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.png";
+import axios from "axios";
+import WeekendIcon from "@mui/icons-material/Weekend";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import PaymentIcon from "@mui/icons-material/Payment";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const profileRef = useRef(null);
   const navigate = useNavigate();
+  const [user, setUser] = useState([]);
 
   const handleAccountClick = () => {
     setShowProfile(!showProfile);
@@ -24,7 +31,17 @@ const Navbar = () => {
     }
   };
 
+  const handleScroll = () => {
+    if (window.scrollY > 0) {
+      setIsScrolling(true);
+    } else {
+      setIsScrolling(false);
+    }
+  };
+
   useEffect(() => {
+    handleScroll();
+
     const handleClickOutside = (event) => {
       if (
         profileRef.current &&
@@ -34,59 +51,100 @@ const Navbar = () => {
         setShowProfile(false);
       }
     };
-  
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
 
   const listMenu = [
     {
       id: 1,
       title: "Dashboard",
-      icon: "ri-dashboard-line",
+      icon: <WeekendIcon />,
       link: "/admin",
     },
     {
       id: 2,
       title: "Booking",
-      icon: "ri-file-list-3-line",
+      icon: <MenuBookIcon />,
       link: "/admin/booking",
     },
     {
       id: 3,
       title: "Room",
-      icon: "ri-file-list-3-line",
+      icon: <WeekendIcon />,
       link: "/admin/room",
     },
     {
       id: 4,
       title: "Payment",
-      icon: "ri-file-list-3-line",
+      icon: <PaymentIcon />,
       link: "/admin/payment",
     },
     {
       id: 5,
       title: "Profile",
-      icon: "ri-file-list-3-line",
+      icon: <AccountBoxIcon />,
       link: "/admin/profile",
-    }
+    },
   ];
 
+  const fetchUser = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get(
+        "https://ceria-music-production-4534.up.railway.app/api/user",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data.data);
+    } catch (err) {
+      console.error("Error fetching user:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
-    <nav className="py-4 px-4 flex items-center justify-between w-full relative z-20">
+    <nav className="py-4 px-4 flex items-center justify-between w-full relative z-20" style={{ backgroundColor: isScrolling ? "#3B9DF8" : "transparent" }}>
       <img src={logo} alt="logo" className="w-[100px] object-contain" />
+      <div className="items-center hidden md:flex lg:hidden">
+        <ul className="items-center gap-[20px] text-[1rem] flex">
+          {listMenu.map((item) => (
+            <li
+              key={item.id}
+              className="hover:border-b-[#3B9DF8] hover:text-blue-400 border-b-[2px] border-transparent transition-all duration-500 cursor-pointer capitalize"
+            >
+              <Link to={item.link} className="flex items-center gap-2">
+                <span className="text-[1.2rem]">{item.icon}</span>
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="flex items-center gap-[10px]">
-        <AccountCircleIcon
-          id="account-icon"
-          className="text-[1.6rem] text-[#424242] cursor-pointer hover:text-[#3B9DF8] transition-all duration-500"
+        <div
           onClick={handleAccountClick}
-        />
+          className="h-10 w-10 mr-4 cursor-pointer rounded-full bg-black flex items-center justify-center relative overflow-hidden"
+        >
+          <img
+            className="w-full h-full object-cover"
+            src={`https://ceria-music-production-4534.up.railway.app/${user.photo}`}
+            alt="profile"
+            id="account-icon"
+          />
+        </div>
 
         <CiMenuFries
-          className="text-[1.6rem] text-[#424242] cursor-pointer lg:hidden flex"
+          className="text-[1.6rem] text-[#424242] cursor-pointer md:hidden flex"
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
         />
       </div>
@@ -94,13 +152,19 @@ const Navbar = () => {
       {showProfile && (
         <div
           ref={profileRef}
-          className="absolute z-50 top-[60px] right-0 w-[300px] bg-white p-4 shadow-lg rounded-md"
+          className="absolute z-50 top-[60px] right-0 w-[300px] bg-white p-6 shadow-lg rounded-lg border border-gray-200"
         >
-          <h2 className="text-xl font-bold">Profile Admin</h2>
-          <p className="mt-2">Nama: John Doe</p>
-          <p>Email: john.doe@example.com</p>
+          <h2 className="text-xl font-semibold text-gray-800">Profile Admin</h2>
+          <div className="mt-4 text-gray-700 space-y-2">
+            <p>
+              <span className="font-medium">Nama:</span> {user.username}
+            </p>
+            <p>
+              <span className="font-medium">Email:</span> {user.email}
+            </p>
+          </div>
           <button
-            className="mt-4 bg-[#f83b3b] text-white py-2 px-4 rounded hover:bg-[#da4040]"
+            className="mt-6 w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 transition"
             onClick={() => {
               setShowProfile(false);
               handleLogout();
@@ -116,7 +180,7 @@ const Navbar = () => {
           mobileSidebarOpen
             ? "translate-x-0 opacity-100 z-20"
             : "opacity-0 z-[-1]"
-        } lg:hidden bg-[#3B9DF8] p-4 text-center absolute top-[60px] right-0 w-full sm:w-[300px] rounded-md transition-all duration-300`}
+        } md:hidden bg-[#3B9DF8] p-4 text-center absolute top-[60px] right-0 w-full sm:w-[300px] rounded-md transition-all duration-300`}
       >
         <div className="w-full relative mb-5">
           <input
@@ -132,9 +196,7 @@ const Navbar = () => {
               className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer capitalize"
             >
               <a href={item.link} className="flex items-center gap-2">
-                <span className="text-[1.2rem]">
-                  <item.icon />
-                </span>
+                <span className="text-[1.2rem]">{item.icon}</span>
                 {item.title}
               </a>
             </li>

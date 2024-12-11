@@ -1,13 +1,11 @@
-import FormBooking from "../Components/fragments/landing pages/FormBooking";
-import Navbar from "../Components/fragments/landing pages/Navbar";
+import Booking from "../Components/fragments/admin/Booking";
 
-const Booking = () => {
+const BookingPage = () => {
   return (
     <>
-      <Navbar />
-      <FormBooking />
+      <Booking/>
     </>
   );
 };
 
-export default Booking;
+export default BookingPage;

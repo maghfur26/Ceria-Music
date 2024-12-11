@@ -10,13 +10,12 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 const Sidebar = () => {
-  const [isCollapse, setIsCollapse] = useState(false);
   const [activeIcon, setActiveIcon] = useState(null);
   const navigate = useNavigate();
 
   const handleIconClick = (target) => {
-    setActiveIcon(target); // Mengatur ikon aktif berdasarkan target URL
-    navigate(target); // Navigasi ke URL yang ditentukan
+    setActiveIcon(target); 
+    navigate(target); 
   };
 
   const handleLogout = async () => {
@@ -60,35 +59,14 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside
-      className={`h-screen ${
-        isCollapse ? "w-16 p-2" : "w-64 p-4"
-      } bg-gradient-to-r from-blue-500 to-blue-700 text-white transition-all duration-300 shadow-lg flex flex-col justify-between`}
-    >
+    <aside className="h-screen w-64 p-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg flex flex-col justify-between">
       <div>
-        {/* Header */}
-        <div
-          className="flex items-center justify-between cursor-pointer mb-6"
-          onClick={() => setIsCollapse(!isCollapse)}
-        >
-          <span className={`text-lg font-bold ${isCollapse && "hidden"}`}>
-            Menu
-          </span>
-          {isCollapse ? (
-            <ChevronRightIcon className="text-white" />
-          ) : (
-            <ChevronLeftIcon className="text-white" />
-          )}
-        </div>
-
-        {/* Menu Items */}
         <div className="flex flex-col gap-4">
+          <h1>Menu</h1>
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center ${
-                isCollapse ? "justify-center" : "gap-3"
-              } p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-300 ${
                 activeIcon === item.target
                   ? "bg-white text-blue-600 shadow-md"
                   : "hover:bg-blue-600 hover:shadow-lg"
@@ -102,20 +80,14 @@ const Sidebar = () => {
               >
                 {item.icon}
               </div>
-              {!isCollapse && (
-                <span className="text-lg font-medium">{item.label}</span>
-              )}
+              <span className="text-lg font-medium">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Logout */}
       <button
         onClick={handleLogout}
-        className={`p-3 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-300 ${
-          isCollapse ? "hidden" : "block"
-        }`}
+        className="p-3 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-300"
       >
         Logout
       </button>
