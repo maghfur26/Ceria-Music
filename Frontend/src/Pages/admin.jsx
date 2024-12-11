@@ -22,10 +22,10 @@ const Admin = ({children, title}) => {
 
   return (
     <div className="flex bg-white h-screen">
-      <div className="hidden lg:block">
+      <div className="hidden lg:block fixed">
         <Sidebar />
       </div>
-      <div className="w-full">
+      <div className="w-full lg:ml-64">
         <Navbar />
         {children}
       </div>

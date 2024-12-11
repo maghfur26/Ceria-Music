@@ -115,8 +115,6 @@ const AdminProfile = () => {
     }
   };
 
-  console.log("User  photo URL:", user?.photo);
-
   return (
     <>
       <div className="flex justify-center items-center md:items-start md:py-20 bg-gray-100 px-4">
@@ -232,7 +230,7 @@ const AdminProfile = () => {
                       <img
                         src={`https://ceria-music-production-4534.up.railway.app/${user?.photo}`} 
                         alt="Profile"
-                        className="w-50 h-20 rounded-3xl mt-2 object-cover"
+                        className="w-50 h-20 rounded-lg mt-2 object-cover"
                       />
                     ) : (
                       <p>No photo uploaded</p>

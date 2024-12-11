@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { useEffect } from "react";
 import axios from "axios";
+import CardStudio from "./CardStudio";
+import { useNavigate } from "react-router-dom";
 
 const CardAdmin = ({ ...props }) => {
   const [data, setData] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
+  const navigate = useNavigate();
 
   const getData = async () => {
     try {
@@ -21,6 +24,27 @@ const CardAdmin = ({ ...props }) => {
     }
   };
 
+  const handleView = (data) => {
+    try {
+      setSelectedData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const closeView = () => {
+    setSelectedData(null); 
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -29,7 +53,7 @@ const CardAdmin = ({ ...props }) => {
     <div className="bg-white rounded-lg shadow-md p-4 md:mt-10">
       <div className="flex justify-between items-center mb-4">
         <button
-          //   onClick={handleAddRoom}
+          onClick={() => navigate("/admin/add-room")}
           className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full"
         >
           Add Rooms
@@ -67,7 +91,7 @@ const CardAdmin = ({ ...props }) => {
             <h2 className="text-lg font-semibold mb-4">{datas.name}</h2>
             <div className="flex flex-wrap gap-2 justify-start">
               <button
-                onClick={() => console.log("Delete", datas._id)}
+                onClick={() => handleDelete(datas._id)}
                 className="flex items-center gap-2 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"
               >
                 <DeleteIcon /> <span>Delete</span>
@@ -79,7 +103,7 @@ const CardAdmin = ({ ...props }) => {
                 <EditIcon /> <span>Edit</span>
               </button>
               <button
-                onClick={() => console.log("View", datas._id)}
+                onClick={() => handleView(datas)}
                 className="flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded"
               >
                 <RemoveRedEyeIcon /> <span>View</span>
@@ -88,6 +112,28 @@ const CardAdmin = ({ ...props }) => {
           </div>
         ))}
       </div>
+
+      {/* Tampilkan CardStudio jika data dipilih */}
+      {selectedData && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="h-[460px] flex flex-col bg-white rounded-lg shadow-lg p-6">
+            <CardStudio
+              title={selectedData.name}
+              img={`https://ceria-music-production-4534.up.railway.app/${selectedData.photo}`}
+              status={selectedData.status}
+              price={selectedData.price_perhour}
+            />
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={closeView}
+                className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

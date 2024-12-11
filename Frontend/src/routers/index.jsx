@@ -9,6 +9,7 @@ import ResetPasswordPage from "../Pages/resetPassword";
 import AdminProfilePage from "../Pages/admin/pofile";
 import RoomPages from "../Pages/admin/room";
 import Dashboard from "../Pages/admin/dasbord";
+import AddRoom from "../Pages/admin/addroom";
 import BookingPage from "../Pages/admin/booking";
 
 const router = createBrowserRouter([
@@ -53,10 +54,13 @@ const router = createBrowserRouter([
     element: <RoomPages />,
   },
   {
+    path: "/admin/add-room",
+    element: <AddRoom />,
+  },
+  {
     path: "/admin/booking",
     element: <Booking/>,
   }
-
 ]);
 
 export default router;

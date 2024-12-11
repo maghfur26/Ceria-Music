@@ -25,7 +25,7 @@ const CardStudio = ({ ...props }) => {
           className="h-[200px] w-[325px] lg:w-[425px] lg:h-[249px] rounded-3xl hover:scale-110 transition-all ease-in-out duration-300 cursor-pointer hover:shadow-2xl"
         />
         <div className="flex w-full justify-between my-4">
-          <div className="flex">
+          <div className="flex items-center">
             <p className="px-4 py-2 rounded-full text-sm bg-blue-500 text-white">
               {props.status}
             </p>
