@@ -13,7 +13,7 @@ const AdminProfile = () => {
     username: "",
     email: "",
   });
-  const [photo, setPhoto] = useState(null); // Tambahkan state untuk foto
+  const [photo, setPhoto] = useState(null); 
 
   useEffect(() => {
     const fetchUser = async () => {
