@@ -4,6 +4,7 @@ import maghfur from "../../../assets/teams/maghfur.jpg";
 import alif_fadillah from "../../../assets/teams/alif_fadillah.jpg";
 import rendy from "../../../assets/teams/rendy.jpg";
 import bella from "../../../assets/teams/bella.jpg";
+import Reza from "../../../assets/teams/Reza.jpg";
 
 const Team = () => {
   const cards = [
@@ -30,6 +31,12 @@ const Team = () => {
       img: `${bella}`,
       work: "UI/UX",
       name: "Salsabila",
+    },
+    {
+      id: 5,
+      img: `${Reza}`,
+      work: "UI/UX",
+      name: "Reza Rafli Fahlendi",
     }
   ];
 
