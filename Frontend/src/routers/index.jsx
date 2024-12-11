@@ -6,7 +6,7 @@ import Booking from "../Pages/booking";
 import LoginPage from "../Pages/login";
 import ForgetPasswordPage from "../Pages/forgetPassword";
 import ResetPasswordPage from "../Pages/resetPassword";
-import AdminProfilePage from "../Pages/adminProfil";
+import AdminProfilePage from "../Pages/admin/pofile";
 import RoomPages from "../Pages/admin/room";
 import Dashboard from "../Pages/admin/dasbord";
 

@@ -69,12 +69,8 @@ const AdminProfile = () => {
 
   return (
     <>
-      <div className="md:min-h-[1000px] lg:min-h-[600px] min-h-52">
-        <div className="lg:px-11 lg:translate-x-0 lg:py-5 md:translate-x-56 md:py-3 px-28 py-3 ">
-          <img src={Logo} alt="" className="md:w-[300px] w-[180px]" />
-        </div>
-
-        <div className="flex items-center justify-center">
+      <div className="h-[80dvh] flex justify-center">
+        <div className="flex items-center justify-center font-manrope">
           <div className="bg-[#222222] w-[1000px] h-[590px] lg:w-[1000px] tablets7portrait:w-[1200px] tablets7portrait:h-[1450px] ipadairportrait:w-[1200px] lg:h-[530px] zflip3portrait:h-[700px] iphone14plus:h-[670px] md:h-[1345px] relative rounded-none lg:rounded-2xl md:rounded-none">
             <div className="absolute -top-8 translate-x-[440px] lg:translate-x-[310px] hidden md:hidden lg:block">
               <div className="bg-white border border-slate-700 px-32 py-3 rounded-full">
