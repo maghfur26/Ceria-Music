@@ -59,7 +59,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/booking",
-    element: <Booking/>,
+    element: <BookingPage/>,
   }
 ]);
 
