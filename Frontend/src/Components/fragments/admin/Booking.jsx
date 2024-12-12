@@ -97,19 +97,26 @@ const Booking = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+<<<<<<< HEAD
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+=======
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
 
   return (
     <div className="w-full flex flex-col gap-8 p-6 bg-gray-50">
       <div className="w-full px-6 py-4 bg-white rounded-lg shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-700">Manage Bookings</h2>
+<<<<<<< HEAD
           <button
             onClick={() => navigate("/admin/add-room")}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Add Room
           </button>
+=======
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
         </div>
 
         {/* Search */}
@@ -123,28 +130,52 @@ const Booking = () => {
           />
         </div>
 
+<<<<<<< HEAD
         {/* Table */}
         <table className="w-full bg-white border rounded shadow">
           <thead>
             <tr className="bg-gray-200 text-left">
+=======
+          {/* Table */}
+        <table className="w-full bg-white border rounded shadow">
+          <thead>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-4 py-2">No.</th>
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
+<<<<<<< HEAD
             {currentData.map((booking) => (
               <tr key={booking._id} className="border-t">
+=======
+            {currentData.map((booking, index) => (
+              <tr key={booking._id} className="border-t">
+                <td className="px-4 py-2">
+                  {(currentPage - 1) * itemsPerPage + index + 1}
+                </td>
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
                 <td className="px-4 py-2 uppercase">{booking.name}</td>
                 <td className="px-4 py-2 flex gap-2">
                   <button
                     onClick={() => getBookingDetails(booking._id)}
+<<<<<<< HEAD
                     className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+=======
+                    className="px-2 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600"
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
                   >
                     Details
                   </button>
                   <button
                     onClick={() => handleDelete(booking._id)}
+<<<<<<< HEAD
                     className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+=======
+                    className="px-2 py-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
                   >
                     Delete
                   </button>
@@ -154,6 +185,10 @@ const Booking = () => {
           </tbody>
         </table>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-4">
           <button
@@ -175,6 +210,7 @@ const Booking = () => {
           >
             Next
           </button>
+<<<<<<< HEAD
         </div>
       </div>
 
@@ -195,6 +231,30 @@ const Booking = () => {
             </button>
           </div>
         </div>
+=======
+        </div>
+      </div>
+
+      {/* Details Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div style={{ width: '500px', height: '300px' }} className="bg-white p-10 rounded-xl shadow-lgflex flex-col justify-center">
+            <h3 className="text-xl font-semibold mb-4 text-center">Booking Details</h3>
+            <p><strong>Name:</strong> {selectedBooking.name}</p>
+            <p><strong>Date:</strong> {formatDate(selectedBooking.date)}</p>
+            <p><strong>Room:</strong> {selectedBooking.room_id.name}</p>
+            <p><strong>Status:</strong> {selectedBooking.status}</p>
+            <div className="mt-4 flex justify-center mb-0">
+            <button
+              onClick={() => setSelectedBooking(null)}
+              className="px-7 py-2 bg-gray-300 rounded-full hover:bg-gray-400"
+            >
+              Close
+            </button>
+          </div>
+          </div>
+        </div>
+>>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
       )}
     </div>
   );
