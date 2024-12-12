@@ -1,6 +1,4 @@
 import { useState } from "react";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import WeekendIcon from "@mui/icons-material/Weekend";

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
-import Navbar from "../../components/fragments/Navbar";
-import Sidebar from "../../components/fragments/Sidebar";
 
 const Facility = () => {
   const [facilities, setFacilities] = useState([]);
@@ -38,10 +36,7 @@ const Facility = () => {
 
   return (
     <div className="flex">
-      <Sidebar />
       <div className="flex flex-col w-full h-full p-6">
-        <Navbar />
-
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Facilities</h1>
           <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">

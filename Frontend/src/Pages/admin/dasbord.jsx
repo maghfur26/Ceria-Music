@@ -3,12 +3,14 @@ import Admin from "../admin";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";  // Pastikan Swal diimport jika digunakan untuk alert
+import Swal from "sweetalert2";  
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [chartData, setChartData] = useState([]);  // Data untuk chart
+  const [chartData, setChartData] = useState([]); 
   const navigate = useNavigate();
 
   const formatPrice = (price) => {
@@ -48,10 +50,10 @@ const Dashboard = () => {
       );
 
       if (resTotalRevenue.status === 200) {
-        const revenue = resTotalRevenue.data.data.totalRevenue;  // Total revenue (misalnya: 100000000)
+        const revenue = resTotalRevenue.data.data.totalRevenue;  
         setTotalRevenue(revenue);
 
-        const currentMonth = new Date().getMonth();  // 0 = Januari, 11 = Desember
+        const currentMonth = new Date().getMonth();  
         const monthlyRevenue = new Array(12).fill(0);
         monthlyRevenue[currentMonth] = revenue;
 
@@ -85,6 +87,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    Aos.init();
     getData();
   }, []);
 

@@ -133,7 +133,7 @@ const Navbar = () => {
       <div className="flex items-center gap-[10px]">
         <div
           onClick={handleAccountClick}
-          className="h-10 w-10 mr-4 cursor-pointer rounded-full bg-black flex items-center justify-center relative overflow-hidden"
+          className="h-10 w-10 mr-4 cursor-pointer shadow-sm shadow-black rounded-full bg-black flex items-center justify-center relative overflow-hidden"
         >
           <img
             className="w-full h-full object-cover"

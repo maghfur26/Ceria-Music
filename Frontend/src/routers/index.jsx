@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../Pages/home";
 import PaymentPages from "../Pages/paymentPages";
 import DetailRoomPages from "../Pages/detailRoom";
-import Booking from "../Pages/Booking";
 import LoginPage from "../Pages/login";
 import ForgetPasswordPage from "../Pages/forgetPassword";
 import ResetPasswordPage from "../Pages/resetPassword";
@@ -10,7 +9,8 @@ import AdminProfilePage from "../Pages/admin/pofile";
 import RoomPages from "../Pages/admin/room";
 import Dashboard from "../Pages/admin/dasbord";
 import AddRoom from "../Pages/admin/addroom";
-import BookingPage from "../Pages/admin/booking";
+import BookingPageAdmin from "../Pages/admin/booking";
+import BookingPage from "../Pages/booking";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/booking/:id",
-    element: <Booking />,
+    element: <BookingPage />,
   },
   {
     path: "/payment/:id",
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/booking",
-    element: <Booking/>,
+    element: <BookingPageAdmin />,
   }
 ]);
 

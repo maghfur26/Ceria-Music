@@ -1,5 +1,5 @@
-import Booking from "../../Components/fragments/admin/Booking";
 import Admin from "../admin";
+import Booking from "../../Components/fragments/admin/Booking";
 
 const BookingPage = () => {
     return (

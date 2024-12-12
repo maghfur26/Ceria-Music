@@ -38,12 +38,16 @@ const CardAdmin = ({ ...props }) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
+      const res = await axios.delete(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
       getData();
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/admin/edit-room/${id}`);
+  };
 
   useEffect(() => {
     getData();
@@ -97,7 +101,7 @@ const CardAdmin = ({ ...props }) => {
                 <DeleteIcon /> <span>Delete</span>
               </button>
               <button
-                onClick={() => console.log("Edit", datas._id)}
+                onClick={() => handleEdit(datas._id)}
                 className="flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
               >
                 <EditIcon /> <span>Edit</span>
