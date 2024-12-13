@@ -8,7 +8,7 @@ const Booking = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
 
