@@ -49,31 +49,57 @@ const Booking = () => {
     } catch (error) {
       console.error("Error fetching booking details:", error.message);
     }
-  };  
+  };
 
   const handleDelete = async (id) => {
-    try {
-      const res = await axios.delete(
-        `https://ceria-music-production-4534.up.railway.app/api/booking/${id}`,
-        header
-      );
-      if (res.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Booking deleted successfully.",
-          confirmButtonText: "OK",
-        });
-        getDataBooking();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `https://ceria-music-production-4534.up.railway.app/api/booking/${id}`,
+            header
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Deleted!",
+                text: "The booking has been deleted.",
+                confirmButtonText: "OK",
+              });
+              getDataBooking(); // Refresh data setelah penghapusan
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting booking:", error.message);
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "Something went wrong. Please try again.",
+              confirmButtonText: "OK",
+            });
+          });
       }
-    } catch (error) {
-      console.error("Error deleting booking:", error.message);
-    }
+    });
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
+      if (!searchQuery.trim()) {
+        getDataBooking();
+        return;
+      }
+
       const res = await axios.get(
         `https://ceria-music-production-4534.up.railway.app/api/booking/search?name=${searchQuery}`,
         header
@@ -81,6 +107,7 @@ const Booking = () => {
 
       if (res.status === 200) {
         setData(res.data.data);
+        setCurrentPage(1);
       }
     } catch (error) {
       console.log("Error during search:", error.message);
@@ -91,16 +118,31 @@ const Booking = () => {
     getDataBooking();
   }, []);
 
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      getDataBooking();
+    }
+  }, [searchQuery]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = (data || []).slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.max(1, Math.ceil((data || []).length / itemsPerPage));
 
+  const formatTime = (timeString) => {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("id-ID", {
+      weekday: "long",
       day: "2-digit",
-      month: "2-digit",
+      month: "long",
       year: "numeric",
     });
   };
@@ -122,7 +164,6 @@ const Booking = () => {
               }}
               className="w-full px-4 py-2 border rounded"
             />
-
             <button
               onClick={handleSearch}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -143,7 +184,7 @@ const Booking = () => {
           <tbody>
             {currentData.map((booking, index) => (
               <tr key={booking._id} className="border-t">
-                <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-2">{data.indexOf(booking) + 1}</td>
                 <td className="px-4 py-2">{booking.name}</td>
                 <td className="px-4 py-2 flex gap-2">
                   <button
@@ -199,6 +240,12 @@ const Booking = () => {
             </p>
             <p>
               <strong>Room:</strong> {selectedBooking.room_id.name}
+            </p>
+            <p>
+              <strong>Start:</strong> {formatTime(selectedBooking.startTime)}
+            </p>
+            <p>
+              <strong>End:</strong> {formatTime(selectedBooking.endTime)}
             </p>
             <p>
               <strong>Status:</strong> {selectedBooking.status}
