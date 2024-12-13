@@ -35,7 +35,7 @@ const Team = () => {
     {
       id: 5,
       img: `${Reza}`,
-      work: "UI/UX",
+      work: "Backend Developer",
       name: "Reza Rafli Fahlendi",
     }
   ];

@@ -1,6 +1,6 @@
-import CardStudio from "../../elements/CardStudio";
 import "aos/dist/aos.css";
 import AOS from "aos";
+import Card from "../../elements/Card";
 import { useEffect, useState } from "react";
 import { ReactTyped } from "react-typed";
 import axios from "axios";
@@ -128,7 +128,7 @@ const Search = () => {
         {filteredStudios.map((studio) => {
           const formattedPrice = formatPrice(studio.price_perhour);
           return (
-            <CardStudio
+            <Card
               className="my-4 lg:my-14"
               img={`https://ceria-music-production-4534.up.railway.app/${studio.photo}`}
               title={studio.name}
