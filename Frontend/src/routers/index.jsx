@@ -11,6 +11,7 @@ import Dashboard from "../Pages/admin/dasbord";
 import AddRoom from "../Pages/admin/addroom";
 import BookingPageAdmin from "../Pages/admin/booking";
 import BookingPage from "../Pages/booking";
+import EditRoomPage from "../Pages/admin/editRoom";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     element: <AdminProfilePage />,
   },
   {
-    path: "/admin/room",
+    path: "/admin/rooms",
     element: <RoomPages />,
   },
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/booking",
     element: <BookingPageAdmin />,
+  },
+  {
+    path: "admin/edit-room/:id",
+    element: <EditRoomPage />,
   }
 ]);
 

@@ -5,9 +5,11 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import axios from "axios";
 import CardStudio from "./CardStudio";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const CardAdmin = ({ ...props }) => {
   const [data, setData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [selectedData, setSelectedData] = useState(null);
   const navigate = useNavigate();
 
@@ -16,6 +18,7 @@ const CardAdmin = ({ ...props }) => {
       const res = await axios.get(props.url);
       if (res.status === 200) {
         setData(res.data.data);
+        setAllData(res.data.data);
       } else {
         throw new Error(res.data.message);
       }
@@ -27,21 +30,46 @@ const CardAdmin = ({ ...props }) => {
   const handleView = (data) => {
     try {
       setSelectedData(data);
+      console.log("dataselected", data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const closeView = () => {
-    setSelectedData(null); 
+    setSelectedData(null);
   };
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
-      getData();
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        const token = sessionStorage.getItem("token");
+        const res = await axios.delete(
+          `https://ceria-music-production-4534.up.railway.app/api/room/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (res.status === 200) {
+          Swal.fire("Deleted!", "Your room has been deleted.", "success");
+          getData();
+        }
+      }
     } catch (error) {
       console.log(error);
+      Swal.fire("Error!", "There was an issue deleting the room.", "error");
     }
   };
 
@@ -49,8 +77,21 @@ const CardAdmin = ({ ...props }) => {
     navigate(`/admin/edit-room/${id}`);
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    if (query === "") {
+      setData(allData);
+    } else {
+      const filtered = allData.filter((room) =>
+        room.name.toLowerCase().includes(query)
+      );
+      setData(filtered);
+    }
+  };
+
   useEffect(() => {
     getData();
+    console.log("data", data);
   }, []);
 
   return (
@@ -67,6 +108,7 @@ const CardAdmin = ({ ...props }) => {
             type="text"
             placeholder="Search"
             className="w-48 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            onChange={handleSearch}
           />
           <span className="absolute inset-y-0 right-0 flex items-center pr-2">
             <svg
@@ -117,16 +159,17 @@ const CardAdmin = ({ ...props }) => {
         ))}
       </div>
 
-      {/* Tampilkan CardStudio jika data dipilih */}
       {selectedData && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="h-[460px] flex flex-col bg-white rounded-lg shadow-lg p-6">
+          <div className="h-screen md:h-[460px] flex flex-col bg-white rounded-lg shadow-lg p-6">
             <CardStudio
               title={selectedData.name}
               img={`https://ceria-music-production-4534.up.railway.app/${selectedData.photo}`}
               status={selectedData.status}
               price={selectedData.price_perhour}
+              facilities={selectedData.facilities}
             />
+
             <div className="mt-4 flex justify-end">
               <button
                 onClick={closeView}

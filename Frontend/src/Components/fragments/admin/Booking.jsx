@@ -33,10 +33,7 @@ const Booking = () => {
         setData(res.data.bookings);
       }
     } catch (error) {
-      console.log(
-        "error get booking on admin page",
-        error.response || error.message
-      );
+      console.error("Error fetching bookings:", error.message);
     }
   };
 
@@ -50,9 +47,9 @@ const Booking = () => {
         setSelectedBooking(res.data.booking);
       }
     } catch (error) {
-      console.log("error get booking details", error.response || error.message);
+      console.error("Error fetching booking details:", error.message);
     }
-  };
+  };  
 
   const handleDelete = async (id) => {
     try {
@@ -64,17 +61,29 @@ const Booking = () => {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Booking deleted successfully",
+          text: "Booking deleted successfully.",
           confirmButtonText: "OK",
-          customClass: {
-            confirmButton:
-              "bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded",
-          },
         });
         getDataBooking();
       }
     } catch (error) {
-      console.log("error delete booking", error.response || error.message);
+      console.error("Error deleting booking:", error.message);
+    }
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.get(
+        `https://ceria-music-production-4534.up.railway.app/api/booking/search?name=${searchQuery}`,
+        header
+      );
+
+      if (res.status === 200) {
+        setData(res.data.data);
+      }
+    } catch (error) {
+      console.log("Error during search:", error.message);
     }
   };
 
@@ -82,100 +91,70 @@ const Booking = () => {
     getDataBooking();
   }, []);
 
-  const filteredData = data.filter((booking) =>
-    booking.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentData = (data || []).slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.max(1, Math.ceil((data || []).length / itemsPerPage));
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return date.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-<<<<<<< HEAD
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-=======
-  const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
-
   return (
-    <div className="w-full flex flex-col gap-8 p-6 bg-gray-50">
-      <div className="w-full px-6 py-4 bg-white rounded-lg shadow-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-700">Manage Bookings</h2>
-<<<<<<< HEAD
-          <button
-            onClick={() => navigate("/admin/add-room")}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Add Room
-          </button>
-=======
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="w-full bg-white rounded-lg shadow-lg p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Manage Bookings
+          </h2>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Search by name"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              className="w-full px-4 py-2 border rounded"
+            />
+
+            <button
+              onClick={handleSearch}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Search
+            </button>
+          </div>
         </div>
 
-        {/* Search */}
-        <div className="flex gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Search by name"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-
-<<<<<<< HEAD
-        {/* Table */}
-        <table className="w-full bg-white border rounded shadow">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-=======
-          {/* Table */}
-        <table className="w-full bg-white border rounded shadow">
-          <thead>
-            <tr className="bg-gray-200 text-left">
+        <table className="w-full table-auto bg-white shadow">
+          <thead className="bg-gray-200">
+            <tr>
               <th className="px-4 py-2">No.</th>
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-<<<<<<< HEAD
-            {currentData.map((booking) => (
-              <tr key={booking._id} className="border-t">
-=======
             {currentData.map((booking, index) => (
               <tr key={booking._id} className="border-t">
-                <td className="px-4 py-2">
-                  {(currentPage - 1) * itemsPerPage + index + 1}
-                </td>
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
-                <td className="px-4 py-2 uppercase">{booking.name}</td>
+                <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
+                <td className="px-4 py-2">{booking.name}</td>
                 <td className="px-4 py-2 flex gap-2">
                   <button
                     onClick={() => getBookingDetails(booking._id)}
-<<<<<<< HEAD
-                    className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-=======
-                    className="px-2 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600"
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
+                    className="bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600"
                   >
                     Details
                   </button>
                   <button
                     onClick={() => handleDelete(booking._id)}
-<<<<<<< HEAD
-                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-=======
-                    className="px-2 py-1 bg-red-500 text-white rounded-full hover:bg-red-600"
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                   >
                     Delete
                   </button>
@@ -185,11 +164,6 @@ const Booking = () => {
           </tbody>
         </table>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
-        {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -210,51 +184,33 @@ const Booking = () => {
           >
             Next
           </button>
-<<<<<<< HEAD
         </div>
       </div>
 
-      {/* Details Modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-1/2">
-            <h3 className="text-xl font-semibold mb-4">Booking Details</h3>
-            <p><strong>Name:</strong> {selectedBooking.name}</p>
-            <p><strong>Date:</strong> {formatDate(selectedBooking.date)}</p>
-            <p><strong>Room:</strong> {selectedBooking.room_id.name}</p>
-            <p><strong>Status:</strong> {selectedBooking.status}</p>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
+            <h3 className="text-lg font-semibold mb-4">Booking Details</h3>
+            <p>
+              <strong>Name:</strong> {selectedBooking.name}
+            </p>
+            <p>
+              <strong>Date:</strong> {formatDate(selectedBooking.date)}
+            </p>
+            <p>
+              <strong>Room:</strong> {selectedBooking.room_id.name}
+            </p>
+            <p>
+              <strong>Status:</strong> {selectedBooking.status}
+            </p>
             <button
               onClick={() => setSelectedBooking(null)}
-              className="mt-4 px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              className="mt-4 bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
             >
               Close
             </button>
           </div>
         </div>
-=======
-        </div>
-      </div>
-
-      {/* Details Modal */}
-      {selectedBooking && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div style={{ width: '500px', height: '300px' }} className="bg-white p-10 rounded-xl shadow-lgflex flex-col justify-center">
-            <h3 className="text-xl font-semibold mb-4 text-center">Booking Details</h3>
-            <p><strong>Name:</strong> {selectedBooking.name}</p>
-            <p><strong>Date:</strong> {formatDate(selectedBooking.date)}</p>
-            <p><strong>Room:</strong> {selectedBooking.room_id.name}</p>
-            <p><strong>Status:</strong> {selectedBooking.status}</p>
-            <div className="mt-4 flex justify-center mb-0">
-            <button
-              onClick={() => setSelectedBooking(null)}
-              className="px-7 py-2 bg-gray-300 rounded-full hover:bg-gray-400"
-            >
-              Close
-            </button>
-          </div>
-          </div>
-        </div>
->>>>>>> 74d1c63d20aa1b61db2a0b1033a877985bad91e7
       )}
     </div>
   );

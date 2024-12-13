@@ -1,43 +1,97 @@
 import "aos/dist/aos.css";
 import AOS from "aos";
 import { useEffect } from "react";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
 const CardStudio = ({ ...props }) => {
   useEffect(() => {
     AOS.init();
-  });
+  }, []);
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
 
   return (
     <div
       data-aos="fade-up"
-      data-aos-duration="600"
+      data-aos-duration="1000"
       data-aos-delay="200"
-      className={`${props.className} p-6 flex flex-col items-center w-full md:w-[325px] lg:w-[425px] h-[269px] flex-grow`}
+      className="max-w-5xl mx-auto my-6 flex flex-col md:flex-row rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white"
     >
-      <header className="font-manrope text-2xl mb-4">
-        <h1>{props.title}</h1>
-      </header>
-      <main onClick={props.onClick}>
+      {/* Image Section */}
+      <aside className="w-full md:w-1/2 h-60 md:h-72">
         <img
           src={props.img}
-          alt="Studio"
-          className="h-[200px] w-[325px] lg:w-[425px] lg:h-[249px] rounded-3xl hover:scale-110 transition-all ease-in-out duration-300 cursor-pointer hover:shadow-2xl"
+          alt={props.title || "Studio Image"}
+          className="w-full h-full object-cover"
         />
-        <div className="flex w-full justify-between my-4">
-          <div className="flex items-center">
-            <p className="px-4 py-2 rounded-full text-sm bg-blue-500 text-white">
-              {props.status}
-            </p>
-            <p className="px-4 py-2 text-sm">{props.price} / hour</p>
-          </div>
-          <button className="hover:text-sky-600 transition-colors duration-300">
-            <BookmarkBorderIcon />
-          </button>
+      </aside>
+
+      {/* Content Section */}
+      <div className="w-full md:w-1/2 p-6 flex flex-col gap-4 justify-between">
+        {/* Title */}
+        <header className="text-xl md:text-2xl font-semibold text-gray-800">
+          {props.title}
+        </header>
+
+        {/* Status and Price */}
+        <div className="flex items-center gap-4">
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              props.status === "Available"
+                ? "bg-green-100 text-green-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {props.status}
+          </span>
+          <span className="text-lg font-bold text-gray-700">
+            {formatPrice(props.price)} <span className="text-sm">/ hour</span>
+          </span>
         </div>
-      </main>
+
+        {/* Facilities */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">
+            Facilities:
+          </h2>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {props.facilities?.length > 0 ? (
+              props.facilities.map((facility, index) => (
+                <li
+                  key={index}
+                  className="text-sm text-gray-600 flex items-center gap-2"
+                >
+                  <span className="inline-block w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
+                  {facility.facility_id?.name || "Unknown Facility"}{" "}
+                  {facility.facility_id?.unit && (
+                    <span className="text-xs text-gray-400">
+                      (Unit: {facility.facility_id.unit})
+                    </span>
+                  )}
+                </li>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500">No facilities available.</p>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
+};
+
+CardStudio.defaultProps = {
+  title: "Studio Name",
+  img: "https://via.placeholder.com/425x249",
+  status: "Unavailable",
+  price: 0,
+  facilities: [],
+  onClick: () => {},
 };
 
 export default CardStudio;

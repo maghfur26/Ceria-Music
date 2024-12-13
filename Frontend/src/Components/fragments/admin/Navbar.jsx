@@ -75,7 +75,7 @@ const Navbar = () => {
       id: 3,
       title: "Room",
       icon: <WeekendIcon />,
-      link: "/admin/room",
+      link: "/admin/rooms",
     },
     {
       id: 4,
@@ -178,8 +178,8 @@ const Navbar = () => {
       <aside
         className={`${
           mobileSidebarOpen
-            ? "translate-x-0 opacity-100 z-20"
-            : "opacity-0 z-[-1]"
+            ? "translate-x-0 block z-20"
+            : "hidden z-[-1]"
         } md:hidden bg-[#3B9DF8] p-4 text-center absolute top-[60px] right-0 w-full sm:w-[300px] rounded-md transition-all duration-300`}
       >
         <div className="w-full relative mb-5">
