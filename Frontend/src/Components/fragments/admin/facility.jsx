@@ -5,9 +5,16 @@ import Swal from "sweetalert2";
 const Facility = () => {
   const [facilities, setFacilities] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [addFacilityForm, setAddFacilityForm] = useState({ name: "", unit: "" });
+  const [addFacilityForm, setAddFacilityForm] = useState({
+    name: "",
+    unit: "",
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editFacilityForm, setEditFacilityForm] = useState({ id: "", name: "", unit: "" });
+  const [editFacilityForm, setEditFacilityForm] = useState({
+    id: "",
+    name: "",
+    unit: "",
+  });
   const itemPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -24,9 +31,9 @@ const Facility = () => {
       setFacilities(response.data.data);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error fetching facilities.',
+        icon: "error",
+        title: "Oops...",
+        text: "Error fetching facilities.",
       });
       console.error("Error fetching facilities:", error);
     }
@@ -45,9 +52,9 @@ const Facility = () => {
       setFacilities(res.data.data);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Facility not found.',
+        icon: "error",
+        title: "Oops...",
+        text: "Facility not found.",
       });
     }
   };
@@ -64,11 +71,10 @@ const Facility = () => {
   };
 
   const handleCancelModal = () => {
-    setEditFacilityForm({ id: "", name: "", unit: "" }); // Reset form edit
-    setAddFacilityForm({ name: "", unit: "" }); // Reset form tambah
-    setIsModalOpen(false); // Tutup modal
+    setEditFacilityForm({ id: "", name: "", unit: "" });
+    setAddFacilityForm({ name: "", unit: "" }); 
+    setIsModalOpen(false); 
   };
-  
 
   const handleAddFacilityChange = (e) => {
     const { name, value } = e.target;
@@ -93,18 +99,18 @@ const Facility = () => {
         }
       );
       Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Facility added successfully.',
+        icon: "success",
+        title: "Success!",
+        text: "Facility added successfully.",
       });
       setIsModalOpen(false);
       setAddFacilityForm({ name: "", unit: "" });
       fetchFacilities();
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error adding facility.',
+        icon: "error",
+        title: "Oops...",
+        text: "Error adding facility.",
       });
       console.error("Error adding facility:", error);
     }
@@ -123,18 +129,18 @@ const Facility = () => {
         }
       );
       Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Facility updated successfully.',
+        icon: "success",
+        title: "Success!",
+        text: "Facility updated successfully.",
       });
-      setIsModalOpen(false);
       setEditFacilityForm({ id: "", name: "", unit: "" });
       fetchFacilities();
+      setIsModalOpen(false);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error updating facility.',
+        icon: "error",
+        title: "Oops...",
+        text: "Error updating facility.",
       });
       console.error("Error updating facility:", error);
     }
@@ -142,12 +148,12 @@ const Facility = () => {
 
   const handleDeleteFacility = (facilityId) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "This will permanently delete the facility.",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -160,16 +166,16 @@ const Facility = () => {
             }
           );
           Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Facility has been deleted.',
+            icon: "success",
+            title: "Deleted!",
+            text: "Facility has been deleted.",
           });
           fetchFacilities();
         } catch (error) {
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error deleting facility.',
+            icon: "error",
+            title: "Oops...",
+            text: "Error deleting facility.",
           });
           console.error("Error deleting facility:", error);
         }
@@ -205,7 +211,10 @@ const Facility = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Facilities</h1>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              setEditFacilityForm({ id: "", name: "", unit: "" }); // Reset edit form state
+            }}
             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition duration-300"
           >
             Add Facility
@@ -248,7 +257,11 @@ const Facility = () => {
                 <td className="border border-gray-300 px-4 py-2 flex flex-wrap gap-2">
                   <button
                     onClick={() => {
-                      setEditFacilityForm({ id: facility._id, name: facility.name, unit: facility.unit });
+                      setEditFacilityForm({
+                        id: facility._id,
+                        name: facility.name,
+                        unit: facility.unit,
+                      });
                       setIsModalOpen(true);
                     }}
                     className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 mr-2"
