@@ -63,6 +63,13 @@ const Facility = () => {
     }
   };
 
+  const handleCancelModal = () => {
+    setEditFacilityForm({ id: "", name: "", unit: "" }); // Reset form edit
+    setAddFacilityForm({ name: "", unit: "" }); // Reset form tambah
+    setIsModalOpen(false); // Tutup modal
+  };
+  
+
   const handleAddFacilityChange = (e) => {
     const { name, value } = e.target;
     setAddFacilityForm((prev) => ({ ...prev, [name]: value }));
@@ -318,7 +325,7 @@ const Facility = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setIsModalOpen(false)}
+                      onClick={handleCancelModal}
                       className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                     >
                       Cancel
@@ -353,7 +360,7 @@ const Facility = () => {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setIsModalOpen(false)}
+                      onClick={handleCancelModal}
                       className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                     >
                       Cancel
