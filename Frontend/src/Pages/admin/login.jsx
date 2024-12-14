@@ -1,4 +1,4 @@
-import Login from "../Components/fragments/admin/Login";
+import Login from "../../Components/fragments/admin/Login";
 
 const LoginPage = () => {
   return (

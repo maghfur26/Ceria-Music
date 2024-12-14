@@ -1,5 +1,5 @@
 import CardAdmin from "../../Components/elements/CardAdmin";
-import Admin from "../admin";
+import Admin from "./admin";
 
 const RoomPages = () => {
   return (

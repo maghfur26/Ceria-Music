@@ -1,5 +1,5 @@
 import FormAddRoom from "../../Components/fragments/admin/FormAddRoom";
-import Admin from "../admin";
+import Admin from "./admin";
 
 const AddRoom = () => {
     return (

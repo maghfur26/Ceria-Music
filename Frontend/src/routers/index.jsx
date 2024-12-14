@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../Pages/home";
-import PaymentPages from "../Pages/paymentPages";
-import DetailRoomPages from "../Pages/detailRoom";
-import LoginPage from "../Pages/login";
-import ForgetPasswordPage from "../Pages/forgetPassword";
-import ResetPasswordPage from "../Pages/resetPassword";
+import Home from "../Pages/landing-pages/home";
+import PaymentPages from "../Pages/landing-pages/paymentPages";
+import DetailRoomPages from "../Pages/landing-pages/detailRoom";
+import LoginPage from "../Pages/admin/login";
+import ForgetPasswordPage from "../Pages/admin/forgetPassword";
+import ResetPasswordPage from "../Pages/admin/resetPassword";
 import AdminProfilePage from "../Pages/admin/pofile";
 import RoomPages from "../Pages/admin/room";
 import Dashboard from "../Pages/admin/dasbord";
 import AddRoom from "../Pages/admin/addroom";
 import BookingPageAdmin from "../Pages/admin/booking";
-import BookingPage from "../Pages/booking";
+import BookingPage from "../Pages/landing-pages/booking";
 import EditRoomPage from "../Pages/admin/editRoom";
 import FacilityPage from "../Pages/admin/facility";
 import PaymentPageAdmin from "../Pages/admin/payment";
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: < Dashboard/>,
+    element: <Dashboard />,
   },
   {
     path: "/room/:id",
@@ -73,9 +73,9 @@ const router = createBrowserRouter([
     element: <FacilityPage />,
   },
   {
-    path: 'admin/payment',
-    element: <PaymentPageAdmin/>
-  }
+    path: "admin/payment",
+    element: <PaymentPageAdmin />,
+  },
 ]);
 
 export default router;

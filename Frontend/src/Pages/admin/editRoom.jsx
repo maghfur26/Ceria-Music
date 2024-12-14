@@ -1,5 +1,5 @@
 import EditRoom from "../../Components/fragments/admin/EditRoom";
-import Admin from "../admin";
+import Admin from "./admin";
 
 const EditRoomPage = () => {
   return (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import Admin from "../admin";
+import Admin from "./admin";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";

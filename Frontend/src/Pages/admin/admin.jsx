@@ -1,5 +1,5 @@
-import Navbar from "../Components/fragments/admin/Navbar";
-import Sidebar from "../Components/fragments/admin/Sidebar";
+import Navbar from "../../Components/fragments/admin/Navbar";
+import Sidebar from "../../Components/fragments/admin/Sidebar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

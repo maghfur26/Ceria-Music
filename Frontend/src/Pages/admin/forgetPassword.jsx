@@ -1,4 +1,4 @@
-import ForgetPassword from "../Components/fragments/admin/ForgetPassword";
+import ForgetPassword from "../../Components/fragments/admin/ForgetPassword";
 
 const ForgetPasswordPage = () => {
   return <ForgetPassword />;

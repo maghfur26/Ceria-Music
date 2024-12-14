@@ -1,4 +1,4 @@
-import ResetPassword from "../Components/fragments/admin/ResetPassword";
+import ResetPassword from "../../Components/fragments/admin/ResetPassword";
 
 const ResetPasswordPage = () => {
   return (

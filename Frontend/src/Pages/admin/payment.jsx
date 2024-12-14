@@ -1,4 +1,4 @@
-import Admin from "../admin";
+import Admin from "./admin"
 import Payment from '../../Components/fragments/admin/Payment'
 
 const PaymentPage = () => {

@@ -1,5 +1,5 @@
 import AdminProfile from "../../Components/fragments/admin/AdminProfil";
-import Admin from "../admin";
+import Admin from "./admin";
 
 const AdminProfilePage = () => {
   return (
