@@ -30,7 +30,6 @@ const CardAdmin = ({ ...props }) => {
   const handleView = (data) => {
     try {
       setSelectedData(data);
-      console.log("dataselected", data);
     } catch (error) {
       console.log(error);
     }
@@ -91,7 +90,6 @@ const CardAdmin = ({ ...props }) => {
 
   useEffect(() => {
     getData();
-    console.log("data", data);
   }, []);
 
   return (

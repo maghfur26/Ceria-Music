@@ -124,7 +124,7 @@ const Search = () => {
           </button>
         </div>
       </div>
-      <div className="w-full justify-center flex-shrink flex-grow mt-6 mb-10 flex flex-wrap lg:justify-around box-border gap-10 lg:gap-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4">
         {filteredStudios.map((studio) => {
           const formattedPrice = formatPrice(studio.price_perhour);
           return (

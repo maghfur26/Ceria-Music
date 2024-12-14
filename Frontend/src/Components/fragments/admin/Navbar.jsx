@@ -85,6 +85,12 @@ const Navbar = () => {
     },
     {
       id: 5,
+      title: "Facility",
+      icon: <WeekendIcon />,
+      link: "/admin/facility",
+    },
+    {
+      id: 6,
       title: "Profile",
       icon: <AccountBoxIcon />,
       link: "/admin/profile",
@@ -113,10 +119,13 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="py-4 px-4 flex items-center justify-between w-full relative z-20" style={{ backgroundColor: isScrolling ? "#3B9DF8" : "transparent" }}>
-      <img src={logo} alt="logo" className="w-[100px] object-contain" />
+    <nav
+      className="py-4 px-4 flex items-center justify-between w-full relative z-20"
+      style={{ backgroundColor: isScrolling ? "#3B9DF8" : "transparent" }}
+    >
+      <img src={logo} alt="logo" className="w-[100px] object-contain md:hidden lg:block" />
       <div className="items-center hidden md:flex lg:hidden">
-        <ul className="items-center gap-[20px] text-[1rem] flex">
+        <ul className="items-center gap-[20px] text-[1rem] flex ml-10">
           {listMenu.map((item) => (
             <li
               key={item.id}
@@ -178,26 +187,20 @@ const Navbar = () => {
       <aside
         className={`${
           mobileSidebarOpen
-            ? "translate-x-0 block z-20"
-            : "hidden z-[-1]"
-        } md:hidden bg-[#3B9DF8] p-4 text-center absolute top-[60px] right-0 w-full sm:w-[300px] rounded-md transition-all duration-300`}
+            ? "translate-x-0 opacity-100 z-20"
+            : "translate-x-full opacity-0 z-[-1]"
+        } md:hidden bg-white fixed top-[60px] right-0 w-full sm:w-[300px] p-4 rounded-md shadow-lg transition-all duration-300 ease-in-out`}
       >
-        <div className="w-full relative mb-5">
-          <input
-            className="py-1.5 pr-4 pl-12 w-full rounded-full outline-none focus:border-[#3B9DF8]"
-            placeholder="Search..."
-          />
-          <IoIosSearch className="absolute top-[9px] left-5 text-[#424242] text-[1.3rem]" />
-        </div>
-        <ul className="items-center gap-[20px] text-[1rem] text-white flex flex-col">
+        <h1 className="font-semibold text-gray-800 text-lg mb-4">Menu</h1>
+        <ul className="flex flex-col items-start gap-3">
           {listMenu.map((item) => (
-            <li
-              key={item.id}
-              className="hover:border-b-[#3B9DF8] border-b-[2px] border-transparent transition-all duration-500 cursor-pointer capitalize"
-            >
-              <a href={item.link} className="flex items-center gap-2">
-                <span className="text-[1.2rem]">{item.icon}</span>
-                {item.title}
+            <li key={item.id} className="w-full">
+              <a
+                href={item.link}
+                className="flex items-center gap-3 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors duration-300 w-full text-gray-700"
+              >
+                <span className="text-xl">{item.icon}</span>
+                <span>{item.title}</span>
               </a>
             </li>
           ))}

@@ -13,9 +13,9 @@ const Card = ({ ...props }) => {
       data-aos="fade-up"
       data-aos-duration="600"
       data-aos-delay="200"
-      className={`${props.className} p-6 flex flex-col items-center w-full md:w-[325px] lg:w-[425px] h-[269px] flex-grow`}
+      className={`${props.className} p-6 flex flex-col items-center w-full md:w-[325px] lg:w-[425px] h-[269px]`}
     >
-      <header className="font-manrope text-2xl mb-4">
+      <header className="font-manrope text-2xl mb-4 text-center">
         <h1>{props.title}</h1>
       </header>
       <main onClick={props.onClick}>
@@ -31,7 +31,7 @@ const Card = ({ ...props }) => {
             </p>
             <p className="px-4 py-2 text-sm">{props.price} / hour</p>
           </div>
-          <button className="hover:text-sky-600 transition-colors duration-300">
+          <button className="hover:text-sky-600 transition-colors duration-300 mr-4">
             <BookmarkBorderIcon />
           </button>
         </div>

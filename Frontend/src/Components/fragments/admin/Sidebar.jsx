@@ -51,7 +51,7 @@ const Sidebar = () => {
     { id: "dashboard", label: "Dashboard", icon: <WeekendIcon />, target: "/admin" },
     { id: "room", label: "Room", icon: <WeekendIcon />, target: "/admin/rooms" },
     { id: "booking", label: "Booking", icon: <MenuBookIcon />, target: "/admin/booking" },
-    { id: "fasility", label: "Fasility", icon: <AssignmentIcon />, target: "/admin/fasility" },
+    { id: "fasility", label: "Fasility", icon: <AssignmentIcon />, target: "/admin/facility" },
     { id: "payment", label: "Payment", icon: <PaymentIcon />, target: "/admin/payment" },
     { id: "profile", label: "Profile", icon: <AccountBoxIcon />, target: "/admin/profile" },
   ];
