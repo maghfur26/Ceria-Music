@@ -138,6 +138,37 @@ const paymentController = {
         }
     },
 
+    deletePaymentById: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            // Cari data pembayaran berdasarkan ID
+            const payment = await PaymentModel.findById(id);
+            if (!payment) {
+                return res.status(404).json({ message: 'Payment not found' });
+            }
+
+            // Hapus file kwitansi jika ada
+            const receiptsDir = path.join('receipts');
+            const receiptPath = path.join(receiptsDir, `receipt-${payment._id}.pdf`);
+
+            if (fs.existsSync(receiptPath)) {
+                fs.unlinkSync(receiptPath);
+                console.log(`Deleted receipt file: ${receiptPath}`);
+            }
+
+            // Hapus data pembayaran dari database
+            await PaymentModel.findByIdAndDelete(id);
+
+            return res.status(200).json({
+                message: 'Payment and associated receipt deleted successfully',
+            });
+        } catch (error) {
+            console.error('Error deleting payment by ID:', error.message);
+            return res.status(500).json({ message: 'Failed to delete payment by ID' });
+        }
+    },
+
     getAllPayments: async (req, res) => {
         try {
             // Ambil semua data pembayaran dari database

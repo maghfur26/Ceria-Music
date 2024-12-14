@@ -28,7 +28,7 @@ const Payments = () => {
               const bookingName = bookingResponse.data.booking.name;
               return { ...payment, name: bookingName };
             } catch (error) {
-              console.error(`Error fetching booking for payment ID ${payment._id}:`, error.message);
+              // console.error(`Error fetching booking for payment ID ${payment._id}:`, error.message);
               return { ...payment, name: null };
             }
           })

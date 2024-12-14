@@ -77,6 +77,7 @@ const paymentRoute = express.Router();
 paymentRoute.put('/payment', paymentController.processPayment);
 paymentRoute.get('/payment', paymentController.getAllPayments);
 paymentRoute.get('/payment/receipt/:paymentId', paymentController.downloadReceipt);
+paymentRoute.delete('/payment/:id', authMiddleware, paymentController.deletePaymentById);
 paymentRoute.delete('/payment/delete-all', authMiddleware, paymentController.deleteAllPayments);
 
 module.exports = paymentRoute
