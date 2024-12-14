@@ -28,7 +28,7 @@ const Payments = () => {
               const bookingName = bookingResponse.data.booking.name;
               return { ...payment, name: bookingName };
             } catch (error) {
-              // console.error(`Error fetching booking for payment ID ${payment._id}:`, error.message);
+              console.error(`Error fetching booking for payment ID ${payment._id}:`, error.message);
               return { ...payment, name: null };
             }
           })
@@ -56,31 +56,43 @@ const Payments = () => {
     }).format(number);
   };
 
-  const handleDeleteAll = async () => {
+  const handleDelete = async (id, name) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "Your payment data will be deleted!",
+      text: `Are you sure you want to delete the payment with name "${name}"?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete all!",
+      confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel",
     });
-
+  
     if (result.isConfirmed) {
       try {
-        await axios.delete(
-          "https://ceria-music-production-4534.up.railway.app/api/payment/delete-all"
+        const token = sessionStorage.getItem("token"); 
+        const response = await axios.delete(
+          `https://ceria-music-production-4534.up.railway.app/api/payment/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setPayments([]);
-        Swal.fire("Deleted!", "All payments have been deleted.", "success");
+        console.log("Delete response:", response.data);
+        setPayments(payments.filter((payment) => payment._id !== id));
+        Swal.fire("Deleted!", `The payment with name "${name}" has been deleted.`, "success");
       } catch (error) {
-        console.error("Error deleting all payments:", error.message);
-        Swal.fire("Error!", "Failed to delete all payments.", "error");
+        console.error("Error deleting payment:", error.response?.data || error.message);
+        Swal.fire(
+          "Error!",
+          `Failed to delete the payment. ${error.response?.data?.message || ""}`,
+          "error"
+        );
       }
     }
   };
+  
 
   const handleView = (payment) => {
     setModalData(payment);
@@ -106,34 +118,24 @@ const Payments = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-lg sm:text-xl md:text-2xl font-bold mb-6 text-center">
-        Payment List
-      </h1>
-      <button
-        onClick={handleDeleteAll}
-        className="mb-4 px-4 py-2 text-sm sm:text-base bg-red-500 text-white rounded hover:bg-red-700"
-      >
-        Delete All Payments
-      </button>
+      <h1 className="text-2xl font-bold mb-6 text-center">Payment List</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead className="bg-gray-100 border-b-2 border-gray-300">
             <tr>
-              <th className="p-2 sm:p-4 text-xs sm:text-sm md:text-base text-left">Name</th>
-              <th className="p-2 sm:p-4 text-xs sm:text-sm md:text-base text-left">Total Amount</th>
-              <th className="p-2 sm:p-4 text-xs sm:text-sm md:text-base text-left">Status</th>
-              <th className="p-2 sm:p-4 text-xs sm:text-sm md:text-base text-left">Actions</th>
+              <th className="p-4 text-left">Name</th>
+              <th className="p-4 text-left">Total Amount</th>
+              <th className="p-4 text-left">Status</th>
+              <th className="p-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentPayments.map((payment) => (
               <tr key={payment._id} className="border-b hover:bg-gray-50">
-                <td className="p-2 sm:p-4 text-xs sm:text-sm md:text-base">{payment.name}</td>
-                <td className="p-2 sm:p-4 text-xs sm:text-sm md:text-base">
-                  {formatToRupiah(payment.total_amount)}
-                </td>
+                <td className="p-4">{payment.name}</td>
+                <td className="p-4">{formatToRupiah(payment.total_amount)}</td>
                 <td
-                  className={`p-2 sm:p-4 font-semibold text-xs sm:text-sm md:text-base ${
+                  className={`p-4 font-semibold ${
                     payment.payment_status === "Paid"
                       ? "text-green-600"
                       : "text-red-600"
@@ -141,27 +143,35 @@ const Payments = () => {
                 >
                   {payment.payment_status}
                 </td>
-                <td className="p-2 sm:p-4 flex items-center gap-2 sm:gap-4">
+                <td className="p-4 flex items-center gap-4">
                   <button
                     onClick={() => handleView(payment)}
                     className="text-blue-500 hover:text-blue-700"
                     title="View Payment"
                   >
-                    <VisibilityIcon fontSize="small" />
+                    <VisibilityIcon />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(payment._id, payment.name)}
+                    className="text-red-500 hover:text-red-700"
+                    title="Delete Payment"
+                  >
+                    <DeleteIcon />
                   </button>
                 </td>
               </tr>
-            ))}
+              ))}
           </tbody>
         </table>
       </div>
+      {/* Paginate */}
       <div className="flex justify-center items-center mt-6 gap-2">
         {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }).map(
           (_, index) => (
             <button
               key={index}
               onClick={() => paginate(index + 1)}
-              className={`px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded ${
+              className={`px-4 py-2 rounded ${
                 currentPage === index + 1
                   ? "bg-blue-500 text-white"
                   : "bg-gray-100 text-gray-700"
@@ -172,25 +182,19 @@ const Payments = () => {
           )
         )}
       </div>
+
       {modalData && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white p-4 sm:p-6 rounded shadow-lg max-w-md w-full">
-            <h2 className="text-lg sm:text-xl font-bold mb-4">Payment Details</h2>
-            <p className="text-sm sm:text-base">
-              <strong>Name:</strong> {modalData.name}
-            </p>
-            <p className="text-sm sm:text-base">
-              <strong>Total Amount:</strong>{" "}
-              {formatToRupiah(modalData.total_amount)}
-            </p>
-            <p className="text-sm sm:text-base">
-              <strong>Payment Code:</strong> {modalData.payment_code}
-            </p>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Payment Details</h2>
+            <p><strong>Name:</strong> {modalData.name}</p>
+            <p><strong>Total Amount:</strong> {formatToRupiah(modalData.total_amount)}</p>
+            <p><strong>Payment Code:</strong> {modalData.payment_code}</p>
             <button
               onClick={closeModal}
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
             >
-              Close
+              Close 
             </button>
           </div>
         </div>
