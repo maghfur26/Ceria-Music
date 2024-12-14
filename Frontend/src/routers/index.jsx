@@ -13,6 +13,7 @@ import BookingPageAdmin from "../Pages/admin/booking";
 import BookingPage from "../Pages/booking";
 import EditRoomPage from "../Pages/admin/editRoom";
 import FacilityPage from "../Pages/admin/facility";
+import PaymentPageAdmin from "../Pages/admin/payment";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
   {
     path: "admin/facility",
     element: <FacilityPage />,
+  },
+  {
+    path: 'admin/payment',
+    element: <PaymentPageAdmin/>
   }
 ]);
 

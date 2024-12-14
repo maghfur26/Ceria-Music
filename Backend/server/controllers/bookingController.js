@@ -216,39 +216,46 @@ const bookingController = {
         try {
             const { id } = req.params;
 
-            // Cek apakah pembayaran terkait sudah kedaluwarsa dan pesanan dibatalkan
+            // Cari data pembayaran terkait booking
             const payment = await PaymentModel.findOne({ booking_id: id });
-            if (payment.payment_status === 'Failed') {
-                return res.status(404).json({
-                    message: "Your booking has been canceled by the system due to expired payment."
-                });
-            }
 
+            // Cari data booking dan relasi lainnya
             const booking = await BookingModel.findById(id).populate('room_id');
+
             if (!booking) {
                 return res.status(404).json({
-                    message: "Your booking has been canceled by the system due to expired payment."
+                    message: "Booking not found."
                 });
             }
 
-            return res.status(200).json({ booking, payment });
+            // Buat pesan status untuk booking yang telah dibatalkan
+            let message = null;
+            if (payment && payment.payment_status === 'Failed') {
+                message = "Your booking has been canceled by the system due to expired payment.";
+            }
+
+            return res.status(200).json({
+                booking,
+                payment,
+                message: message || "Booking details retrieved successfully."
+            });
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    },
+    },    
 
     getAllBookings: async (req, res) => {
         try {
             // Ambil semua data booking dari database
             const bookings = await BookingModel.find();
-    
+
             // Konversi waktu ke Asia/Jakarta untuk setiap booking
             const formattedBookings = bookings.map((booking) => ({
                 ...booking._doc, // Spread data asli
                 startTime: moment(booking.startTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 endTime: moment(booking.endTime).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
             }));
-    
+
             // Kirim respon dengan data booking, meskipun kosong
             return res.status(200).json({
                 message: 'Bookings retrieved successfully',
@@ -259,7 +266,7 @@ const bookingController = {
             console.error(error.message);
             return res.status(500).json({ message: 'Error retrieving bookings' });
         }
-    },    
+    },
 
     async cancelExpiredBookings() {
         try {
