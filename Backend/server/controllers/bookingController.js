@@ -150,7 +150,6 @@ const bookingController = {
         }
     },
 
-
     generateReceipt: async (bookingId) => {
         try {
             const booking = await BookingModel.findById(bookingId).populate('room_id');
@@ -182,6 +181,15 @@ const bookingController = {
                 ? moment(payment.payment_date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss')
                 : '-';
 
+            // Format currency untuk Rupiah Indonesia
+            const formatRupiah = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+            });
+
+            const formattedPricePerHour = formatRupiah.format(room.price_perhour);
+            const formattedTotalAmount = formatRupiah.format(payment.total_amount);
+
             doc.fontSize(14).font('Helvetica').text(`Receipt ID: ${payment._id}`);
             doc.text(`Booking ID: ${booking._id}`);
             doc.text(`Name: ${booking.name}`);
@@ -191,9 +199,9 @@ const bookingController = {
             doc.text(`End Time: ${endTimeLocal}`);
             doc.moveDown();
             doc.text(`Room Name: ${room.name}`);
-            doc.text(`Price per Hour: ${room.price_perhour}`);
+            doc.text(`Price per Hour: ${formattedPricePerHour}`);
             doc.moveDown();
-            doc.text(`Total Amount: ${payment.total_amount}`);
+            doc.text(`Total Amount: ${formattedTotalAmount}`);
             doc.text(`Payment Code: ${payment.payment_code}`);
             doc.text(`Payment Status: ${payment.payment_status}`);
             doc.text(`Payment Date: ${paymentDateLocal}`);
@@ -242,7 +250,7 @@ const bookingController = {
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
-    },    
+    },
 
     getAllBookings: async (req, res) => {
         try {
