@@ -16,7 +16,7 @@ const ForgetPassword = () => {
 
     try {
       const res = await axios.post(
-        "https://ceria-music-production-4534.up.railway.app/api/forgot-password",
+        "https://ceriamusicapi-production.up.railway.app/api/forgot-password",
         { email }
       );
       

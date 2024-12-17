@@ -101,7 +101,7 @@ const Navbar = () => {
     try {
       const token = sessionStorage.getItem("token");
       const response = await axios.get(
-        "https://ceria-music-production-4534.up.railway.app/api/user",
+        "https://ceriamusicapi-production.up.railway.app/api/user",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ const Navbar = () => {
         >
           <img
             className="w-full h-full object-cover"
-            src={`https://ceria-music-production-4534.up.railway.app/${user.photo}`}
+            src={`https://ceriamusicapi-production.up.railway.app/${user.photo}`}
             alt="profile"
             id="account-icon"
           />

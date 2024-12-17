@@ -20,7 +20,7 @@ const AdminProfile = () => {
       try {
         const token = sessionStorage.getItem("token");
         const response = await axios.get(
-          "https://ceria-music-production-4534.up.railway.app/api/user",
+          "https://ceriamusicapi-production.up.railway.app/api/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const AdminProfile = () => {
       }
 
       const response = await axios.put(
-        "https://ceria-music-production-4534.up.railway.app/api/user/update",
+        "https://ceriamusicapi-production.up.railway.app/api/user/update",
         formData,
         {
           headers: {
@@ -228,7 +228,7 @@ const AdminProfile = () => {
                     </label>
                     {user?.photo ? (
                       <img
-                        src={`https://ceria-music-production-4534.up.railway.app/${user?.photo}`} 
+                        src={`https://ceriamusicapi-production.up.railway.app/${user?.photo}`} 
                         alt="Profile"
                         className="w-50 h-20 rounded-lg mt-2 object-cover"
                       />

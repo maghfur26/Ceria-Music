@@ -28,7 +28,7 @@ const ResetPassword = () => {
 
     try {
       const response = await axios.post(
-        "https://ceria-music-production-4534.up.railway.app/api/reset-password/:token",
+        "https://ceriamusicapi-production.up.railway.app/api/reset-password/:token",
         { token, newPassword }
       );
 

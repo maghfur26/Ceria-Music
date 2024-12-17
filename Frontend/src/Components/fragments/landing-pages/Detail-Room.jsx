@@ -21,7 +21,7 @@ const DetailRoom = () => {
 
   const getRoom = async () => {
     try {
-      const res = await axios.get(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
+      const res = await axios.get(`https://ceriamusicapi-production.up.railway.app/api/room/${id}`);
       const data = res.data.data;
       setRoom(data);
     } catch (error) {
