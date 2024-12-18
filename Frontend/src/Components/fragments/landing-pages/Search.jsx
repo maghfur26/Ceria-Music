@@ -15,7 +15,9 @@ const Search = () => {
 
   const getRooms = async () => {
     try {
-      const res = await axios.get("https://ceriamusicapi-production.up.railway.app//api/room");
+      const res = await axios.get(
+        "https://ceriamusicapi-production.up.railway.app/api/room"
+      );
       if (res.status === 200) {
         setListStudio(res.data.data);
         setFilteredStudios(res.data.data);
@@ -54,7 +56,10 @@ const Search = () => {
   }, []);
 
   return (
-    <div className="flex flex-col font-manrope bg-slate-100 py-20 mb-20" id="booking">
+    <div
+      className="flex flex-col font-manrope bg-slate-100 py-20 mb-20"
+      id="booking"
+    >
       <h1
         className="pb-4 text-[30px] font-thin ml-7 mb-4 first-letter:text-5xl first-letter:font-bold  lg:ml-10"
         data-aos="fade-right"
@@ -130,7 +135,7 @@ const Search = () => {
           return (
             <Card
               className="my-4 lg:my-14"
-              img={`https://ceria-music-production-4534.up.railway.app/${studio.photo}`}
+              img={`https://ceriamusicapi-production.up.railway.app/${studio.photo}`}
               title={studio.name}
               status="Available"
               price={formattedPrice}

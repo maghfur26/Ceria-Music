@@ -21,7 +21,7 @@ const FormBooking = () => {
 
   const getRoom = async () => {
     try {
-      const res = await axios.get(`https://ceria-music-production-4534.up.railway.app/api/room/${id}`);
+      const res = await axios.get(`https://ceriamusicapi-production.up.railway.app/api/room/${id}`);
       const data = res.data.data;
       setRoom(data);
     } catch (error) {
@@ -82,7 +82,7 @@ const FormBooking = () => {
       };
 
       const response = await axios.post(
-        "https://ceria-music-production-4534.up.railway.app/api/booking",
+        "https://ceriamusicapi-production.up.railway.app/api/booking",
         requestData
       );
 
@@ -126,7 +126,7 @@ const FormBooking = () => {
       <div
         className="min-h-screen flex items-center justify-center p-6"
         style={{
-          backgroundImage: `url(https://ceria-music-production-4534.up.railway.app/${room.photo})`,
+          backgroundImage: `url(https://ceriamusicapi-production.up.railway.app/${room.photo})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

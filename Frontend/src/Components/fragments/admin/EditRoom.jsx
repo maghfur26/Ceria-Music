@@ -25,7 +25,7 @@ const EditRoom = () => {
     const fetchRoomData = async () => {
       try {
         const res = await axios.get(
-          `https://ceria-music-production-4534.up.railway.app/api/room/${id}`
+          `https://ceriamusicapi-production.up.railway.app/api/room/${id}`
         );
         if (res.status === 200) {
           setFormData(res.data.data);
@@ -60,7 +60,7 @@ const EditRoom = () => {
       }
 
       const res = await axios.put(
-        `https://ceria-music-production-4534.up.railway.app/api/room/${id}`,
+        `https://ceriamusicapi-production.up.railway.app/api/room/${id}`,
         formDataObj,
         headers
       );

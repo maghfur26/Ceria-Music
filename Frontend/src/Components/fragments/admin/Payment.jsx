@@ -15,7 +15,7 @@ const Payments = () => {
     const fetchPayments = async () => {
       try {
         const paymentResponse = await axios.get(
-          "https://ceria-music-production-4534.up.railway.app/api/payment"
+          "https://ceriamusicapi-production.up.railway.app/api/payment"
         );
         const payments = paymentResponse.data.payment || [];
 
@@ -23,7 +23,7 @@ const Payments = () => {
           payments.map(async (payment) => {
             try {
               const bookingResponse = await axios.get(
-                `https://ceria-music-production-4534.up.railway.app/api/booking/${payment.booking_id}`
+                `https://ceriamusicapi-production.up.railway.app/api/booking/${payment.booking_id}`
               );
               const bookingName = bookingResponse.data.booking.name;
               return { ...payment, name: bookingName };
@@ -72,7 +72,7 @@ const Payments = () => {
       try {
         const token = sessionStorage.getItem("token"); 
         const response = await axios.delete(
-          `https://ceria-music-production-4534.up.railway.app/api/payment/${id}`,
+          `https://ceriamusicapi-production.up.railway.app/api/payment/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

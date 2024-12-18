@@ -35,17 +35,17 @@ const Dashboard = () => {
       };
 
       const resAvailableRoom = await axios.get(
-        "https://ceria-music-production-4534.up.railway.app/api/total-rooms",
+        "https://ceriamusicapi-production.up.railway.app/api/total-rooms",
         { headers }
       );
 
       const resTotalBooking = await axios.get(
-        "https://ceria-music-production-4534.up.railway.app/api/total-bookings",
+        "https://ceriamusicapi-production.up.railway.app/api/total-bookings",
         { headers }
       );
 
       const resTotalRevenue = await axios.get(
-        "https://ceria-music-production-4534.up.railway.app/api/total-revenue",
+        "https://ceriamusicapi-production.up.railway.app/api/total-revenue",
         { headers }
       );
 

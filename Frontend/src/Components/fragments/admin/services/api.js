@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://ceria-music-production-4534.up.railway.app/api/user/login';
+const API_URL = 'https://ceriamusicapi-production.up.railway.app/api/user/login';
 
 export const loginUser = async (email, password) => {
   try {

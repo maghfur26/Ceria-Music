@@ -29,14 +29,14 @@ const Payments = ({ paramBooking }) => {
 
   const getPayment = async () => {
     try {
-      const res = await axios.get(`https://ceria-music-production-4534.up.railway.app/api/booking/${id}`);
+      const res = await axios.get(`https://ceriamusicapi-production.up.railway.app/api/booking/${id}`);
       const data = res.data.booking.room_id;
       const dataPayment = res.data.payment;
 
       if (data && dataPayment) {
         const idBooking = res.data.booking._id;
         const resBooking = await axios.get(
-          `https://ceria-music-production-4534.up.railway.app/api/booking/${idBooking}`
+          `https://ceriamusicapi-production.up.railway.app/api/booking/${idBooking}`
         );
 
         const dataBooking = resBooking.data.booking;
@@ -99,7 +99,7 @@ const Payments = ({ paramBooking }) => {
     setIsLoading(true);
     try {
       const paymentResponse = await axios.put(
-        "https://ceria-music-production-4534.up.railway.app/api/payment",
+        "https://ceriamusicapi-production.up.railway.app/api/payment",
         {
           payment_code: payment.payment_code,
           amount: payment.total_amount,
@@ -108,7 +108,7 @@ const Payments = ({ paramBooking }) => {
 
       if (paymentResponse.status === 200) {
         const receiptResponse = await axios({
-          url: `https://ceria-music-production-4534.up.railway.app/api/payment/receipt/${paymentResponse.data.payment._id}`,
+          url: `https://ceriamusicapi-production.up.railway.app/api/payment/receipt/${paymentResponse.data.payment._id}`,
           method: "GET",
           responseType: "blob",
         });
@@ -157,7 +157,7 @@ const Payments = ({ paramBooking }) => {
       <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
         <div className="flex-1">
           <img
-            src={`https://ceria-music-production-4534.up.railway.app/${room.photo}`}
+            src={`https://ceriamusicapi-production.up.railway.app/${room.photo}`}
             alt="Studio"
             className="rounded-lg w-full h-[400px] object-cover"
           />
