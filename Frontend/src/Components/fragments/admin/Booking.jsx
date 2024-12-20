@@ -76,7 +76,7 @@ const Booking = () => {
                 text: "The booking has been deleted.",
                 confirmButtonText: "OK",
               });
-              getDataBooking(); // Refresh data setelah penghapusan
+              getDataBooking();
             }
           })
           .catch((error) => {

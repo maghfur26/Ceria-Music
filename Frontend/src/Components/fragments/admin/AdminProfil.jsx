@@ -14,27 +14,27 @@ const AdminProfile = () => {
     email: "",
   });
   const [photo, setPhoto] = useState(null); 
+  
+  const fetchUser = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get(
+        "https://ceriamusicapi-production.up.railway.app/api/user",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Terjadi kesalahan");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = sessionStorage.getItem("token");
-        const response = await axios.get(
-          "https://ceriamusicapi-production.up.railway.app/api/user",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUser(response.data.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Terjadi kesalahan");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUser();
   }, []);
 

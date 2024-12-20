@@ -3,10 +3,6 @@ import AOS from "aos";
 import { useEffect } from "react";
 
 const CardStudio = ({ ...props }) => {
-  useEffect(() => {
-    AOS.init();
-  }, []);
-
   const formatPrice = (price) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -14,6 +10,10 @@ const CardStudio = ({ ...props }) => {
       minimumFractionDigits: 0,
     }).format(price);
   };
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   return (
     <div
