@@ -6,7 +6,7 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 const Card = ({ ...props }) => {
   useEffect(() => {
     AOS.init();
-  });
+  }, []);
 
   return (
     <div

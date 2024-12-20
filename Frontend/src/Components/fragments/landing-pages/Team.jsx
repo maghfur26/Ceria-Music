@@ -23,7 +23,7 @@ const Team = () => {
     {
       id: 3,
       img: `${rendy}`,
-      work: "Frontend Developer",
+      work: "Backend Developer",
       name: "Alif Rendy Pahlevi",
     },
     {
@@ -35,7 +35,7 @@ const Team = () => {
     {
       id: 5,
       img: `${Reza}`,
-      work: "UI/UX",
+      work: "Frontend Developer",
       name: "Reza Rafli Fahlendi",
     }
   ];
